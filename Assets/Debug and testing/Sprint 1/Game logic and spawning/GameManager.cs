@@ -57,8 +57,16 @@ public class GameManager : MonoBehaviour
             newButterfly.transform.parent = this.transform;
             newButterfly.transform.name =  "Butterfly id:"+i;
 
+            newButterfly = GetMaterial(newButterfly);
+
             //butterflies[i] = newButterfly;
         }
+    }
+
+    GameObject GetMaterial(GameObject gameObject)
+    {
+        gameObject.GetComponent<Renderer>().material = backgroundPattern;
+        return gameObject;
     }
 
     // Update is called once per frame
