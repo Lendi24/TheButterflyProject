@@ -7,13 +7,15 @@ public class ButterflyBehaviour : MonoBehaviour
     Ray ray;
     RaycastHit hit;
 
+    public bool hasCollided = false;
+
     [SerializeField]
     Material backgroundPattern;
 
     // Start is called before the first frame update
     void Start()
     {
-        
+        this.GetComponent<Renderer>().material = backgroundPattern;
     }
 
     // Update is called once per frame
@@ -27,7 +29,12 @@ public class ButterflyBehaviour : MonoBehaviour
         ray = Camera.main.ScreenPointToRay(Input.mousePosition);
         if (Physics.Raycast(ray, out hit))
         {
-            print(hit.collider.name);
+            transform.parent.GetComponent<GameManager>().ButterClick(this);
         }
+    }
+
+    void OnCollisionEnter(Collision collision)
+    {
+        hasCollided = true;
     }
 }

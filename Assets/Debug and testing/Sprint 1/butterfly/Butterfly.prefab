@@ -109,4 +109,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6769132edfd860148af73fefe81cded1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  pattern: {fileID: 2100000, guid: 4ebaffc2c9699ca4b90ba82817fbf971, type: 2}
+  backgroundPattern: {fileID: 2100000, guid: 4ebaffc2c9699ca4b90ba82817fbf971, type: 2}
