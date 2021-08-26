@@ -53,7 +53,7 @@ public class GameManager : MonoBehaviour
                 new Vector3(
                     Random.Range((boardSize.x / 2) - butterfly.GetComponent<Renderer>().bounds.size.x / 2, (boardSize.x / -2) + butterfly.GetComponent<Renderer>().bounds.size.x / 2),
                     Random.Range((boardSize.y / 2) - butterfly.GetComponent<Renderer>().bounds.size.y / 2, (boardSize.y / -2) + butterfly.GetComponent<Renderer>().bounds.size.y / 2),
-                    butterfly.GetComponent<Renderer>().bounds.size.z*-1),
+                    (butterfly.GetComponent<Renderer>().bounds.size.z)/-2),
                 Quaternion.Euler(0,0,Random.Range(1,360)));
 
             newButterfly.transform.parent = this.transform;
