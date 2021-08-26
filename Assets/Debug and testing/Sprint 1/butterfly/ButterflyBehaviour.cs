@@ -15,7 +15,11 @@ public class ButterflyBehaviour : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        this.GetComponent<Renderer>().material = backgroundPattern;
+        Material specificBackground = Instantiate(backgroundPattern);  
+        float value = Random.Range(0, 11);
+        value /= 10;
+        specificBackground.SetFloat("_LerpValue", value);
+        this.GetComponent<Renderer>().material = specificBackground;
     }
 
     // Update is called once per frame
@@ -29,12 +33,14 @@ public class ButterflyBehaviour : MonoBehaviour
         ray = Camera.main.ScreenPointToRay(Input.mousePosition);
         if (Physics.Raycast(ray, out hit))
         {
+            print("no");
             transform.parent.GetComponent<GameManager>().ButterClick(this);
         }
     }
 
-    void OnCollisionEnter(Collision collision)
+    private void OnCollisionEnter(Collision collision)
     {
+        print("yes");
         hasCollided = true;
     }
 }
