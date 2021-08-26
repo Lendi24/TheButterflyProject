@@ -64,6 +64,11 @@ public class GameManager : MonoBehaviour
 
     }
 
+    void ButterClick(GameObject clickedButterfly)
+    {
+
+    }
+
     // Update is called once per frame
     void Update()
     {
