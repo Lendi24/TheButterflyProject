@@ -60,9 +60,17 @@ public class GameManager : MonoBehaviour
             butterflies[i] = newButterfly;
         }
 
+        gameState = 1;
+        //TODO: Add splash and countdown
+        gameState = 2;
     }
 
-    public void randomMoveButterfly(GameObject butterfly)
+    /*
+    |=============================|
+    |==BUTTERFLY EVENT HANDELERS==|
+    |=============================|
+    */
+    public void RandomMoveButterfly(GameObject butterfly)
     {
         Vector2 boardSize = GetComponent<Renderer>().bounds.size;
 
@@ -76,12 +84,13 @@ public class GameManager : MonoBehaviour
         Debug.Log("Butterfly overlap detected: Moved "+butterfly.name+" to a new random position!");
     }
 
-    public void ButterClick(ButterflyBehaviour clickedButterfly)
+    public void ButterClick(GameObject butterfly)
     {
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
+        if (gameState == 2)
+        {
+            Debug.Log("Butterfly click detected: Removed " + butterfly.name + " from the game board");
+            Destroy(butterfly);
+            gameState = 3;
+        }
     }
 }

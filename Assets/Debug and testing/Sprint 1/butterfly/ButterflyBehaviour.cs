@@ -29,12 +29,12 @@ public class ButterflyBehaviour : MonoBehaviour
         ray = Camera.main.ScreenPointToRay(Input.mousePosition);
         if (Physics.Raycast(ray, out hit))
         {
-            transform.parent.GetComponent<GameManager>().ButterClick(this);
+            transform.parent.GetComponent<GameManager>().ButterClick(this.gameObject);
         }
     }
 
     void OnTriggerEnter()
     {
-        transform.parent.GetComponent<GameManager>().randomMoveButterfly(this.gameObject);
+        transform.parent.GetComponent<GameManager>().RandomMoveButterfly(this.gameObject);
     }
 }
