@@ -64,7 +64,7 @@ public class GameManager : MonoBehaviour
 
     }
 
-    void ButterClick(GameObject clickedButterfly)
+    public void ButterClick(ButterflyBehaviour clickedButterfly)
     {
 
     }
