@@ -33,8 +33,8 @@ public class ButterflyBehaviour : MonoBehaviour
         }
     }
 
-    void OnCollisionEnter(Collision collision)
+    void OnTriggerEnter()
     {
-        hasCollided = true;
+        transform.parent.GetComponent<GameManager>().randomMoveButterfly(this.gameObject);
     }
 }
