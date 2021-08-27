@@ -42,5 +42,12 @@ public class ButterflyBehaviour : MonoBehaviour
     {
         print("yes");
         hasCollided = true;
+            transform.parent.GetComponent<GameManager>().ButterClick(this.gameObject);
+        }
+    }
+
+    void OnTriggerEnter()
+    {
+        transform.parent.GetComponent<GameManager>().RandomMoveButterfly(this.gameObject);
     }
 }
