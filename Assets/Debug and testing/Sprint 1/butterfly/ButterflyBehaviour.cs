@@ -19,7 +19,7 @@ public class ButterflyBehaviour : MonoBehaviour
         float value = Random.Range(0, 11);
         value /= 10;
         specificBackground.SetFloat("_LerpValue", value);
-        this.GetComponent<Renderer>().material = specificBackground;
+        //this.GetComponent<Renderer>().material = specificBackground;
     }
 
     // Update is called once per frame
@@ -33,15 +33,6 @@ public class ButterflyBehaviour : MonoBehaviour
         ray = Camera.main.ScreenPointToRay(Input.mousePosition);
         if (Physics.Raycast(ray, out hit))
         {
-            print("no");
-            transform.parent.GetComponent<GameManager>().ButterClick(this);
-        }
-    }
-
-    private void OnCollisionEnter(Collision collision)
-    {
-        print("yes");
-        hasCollided = true;
             transform.parent.GetComponent<GameManager>().ButterClick(this.gameObject);
         }
     }

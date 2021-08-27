@@ -11,6 +11,9 @@ public class GameManager : MonoBehaviour
     Material backgroundPattern;
 
     [SerializeField]
+    Texture backgroundTexture, blendTexture;
+
+    [SerializeField]
     float preHuntTime, huntTime;
 
     [SerializeField]
@@ -57,6 +60,10 @@ public class GameManager : MonoBehaviour
 
             newButterfly.transform.parent = this.transform;
             newButterfly.transform.name =  "Butterfly id:"+i;
+            newButterfly.GetComponent<Renderer>().material = backgroundPattern;
+            newButterfly.GetComponent<Renderer>().material.SetTexture("_MainTex", backgroundTexture);
+            newButterfly.GetComponent<Renderer>().material.SetTexture("__SecondaryTex", blendTexture);
+
             butterflies[i] = newButterfly;
         }
 

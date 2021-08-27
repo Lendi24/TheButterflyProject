@@ -13,6 +13,7 @@ GameObject:
   - component: {fileID: 3798884495529638032}
   - component: {fileID: 7914867954998012407}
   - component: {fileID: 2255867947365824953}
+  - component: {fileID: 8687342108100255779}
   m_Layer: 0
   m_Name: Butterfly
   m_TagString: Untagged
@@ -61,7 +62,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 10303, guid: 0000000000000000f000000000000000, type: 0}
+  - {fileID: 2100000, guid: 4ebaffc2c9699ca4b90ba82817fbf971, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -111,13 +112,13 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   hasCollided: 0
   backgroundPattern: {fileID: 2100000, guid: 4ebaffc2c9699ca4b90ba82817fbf971, type: 2}
---- !u!54 &1846175614869584876
+--- !u!54 &8687342108100255779
 Rigidbody:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1955987185001329813}
+  m_GameObject: {fileID: 3438679882897807685}
   serializedVersion: 2
   m_Mass: 1
   m_Drag: 0
