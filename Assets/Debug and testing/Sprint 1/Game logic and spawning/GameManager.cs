@@ -48,8 +48,7 @@ public class GameManager : MonoBehaviour
         {
             Vector2 boardSize = GetComponent<Renderer>().bounds.size;
 
-            GameObject newButterfly = Instantiate(
-                butterfly,
+            GameObject newButterfly = Instantiate(butterfly,
                 new Vector3(
                     Random.Range((boardSize.x / 2) - butterfly.GetComponent<Renderer>().bounds.size.x / 2, (boardSize.x / -2) + butterfly.GetComponent<Renderer>().bounds.size.x / 2),
                     Random.Range((boardSize.y / 2) - butterfly.GetComponent<Renderer>().bounds.size.y / 2, (boardSize.y / -2) + butterfly.GetComponent<Renderer>().bounds.size.y / 2),
@@ -58,19 +57,40 @@ public class GameManager : MonoBehaviour
 
             newButterfly.transform.parent = this.transform;
             newButterfly.transform.name =  "Butterfly id:"+i;
-
             butterflies[i] = newButterfly;
         }
 
+        gameState = 1;
+        //TODO: Add splash and countdown
+        gameState = 2;
     }
 
-    public void ButterClick(ButterflyBehaviour clickedButterfly)
+    /*
+    |=============================|
+    |==BUTTERFLY EVENT HANDELERS==|
+    |=============================|
+    */
+    public void RandomMoveButterfly(GameObject butterfly)
     {
+        Vector2 boardSize = GetComponent<Renderer>().bounds.size;
 
+        butterfly.transform.position = new Vector3(
+                    Random.Range((boardSize.x / 2) - butterfly.GetComponent<Renderer>().bounds.size.x / 2, (boardSize.x / -2) + butterfly.GetComponent<Renderer>().bounds.size.x / 2),
+                    Random.Range((boardSize.y / 2) - butterfly.GetComponent<Renderer>().bounds.size.y / 2, (boardSize.y / -2) + butterfly.GetComponent<Renderer>().bounds.size.y / 2),
+                    (butterfly.GetComponent<Renderer>().bounds.size.z) / -2);
+
+        butterfly.transform.rotation = Quaternion.Euler(0, 0, Random.Range(1, 360));
+
+        Debug.Log("Butterfly overlap detected: Moved "+butterfly.name+" to a new random position!");
     }
 
-    // Update is called once per frame
-    void Update()
+    public void ButterClick(GameObject butterfly)
     {
+        if (gameState == 2)
+        {
+            Debug.Log("Butterfly click detected: Removed " + butterfly.name + " from the game board");
+            Destroy(butterfly);
+            gameState = 3;
+        }
     }
 }
