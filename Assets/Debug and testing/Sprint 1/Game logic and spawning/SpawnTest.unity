@@ -215,7 +215,7 @@ Transform:
   m_GameObject: {fileID: 549228759}
   m_LocalRotation: {x: 0.7071068, y: -0, z: -0, w: -0.7071068}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 0.6, y: 1, z: 0.6}
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 2
@@ -234,6 +234,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   butterfly: {fileID: 3438679882897807685, guid: db2fab70d7da23d4989f269e3a12d2d4, type: 3}
   backgroundPattern: {fileID: 2100000, guid: 4ebaffc2c9699ca4b90ba82817fbf971, type: 2}
+  backgroundTexture: {fileID: 2800000, guid: c5b870f95c190c6488d86499845664d9, type: 3}
+  blendTexture: {fileID: 0}
   preHuntTime: 0
   huntTime: 0
   butterflyAmount: 0

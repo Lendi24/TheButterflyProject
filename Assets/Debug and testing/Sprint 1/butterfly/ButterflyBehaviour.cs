@@ -7,26 +7,16 @@ public class ButterflyBehaviour : MonoBehaviour
     Ray ray;
     RaycastHit hit;
 
-    public bool hasCollided = false;
-
-    [SerializeField]
-    Material backgroundPattern;
 
     // Start is called before the first frame update
     void Start()
     {
-        Material specificBackground = Instantiate(backgroundPattern);  
-        float value = Random.Range(0, 11);
-        value /= 10;
-        specificBackground.SetFloat("_LerpValue", value);
-        //this.GetComponent<Renderer>().material = specificBackground;
+        //float value = Random.Range(0, 11);
+        //value /= 10;
+        //specificBackground.SetFloat("_LerpValue", value); add this on gamemaster and stuff
+
     }
 
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
 
     private void OnMouseDown()
     {
@@ -35,10 +25,5 @@ public class ButterflyBehaviour : MonoBehaviour
         {
             transform.parent.GetComponent<GameManager>().ButterClick(this.gameObject);
         }
-    }
-
-    void OnTriggerEnter()
-    {
-        transform.parent.GetComponent<GameManager>().RandomMoveButterfly(this.gameObject);
     }
 }

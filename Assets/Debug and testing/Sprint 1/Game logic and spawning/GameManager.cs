@@ -37,10 +37,10 @@ public class GameManager : MonoBehaviour
     {
         //Init variables
         gameState = 0;
-        butterflyAmount = 5;
-        butterflies = new GameObject[butterflyAmount];
 
         //[INSER MENU HERE]
+        butterflies = new GameObject[butterflyAmount];
+
 
         GameStart();
     }
@@ -50,13 +50,32 @@ public class GameManager : MonoBehaviour
         for (int i = 0; i < butterflyAmount; i++)
         {
             Vector2 boardSize = GetComponent<Renderer>().bounds.size;
+            float newButterX;
+            float newButterY;
+            float newButterZ = ((butterfly.GetComponent<Renderer>().bounds.size.z) / -2);
+            Quaternion newButterRotate;
+            int nrOfLoops = 0;
+            bool noOverlap;
+
+            do { //Finds empty space to spawn butterfly
+                nrOfLoops++;
+                newButterX = Random.Range((boardSize.x / 2) - butterfly.GetComponent<Renderer>().bounds.size.x / 2, (boardSize.x / -2) + butterfly.GetComponent<Renderer>().bounds.size.x / 2);
+                newButterY = Random.Range((boardSize.y / 2) - butterfly.GetComponent<Renderer>().bounds.size.y / 2, (boardSize.y / -2) + butterfly.GetComponent<Renderer>().bounds.size.y / 2);
+                newButterRotate = Quaternion.Euler(0, 0, Random.Range(1, 360));
+
+                noOverlap = !Physics.CheckBox(new Vector3(newButterX, newButterY, newButterZ),
+                                       butterfly.GetComponent<Renderer>().bounds.size / 2, newButterRotate);
+
+            } while (!(nrOfLoops > 5000000 || noOverlap));
+
+            if (nrOfLoops > 5000000)
+            {
+                Debug.LogError("Could not find space for butterfly, or spawner code is broken.");
+            }
 
             GameObject newButterfly = Instantiate(butterfly,
                 new Vector3(
-                    Random.Range((boardSize.x / 2) - butterfly.GetComponent<Renderer>().bounds.size.x / 2, (boardSize.x / -2) + butterfly.GetComponent<Renderer>().bounds.size.x / 2),
-                    Random.Range((boardSize.y / 2) - butterfly.GetComponent<Renderer>().bounds.size.y / 2, (boardSize.y / -2) + butterfly.GetComponent<Renderer>().bounds.size.y / 2),
-                    (butterfly.GetComponent<Renderer>().bounds.size.z)/-2),
-                Quaternion.Euler(0,0,Random.Range(1,360)));
+                    newButterX, newButterY, newButterZ), newButterRotate);
 
             newButterfly.transform.parent = this.transform;
             newButterfly.transform.name =  "Butterfly id:"+i;
@@ -66,8 +85,15 @@ public class GameManager : MonoBehaviour
 
             butterflies[i] = newButterfly;
         }
-
-        gameState = 1;
+        /*
+        for (int i = 0; i < butterflyAmount; i++)
+        {
+            butterflies[i].GetComponent<Rigidbody>().isKinematic = true;
+            butterflies[i].GetComponent<BoxCollider>().enabled = false;
+            butterflies[i].GetComponent<MeshCollider>().enabled = true;
+        }
+        */
+            gameState = 1;
         //TODO: Add splash and countdown
         gameState = 2;
     }
