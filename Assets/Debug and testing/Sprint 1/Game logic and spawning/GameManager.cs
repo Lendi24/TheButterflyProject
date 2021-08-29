@@ -5,7 +5,7 @@ using UnityEngine;
 public class GameManager : MonoBehaviour
 {
     [SerializeField]
-    GameObject butterfly;
+    GameObject butterfly, preGameSplash, postGameSplash;
 
     [SerializeField]
     Material backgroundPattern;
@@ -47,10 +47,10 @@ public class GameManager : MonoBehaviour
             GetComponent<Renderer>().bounds.size.x * tilesPerUnit, 
             GetComponent<Renderer>().bounds.size.y * tilesPerUnit));
 
-        GameStart();
+        PrepareGame();
     }
 
-    void GameStart()
+    void PrepareGame()
     {
         for (int i = 0; i < butterflyAmount; i++)
         {
@@ -71,9 +71,9 @@ public class GameManager : MonoBehaviour
                 noOverlap = !Physics.CheckBox(new Vector3(newButterX, newButterY, newButterZ),
                                        butterfly.GetComponent<Renderer>().bounds.size / 2, newButterRotate);
 
-            } while (!(nrOfLoops > 5000000 || noOverlap));
+            } while (!(nrOfLoops > 500000 || noOverlap));
 
-            if (nrOfLoops > 5000000)
+            if (nrOfLoops > 500000)
             {
                 Debug.LogError("Could not find space for butterfly, or spawner code is broken.");
             }
@@ -88,23 +88,75 @@ public class GameManager : MonoBehaviour
             newButterfly.GetComponent<Renderer>().material.SetTexture("_MainTex", backgroundTexture);
             newButterfly.GetComponent<Renderer>().material.SetTexture("__SecondaryTex", blendTexture);
             newButterfly.GetComponent<Renderer>().material.SetTextureScale("_MainTex", new Vector2(
-                newButterfly.GetComponent<MeshFilter>().mesh.bounds.size.x * tilesPerUnit,
-                newButterfly.GetComponent<MeshFilter>().mesh.bounds.size.y * tilesPerUnit));
+                newButterfly.GetComponent<MeshFilter>().mesh.bounds.size.x * tilesPerUnit * newButterfly.transform.localScale.x * 2, //I am not quite sure why *2 fixes it,
+                newButterfly.GetComponent<MeshFilter>().mesh.bounds.size.y * tilesPerUnit * newButterfly.transform.localScale.y * 2));//but I think it has to do with how x and y is messured by different functions
+                                                                                                                                      //A.K.A Don't touch it, it works :3
 
+            float value = Random.Range(0, 11);
+            value /= 10;
+            newButterfly.GetComponent<Renderer>().material.SetFloat("_LerpValue", value);
 
             butterflies[i] = newButterfly;
         }
-        /*
+        /* Code from when I tried to fix collition detection the easy way, that later turned out to be the hard way
         for (int i = 0; i < butterflyAmount; i++)
         {
             butterflies[i].GetComponent<Rigidbody>().isKinematic = true;
             butterflies[i].GetComponent<BoxCollider>().enabled = false;
             butterflies[i].GetComponent<MeshCollider>().enabled = true;
-        }
+        } 
         */
-            gameState = 1;
+
+
+        gameState = 1;
         //TODO: Add splash and countdown
-        gameState = 2;
+//        CountdownSplash();//working on it
+ //       gameState = 2;
+    }
+
+    private void Update()
+    {
+        switch (gameState)
+        {
+            case 1:
+                preGameSplash.GetComponent<Canvas>().enabled = true;
+
+                if (preHuntTime > 0)
+                {
+                    preHuntTime -= Time.deltaTime;
+                }
+
+                else
+                {
+                    preGameSplash.GetComponent<Canvas>().enabled = false;
+                    gameState = 2;
+                }
+
+                break;
+
+            case 2:
+                postGameSplash.GetComponent<Canvas>().enabled = false;
+
+                if (huntTime > 0)
+                {
+                    huntTime -= Time.deltaTime;
+                }
+
+                else
+                {
+                    postGameSplash.GetComponent<Canvas>().enabled = true;
+                    gameState = 3;
+                }
+
+
+                break;
+
+            case 3:
+                break;
+
+            default:
+                break;
+        }
     }
 
     /*

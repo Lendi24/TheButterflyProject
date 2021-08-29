@@ -10,9 +10,6 @@ public class ButterflyBehaviour : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        //float value = Random.Range(0, 11);
-        //value /= 10;
-        //specificBackground.SetFloat("_LerpValue", value); add this on gamemaster and stuff
         transform.parent = GameObject.Find("ButterCollection").transform;
     }
 
