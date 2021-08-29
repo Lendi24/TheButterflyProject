@@ -71,9 +71,9 @@ public class GameManager : MonoBehaviour
                 noOverlap = !Physics.CheckBox(new Vector3(newButterX, newButterY, newButterZ),
                                        butterfly.GetComponent<Renderer>().bounds.size / 2, newButterRotate);
 
-            } while (!(nrOfLoops > 5000000 || noOverlap));
+            } while (!(nrOfLoops > 500000 || noOverlap));
 
-            if (nrOfLoops > 5000000)
+            if (nrOfLoops > 500000)
             {
                 Debug.LogError("Could not find space for butterfly, or spawner code is broken.");
             }
@@ -91,6 +91,10 @@ public class GameManager : MonoBehaviour
                 newButterfly.GetComponent<MeshFilter>().mesh.bounds.size.x * tilesPerUnit * newButterfly.transform.localScale.x * 2, //I am not quite sure why *2 fixes it,
                 newButterfly.GetComponent<MeshFilter>().mesh.bounds.size.y * tilesPerUnit * newButterfly.transform.localScale.y * 2));//but I think it has to do with how x and y is messured by different functions
                                                                                                                                       //A.K.A Don't touch it, it works :3
+
+            float value = Random.Range(0, 11);
+            value /= 10;
+            newButterfly.GetComponent<Renderer>().material.SetFloat("_LerpValue", value);
 
             butterflies[i] = newButterfly;
         }
