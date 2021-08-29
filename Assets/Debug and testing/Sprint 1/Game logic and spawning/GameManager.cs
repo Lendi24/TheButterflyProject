@@ -5,7 +5,7 @@ using UnityEngine;
 public class GameManager : MonoBehaviour
 {
     [SerializeField]
-    GameObject butterfly;
+    GameObject butterfly, preGameSplash, postGameSplash;
 
     [SerializeField]
     Material backgroundPattern;
@@ -47,10 +47,10 @@ public class GameManager : MonoBehaviour
             GetComponent<Renderer>().bounds.size.x * tilesPerUnit, 
             GetComponent<Renderer>().bounds.size.y * tilesPerUnit));
 
-        GameStart();
+        PrepareGame();
     }
 
-    void GameStart()
+    void PrepareGame()
     {
         for (int i = 0; i < butterflyAmount; i++)
         {
@@ -98,17 +98,65 @@ public class GameManager : MonoBehaviour
 
             butterflies[i] = newButterfly;
         }
-        /*
+        /* Code from when I tried to fix collition detection the easy way, that later turned out to be the hard way
         for (int i = 0; i < butterflyAmount; i++)
         {
             butterflies[i].GetComponent<Rigidbody>().isKinematic = true;
             butterflies[i].GetComponent<BoxCollider>().enabled = false;
             butterflies[i].GetComponent<MeshCollider>().enabled = true;
-        }
+        } 
         */
-            gameState = 1;
+
+
+        gameState = 1;
         //TODO: Add splash and countdown
-        gameState = 2;
+//        CountdownSplash();//working on it
+ //       gameState = 2;
+    }
+
+    private void Update()
+    {
+        switch (gameState)
+        {
+            case 1:
+                preGameSplash.GetComponent<Canvas>().enabled = true;
+
+                if (preHuntTime > 0)
+                {
+                    preHuntTime -= Time.deltaTime;
+                }
+
+                else
+                {
+                    preGameSplash.GetComponent<Canvas>().enabled = false;
+                    gameState = 2;
+                }
+
+                break;
+
+            case 2:
+                postGameSplash.GetComponent<Canvas>().enabled = false;
+
+                if (huntTime > 0)
+                {
+                    huntTime -= Time.deltaTime;
+                }
+
+                else
+                {
+                    postGameSplash.GetComponent<Canvas>().enabled = true;
+                    gameState = 3;
+                }
+
+
+                break;
+
+            case 3:
+                break;
+
+            default:
+                break;
+        }
     }
 
     /*
