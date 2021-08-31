@@ -8,7 +8,7 @@ public class GameManager : MonoBehaviour
     GameObject butterfly, preGameSplash, postGameSplash;
 
     [SerializeField]
-    Material backgroundPattern;
+    Material backgroundPattern, animalMaterial;
 
     [SerializeField]
     Texture backgroundTexture, blendTexture;
@@ -21,6 +21,8 @@ public class GameManager : MonoBehaviour
 
     [SerializeField]
     bool timmerRunning;
+
+    Color newColor = Color.white;
 
     GameObject[] butterflies;
 
@@ -84,17 +86,20 @@ public class GameManager : MonoBehaviour
 
             //newButterfly.transform.parent = this.transform; DO NOT ENABLE!! Childning game object will cause weird scaling behaviour 
             newButterfly.transform.name =  "Butterfly id:"+i;
-            newButterfly.GetComponent<Renderer>().material = backgroundPattern;
-            newButterfly.GetComponent<Renderer>().material.SetTexture("_MainTex", backgroundTexture);
-            newButterfly.GetComponent<Renderer>().material.SetTexture("__SecondaryTex", blendTexture);
-            newButterfly.GetComponent<Renderer>().material.SetTextureScale("_MainTex", new Vector2(
-                newButterfly.GetComponent<MeshFilter>().mesh.bounds.size.x * tilesPerUnit * newButterfly.transform.localScale.x * 2, //I am not quite sure why *2 fixes it,
-                newButterfly.GetComponent<MeshFilter>().mesh.bounds.size.y * tilesPerUnit * newButterfly.transform.localScale.y * 2));//but I think it has to do with how x and y is messured by different functions
+            newButterfly.GetComponent<Renderer>().material = animalMaterial;
+            //newButterfly.GetComponent<Renderer>().material.SetTexture("_MainTex", backgroundTexture);
+            //newButterfly.GetComponent<Renderer>().material.SetTexture("__SecondaryTex", blendTexture);
+            //newButterfly.GetComponent<Renderer>().material.SetTextureScale("_MainTex", new Vector2(
+                //newButterfly.GetComponent<MeshFilter>().mesh.bounds.size.x * tilesPerUnit * newButterfly.transform.localScale.x, //I am not quite sure why *2 fixes it,
+                //newButterfly.GetComponent<MeshFilter>().mesh.bounds.size.y * tilesPerUnit * newButterfly.transform.localScale.y));//but I think it has to do with how x and y is messured by different functions
                                                                                                                                       //A.K.A Don't touch it, it works :3
 
             float value = Random.Range(0, 11);
             value /= 10;
-            newButterfly.GetComponent<Renderer>().material.SetFloat("_LerpValue", value);
+            //newButterfly.GetComponent<Renderer>().material.SetFloat("_LerpValue", value);
+            newColor.a = value;
+
+            newButterfly.GetComponent<Renderer>().material.color = newColor;
 
             butterflies[i] = newButterfly;
         }

@@ -2,22 +2,22 @@ Shader "Butterfly/Blending2Textures"
 {
     Properties
     {
-		_MainTex("Texture", 2D) = "white" {}
-		_SecondaryTex("2nd Texture", 2D) = "white" {}
+		_MainTex("Alpha Texture", 2D) = "white"
+		_SecondaryTex("Filter Texture", 2D) = "white" {}
 		_LerpValue("Transition float", Range(0,1)) = 0.5
     }
     SubShader
     {
-        Tags { "RenderType"="Opaque" }
+        Tags { "Queue" = "Transparent" "RenderType" = "Transparent" }
         LOD 100
 
         Pass
         {
             CGPROGRAM
-            #pragma vertex vert
-            #pragma fragment frag
+            #pragma vertex vert alpha
+            #pragma fragment frag frag alpha
             // make fog work
-            #pragma multi_compile_fog
+            #pragma multi_compile_fog alpha
 
             #include "UnityCG.cginc"
 
