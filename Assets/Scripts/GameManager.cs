@@ -44,10 +44,10 @@ public class GameManager : MonoBehaviour
         butterflies = new GameObject[butterflyAmount];
 
         GetComponent<Renderer>().material = backgroundPattern;
-        GetComponent<Renderer>().material.SetTexture("_MainTex", backgroundTexture);
-        GetComponent<Renderer>().material.SetTextureScale("_MainTex", new Vector2(
-            GetComponent<Renderer>().bounds.size.x * tilesPerUnit, 
-            GetComponent<Renderer>().bounds.size.y * tilesPerUnit));
+        GetComponent<Renderer>().material.SetTexture("_MainTex", GetComponent<PerlinNoise>().GenerateTexture());
+        GetComponent<Renderer>().material.SetTextureScale("_MainTex", new Vector2(1, 1));
+            /*GetComponent<Renderer>().bounds.size.x * tilesPerUnit, 
+            GetComponent<Renderer>().bounds.size.y * tilesPerUnit));*/
 
         PrepareGame();
     }
@@ -191,4 +191,6 @@ public class GameManager : MonoBehaviour
             gameState = 3;
         }
     }
+
+    
 }
