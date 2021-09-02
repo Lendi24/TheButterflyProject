@@ -2,6 +2,34 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+public static class TimmerManagment
+{
+    private static float timmerTimeLeft;
+    private static bool timmerIsRunning;
+
+    public static bool Timmer(float time)
+    {
+        if (!timmerIsRunning)
+        {
+            timmerTimeLeft = time;
+            timmerIsRunning = true;
+        }
+
+        if (timmerTimeLeft > 0)
+        {
+            timmerTimeLeft -= Time.deltaTime;
+            return false;
+        }
+
+        else
+        {
+            timmerIsRunning = false;
+            return true;
+        }
+
+    }
+}
+
 public class GameManager : MonoBehaviour
 {
     [SerializeField]
@@ -18,9 +46,6 @@ public class GameManager : MonoBehaviour
 
     [SerializeField]
     int butterflyAmount, gameState;
-
-    [SerializeField]
-    bool timmerRunning;
 
     Color newColor = Color.white;
 
@@ -126,34 +151,20 @@ public class GameManager : MonoBehaviour
             case 1:
                 preGameSplash.GetComponent<Canvas>().enabled = true;
 
-                if (preHuntTime > 0)
-                {
-                    preHuntTime -= Time.deltaTime;
-                }
-
-                else
-                {
+                if (TimmerManagment.Timmer(preHuntTime)) {
                     preGameSplash.GetComponent<Canvas>().enabled = false;
                     gameState = 2;
                 }
-
                 break;
 
             case 2:
                 postGameSplash.GetComponent<Canvas>().enabled = false;
 
-                if (huntTime > 0)
-                {
-                    huntTime -= Time.deltaTime;
-                }
-
-                else
+                if (TimmerManagment.Timmer(huntTime))
                 {
                     postGameSplash.GetComponent<Canvas>().enabled = true;
                     gameState = 3;
                 }
-
-
                 break;
 
             case 3:
