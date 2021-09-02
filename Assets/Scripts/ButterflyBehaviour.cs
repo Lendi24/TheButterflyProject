@@ -4,8 +4,9 @@ using UnityEngine;
 
 public class ButterflyBehaviour : MonoBehaviour
 {
-    Ray ray;
-    RaycastHit hit;
+    private Ray ray;
+    private RaycastHit hit;
+    public GameObject gameBoard;
 
     // Start is called before the first frame update
     void Start()
@@ -13,14 +14,14 @@ public class ButterflyBehaviour : MonoBehaviour
         transform.parent = GameObject.Find("ButterCollection").transform;
     }
 
-
     private void OnMouseDown()
     {
         ray = Camera.main.ScreenPointToRay(Input.mousePosition);
         if (Physics.Raycast(ray, out hit))
         {
-            GameObject.Find("GameBoard").GetComponent<GameManager>().ButterClick(this.gameObject);
-            Destroy(this.gameObject);
+            gameBoard.GetComponent<GameManager>().ButterClick(gameObject);
+            //GameObject.Find("GameBoard").GetComponent<GameManager>().ButterClick(this.gameObject);
+            //Destroy(this.gameObject);
         }
     }
 }

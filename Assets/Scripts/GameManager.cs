@@ -45,9 +45,10 @@ public class GameManager : MonoBehaviour
     float preHuntTime, huntTime, tilesPerUnit;
 
     [SerializeField]
-    int butterflyAmount, gameState;
+    int butterflyAmount, maximumKills, minimumKills;
 
-    Color newColor = Color.white;
+    private int butterfliesRemaining, gameState;
+    private Color newColor = Color.white;
 
     GameObject[] butterflies;
 
@@ -62,11 +63,7 @@ public class GameManager : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        //Init variables
-        gameState = 0;
-
         //[INSER MENU HERE]
-        butterflies = new GameObject[butterflyAmount];
 
         GetComponent<Renderer>().material = backgroundPattern;
         GetComponent<Renderer>().material.SetTexture("_MainTex", backgroundTexture);
@@ -74,7 +71,18 @@ public class GameManager : MonoBehaviour
             GetComponent<Renderer>().bounds.size.x * tilesPerUnit, 
             GetComponent<Renderer>().bounds.size.y * tilesPerUnit));
 
+        ResetVariables();
         PrepareGame();
+    }
+
+    void ResetVariables()
+    {
+        //Init variables
+        gameState = 0;
+        butterfliesRemaining = butterflyAmount;
+        butterflies = new GameObject[butterflyAmount];
+        preGameSplash.GetComponent<Canvas>().enabled = true;
+        postGameSplash.GetComponent<Canvas>().enabled = false;
     }
 
     void PrepareGame()
@@ -98,50 +106,29 @@ public class GameManager : MonoBehaviour
                 noOverlap = !Physics.CheckBox(new Vector3(newButterX, newButterY, newButterZ),
                                        butterfly.GetComponent<Renderer>().bounds.size / 2, newButterRotate);
 
-            } while (!(nrOfLoops > 500000 || noOverlap));
+            } while (!(nrOfLoops > 500000 || noOverlap)); //Break for infinite loop 
 
-            if (nrOfLoops > 500000)
+            if (nrOfLoops > 500000)//Throws error for infinite loop
             {
                 Debug.LogError("Could not find space for butterfly, or spawner code is broken.");
             }
 
-            GameObject newButterfly = Instantiate(butterfly,
+            GameObject newButterfly = Instantiate(butterfly,//Spawn butterfly
                 new Vector3(
                     newButterX, newButterY, newButterZ), newButterRotate);
 
-            //newButterfly.transform.parent = this.transform; DO NOT ENABLE!! Childning game object will cause weird scaling behaviour 
-            newButterfly.transform.name =  "Butterfly id:"+i;
-            newButterfly.GetComponent<Renderer>().material = animalMaterial;
-            //newButterfly.GetComponent<Renderer>().material.SetTexture("_MainTex", backgroundTexture);
-            //newButterfly.GetComponent<Renderer>().material.SetTexture("__SecondaryTex", blendTexture);
-            //newButterfly.GetComponent<Renderer>().material.SetTextureScale("_MainTex", new Vector2(
-                //newButterfly.GetComponent<MeshFilter>().mesh.bounds.size.x * tilesPerUnit * newButterfly.transform.localScale.x, //I am not quite sure why *2 fixes it,
-                //newButterfly.GetComponent<MeshFilter>().mesh.bounds.size.y * tilesPerUnit * newButterfly.transform.localScale.y));//but I think it has to do with how x and y is messured by different functions
-                                                                                                                                      //A.K.A Don't touch it, it works :3
-
             float value = Random.Range(0, 11);
             value /= 10;
-            //newButterfly.GetComponent<Renderer>().material.SetFloat("_LerpValue", value);
             newColor.a = value;
-
             newButterfly.GetComponent<Renderer>().material.color = newColor;
+            newButterfly.GetComponent<Renderer>().material = animalMaterial;
+            newButterfly.GetComponent<ButterflyBehaviour>().gameBoard = this.gameObject;
+            newButterfly.transform.name =  "Butterfly id:"+i;
 
             butterflies[i] = newButterfly;
         }
-        /* Code from when I tried to fix collition detection the easy way, that later turned out to be the hard way
-        for (int i = 0; i < butterflyAmount; i++)
-        {
-            butterflies[i].GetComponent<Rigidbody>().isKinematic = true;
-            butterflies[i].GetComponent<BoxCollider>().enabled = false;
-            butterflies[i].GetComponent<MeshCollider>().enabled = true;
-        } 
-        */
-
 
         gameState = 1;
-        //TODO: Add splash and countdown
-//        CountdownSplash();//working on it
- //       gameState = 2;
     }
 
     private void Update()
@@ -149,26 +136,48 @@ public class GameManager : MonoBehaviour
         switch (gameState)
         {
             case 1:
-                preGameSplash.GetComponent<Canvas>().enabled = true;
 
                 if (TimmerManagment.Timmer(preHuntTime)) {
                     preGameSplash.GetComponent<Canvas>().enabled = false;
                     gameState = 2;
                 }
+
                 break;
 
             case 2:
-                postGameSplash.GetComponent<Canvas>().enabled = false;
 
-                if (TimmerManagment.Timmer(huntTime))
-                {
+                if (TimmerManagment.Timmer(huntTime)) {
                     postGameSplash.GetComponent<Canvas>().enabled = true;
-                    gameState = 3;
+
+                    if ((butterflyAmount - butterfliesRemaining) < minimumKills)
+                    {
+                        Debug.Log("U loose");
+                        gameState = 4;//Failed! Health will be lost, energy will be lost or game will be lost here.
+                    }
+
+                    else
+                    {
+                        Debug.Log("continu");
+                        gameState = 3;//Continue playing!
+                    }
                 }
+
                 break;
 
             case 3:
+
+                ResetVariables();
+                gameState = 1;
+                //Fix some splash about stats or smt and some wait time
+
                 break;
+
+            case 4:
+
+                //Fix some splash about stats or smt and some wait time
+
+                break;
+
 
             default:
                 break;
@@ -196,10 +205,11 @@ public class GameManager : MonoBehaviour
 
     public void ButterClick(GameObject butterfly)
     {
-        if (gameState == 2)
+        if (gameState == 2 && (butterflyAmount - butterfliesRemaining) < maximumKills)
         {
+            Destroy(butterfly);
             Debug.Log("Butterfly click detected: Removed " + butterfly.name + " from the game board");
-            gameState = 3;
+            butterfliesRemaining--;
         }
     }
 }
