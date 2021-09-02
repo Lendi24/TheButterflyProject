@@ -31,6 +31,7 @@ public class PerlinNoise : MonoBehaviour
             }
         }
 
+        texture.filterMode = FilterMode.Point;
         texture.Apply();
         return texture;
     }
