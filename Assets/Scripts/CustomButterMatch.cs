@@ -82,8 +82,9 @@ public class CustomButterMatch : MonoBehaviour
     {
         if (canSave())
         {
-            PlayerPrefs.SetString(keyPrefix + name, "test");
+            PlayerPrefs.SetString(keyPrefix + name, butterMatchX+ ":"+butterMatchY+ ":"+squareMatch);
         }
+
         else
         {
             Debug.LogError("Could not save! Is name empty? Are you trying to overwrite an already existing key?");
@@ -92,7 +93,13 @@ public class CustomButterMatch : MonoBehaviour
 
     public void Load()
     {
-        Debug.Log(PlayerPrefs.GetString(keyPrefix + name));
+        string[] tempData = PlayerPrefs.GetString(keyPrefix + name).Split(':');
+
+        snapMatchYtoX = (tempData[0] == tempData[1]);
+        squareMatch = bool.Parse(tempData[2]);
+
+        butterMatchX = float.Parse(tempData[0]);
+        butterMatchY = float.Parse(tempData[1]);
     }
 
     bool canSave()
@@ -100,7 +107,7 @@ public class CustomButterMatch : MonoBehaviour
         bool canSave = true;
                                                                     //Can not save if:
         if ((name == "") ||                                         //name does not exist
-        (PlayerPrefs.HasKey(keyPrefix+name)) ||                     //key with same name exists
+        //(PlayerPrefs.HasKey(keyPrefix+name)) ||                     //key with same name exists
         (butterMatchX == 0 || butterMatchY == 0)) canSave = false;  //Saved values are 0    
 
         return canSave;
