@@ -2,34 +2,6 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public static class TimmerManagment
-{
-    private static float timmerTimeLeft;
-    private static bool timmerIsRunning;
-
-    public static bool Timmer(float time)
-    {
-        if (!timmerIsRunning)
-        {
-            timmerTimeLeft = time;
-            timmerIsRunning = true;
-        }
-
-        if (timmerTimeLeft > 0)
-        {
-            timmerTimeLeft -= Time.deltaTime;
-            return false;
-        }
-
-        else
-        {
-            timmerIsRunning = false;
-            return true;
-        }
-
-    }
-}
-
 public class GameManager : MonoBehaviour
 {
     [SerializeField]
@@ -188,20 +160,7 @@ public class GameManager : MonoBehaviour
     |=============================|
     |==BUTTERFLY EVENT HANDELERS==|
     |=============================|
-    
-    public void RandomMoveButterfly(GameObject butterfly)
-    {
-        Vector2 boardSize = GetComponent<Renderer>().bounds.size; This code is old. We dont use this code. We do not speak of this code. 
-
-        butterfly.transform.position = new Vector3(
-                    Random.Range((boardSize.x / 2) - butterfly.GetComponent<Renderer>().bounds.size.x / 2, (boardSize.x / -2) + butterfly.GetComponent<Renderer>().bounds.size.x / 2),
-                    Random.Range((boardSize.y / 2) - butterfly.GetComponent<Renderer>().bounds.size.y / 2, (boardSize.y / -2) + butterfly.GetComponent<Renderer>().bounds.size.y / 2),
-                    (butterfly.GetComponent<Renderer>().bounds.size.z) / -2);
-
-        butterfly.transform.rotation = Quaternion.Euler(0, 0, Random.Range(1, 360));
-
-        Debug.Log("Butterfly overlap detected: Moved "+butterfly.name+" to a new random position!");
-    }*/
+    */
 
     public void ButterClick(GameObject butterfly)
     {
