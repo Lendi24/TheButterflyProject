@@ -20,6 +20,7 @@ public class GameManager : MonoBehaviour
     int butterflyAmount, maximumKills, minimumKills, butterflyRenderMode;
 
     private int butterfliesRemaining, gameState;
+    string keyPrefix = "modelMatch";
 
     GameObject[] butterflies;
 
@@ -105,11 +106,45 @@ public class GameManager : MonoBehaviour
                     value /= 10;
                     newColor.a = value;
                     newButterfly.GetComponent<Renderer>().material.color = newColor;
-                    newButterfly.GetComponent<Renderer>().material = animalMaterial;
                     newButterfly.GetComponent<ButterflyBehaviour>().gameBoard = this.gameObject;
                     break;
 
                 case 1:
+
+                    string modelName = newButterfly.GetComponent<MeshFilter>().sharedMesh.name;
+                    Debug.Log(modelName);
+                    string[] tempData = PlayerPrefs.GetString(keyPrefix + modelName).Split(':');
+
+                    float butterMatchX = float.Parse(tempData[0]);
+                    float butterMatchY = float.Parse(tempData[1]);
+                    bool squareMatch = bool.Parse(tempData[2]);
+
+                    float squareX, squareY;
+
+                    if (squareMatch)
+                    {
+                        squareX = newButterfly.GetComponent<MeshFilter>().mesh.bounds.size.x;
+                        squareY = newButterfly.GetComponent<MeshFilter>().mesh.bounds.size.y;
+                    }
+
+                    else
+                    {
+                        squareX = 1;
+                        squareY = 1;
+                    }
+
+                    newButterfly.GetComponent<Renderer>().material = animalMaterial;
+                    newButterfly.GetComponent<Renderer>().material.SetTexture("_MainTex", backgroundTexture);
+                    newButterfly.GetComponent<Renderer>().material.SetTexture("__SecondaryTex", blendTexture);
+                    newButterfly.GetComponent<Renderer>().material.SetTextureScale("_MainTex", new Vector2(
+                        newButterfly.GetComponent<MeshFilter>().mesh.bounds.size.x * tilesPerUnit * newButterfly.transform.localScale.x * butterMatchX * squareY,
+                        newButterfly.GetComponent<MeshFilter>().mesh.bounds.size.y * tilesPerUnit * newButterfly.transform.localScale.y * butterMatchY * squareX));
+
+                    GetComponent<Renderer>().material.SetTextureScale("_MainTex", new Vector2(
+                        GetComponent<Renderer>().bounds.size.x * tilesPerUnit,
+                        GetComponent<Renderer>().bounds.size.y * tilesPerUnit));
+
+
                     break;
 
                 default:

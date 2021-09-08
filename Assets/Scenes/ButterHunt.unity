@@ -245,6 +245,7 @@ MonoBehaviour:
   butterflyAmount: 5
   maximumKills: 1
   minimumKills: 1
+  butterflyRenderMode: 1
 --- !u!1 &616003544
 GameObject:
   m_ObjectHideFlags: 0

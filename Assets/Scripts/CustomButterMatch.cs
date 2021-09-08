@@ -7,7 +7,7 @@ using UnityEngine;
 public class CustomButterMatch : MonoBehaviour
 {
     [SerializeField]
-    string name;
+    string modelName;
     string keyPrefix = "modelMatch";
 
     [SerializeField]
@@ -82,7 +82,7 @@ public class CustomButterMatch : MonoBehaviour
     {
         if (canSave())
         {
-            PlayerPrefs.SetString(keyPrefix + name, butterMatchX+ ":"+butterMatchY+ ":"+squareMatch);
+            PlayerPrefs.SetString(keyPrefix + modelName, butterMatchX+ ":"+butterMatchY+ ":"+squareMatch);
         }
 
         else
@@ -93,7 +93,7 @@ public class CustomButterMatch : MonoBehaviour
 
     public void Load()
     {
-        string[] tempData = PlayerPrefs.GetString(keyPrefix + name).Split(':');
+        string[] tempData = PlayerPrefs.GetString(keyPrefix + modelName).Split(':');
 
         snapMatchYtoX = (tempData[0] == tempData[1]);
         squareMatch = bool.Parse(tempData[2]);
@@ -106,7 +106,7 @@ public class CustomButterMatch : MonoBehaviour
     {
         bool canSave = true;
                                                                     //Can not save if:
-        if ((name == "") ||                                         //name does not exist
+        if ((modelName == "") ||                                         //name does not exist
         //(PlayerPrefs.HasKey(keyPrefix+name)) ||                     //key with same name exists
         (butterMatchX == 0 || butterMatchY == 0)) canSave = false;  //Saved values are 0    
 
