@@ -17,14 +17,18 @@ public class GameManager : MonoBehaviour
     float preHuntTime, huntTime, tilesPerUnit;
 
     [SerializeField]
-    int butterflyAmount, maximumKills, minimumKills;
+    int butterflyAmount, maximumKills, minimumKills, butterflyRenderMode;
 
     private int butterfliesRemaining, gameState;
-    private Color newColor = Color.white;
 
     GameObject[] butterflies;
 
-    /*
+    /* Butterfly Render Modes
+     * 0 - Transparancy
+     * 1 - TextureMode
+    */
+
+    /* Game States
     0-PreGame
     1-PreHunt
     2-Hunt
@@ -89,15 +93,28 @@ public class GameManager : MonoBehaviour
                 new Vector3(
                     newButterX, newButterY, newButterZ), newButterRotate);
 
-            float value = Random.Range(0, 11);
-            value /= 10;
-            newColor.a = value;
-            newButterfly.GetComponent<Renderer>().material.color = newColor;
-            newButterfly.GetComponent<Renderer>().material = animalMaterial;
-            newButterfly.GetComponent<ButterflyBehaviour>().gameBoard = this.gameObject;
             newButterfly.transform.name =  "Butterfly id:"+i;
 
             butterflies[i] = newButterfly;
+
+            switch (butterflyRenderMode)
+            {
+                case 0:
+                    Color newColor = Color.white;
+                    float value = Random.Range(0, 11);
+                    value /= 10;
+                    newColor.a = value;
+                    newButterfly.GetComponent<Renderer>().material.color = newColor;
+                    newButterfly.GetComponent<Renderer>().material = animalMaterial;
+                    newButterfly.GetComponent<ButterflyBehaviour>().gameBoard = this.gameObject;
+                    break;
+
+                case 1:
+                    break;
+
+                default:
+                    break;
+            }
         }
 
         gameState = 1;
