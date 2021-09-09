@@ -102,15 +102,17 @@ public class GameManager : MonoBehaviour
             {
                 case 0:
                     Color newColor = Color.white;
+                    Material newMat = new Material(Shader.Find("Transparent/Diffuse"));
                     float value = Random.Range(0, 11);
                     value /= 10;
                     newColor.a = value;
+                    newButterfly.GetComponent<Renderer>().material = newMat;
                     newButterfly.GetComponent<Renderer>().material.color = newColor;
                     newButterfly.GetComponent<ButterflyBehaviour>().gameBoard = this.gameObject;
                     break;
 
                 case 1:
-
+                    
                     string modelName = newButterfly.GetComponent<MeshFilter>().sharedMesh.name;
                     Debug.Log(modelName);
                     string[] tempData = PlayerPrefs.GetString(keyPrefix + modelName).Split(':');
@@ -146,7 +148,7 @@ public class GameManager : MonoBehaviour
 
 
                     break;
-
+                    
                 default:
                     break;
             }
