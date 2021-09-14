@@ -17,7 +17,7 @@ public class GameManager : MonoBehaviour
     float preHuntTime, huntTime, tilesPerUnit;
 
     [SerializeField]
-    int butterflyAmount, maximumKills, minimumKills, butterflyRenderMode;
+    int butterflyStartAmount, maximumKills, minimumKills, butterflyRenderMode;
 
     private int butterfliesRemaining, gameState;
     string keyPrefix = "modelMatch";
@@ -56,15 +56,21 @@ public class GameManager : MonoBehaviour
     {
         //Init variables
         gameState = 0;
-        butterfliesRemaining = butterflyAmount;
-        butterflies = new GameObject[butterflyAmount];
+        butterfliesRemaining = butterflyStartAmount;
+        butterflies = new GameObject[butterflyStartAmount];
         preGameSplash.GetComponent<Canvas>().enabled = true;
         postGameSplash.GetComponent<Canvas>().enabled = false;
     }
 
     void PrepareGame()
     {
-        for (int i = 0; i < butterflyAmount; i++)
+        SpawnButterfly(butterflyStartAmount);
+        gameState = 1;
+    }
+
+    void SpawnButterfly(int amount)
+    {
+        for (int i = 0; i < amount; i++)
         {
             Vector2 boardSize = GetComponent<Renderer>().bounds.size;
             float newButterX;
@@ -74,7 +80,8 @@ public class GameManager : MonoBehaviour
             int nrOfLoops = 0;
             bool noOverlap;
 
-            do { //Finds empty space to spawn butterfly
+            do
+            { //Finds empty space to spawn butterfly
                 nrOfLoops++;
                 newButterX = Random.Range((boardSize.x / 2) - butterfly.GetComponent<MeshFilter>().sharedMesh.bounds.size.x / 2, (boardSize.x / -2) + butterfly.GetComponent<Renderer>().bounds.size.x / 2);
                 newButterY = Random.Range((boardSize.y / 2) - butterfly.GetComponent<MeshFilter>().sharedMesh.bounds.size.y / 2, (boardSize.y / -2) + butterfly.GetComponent<Renderer>().bounds.size.y / 2);
@@ -94,25 +101,25 @@ public class GameManager : MonoBehaviour
                 new Vector3(
                     newButterX, newButterY, newButterZ), newButterRotate);
 
-            newButterfly.transform.name =  "Butterfly id:"+i;
+            newButterfly.transform.name = "Butterfly id:" + i;
+            newButterfly.GetComponent<ButterflyBehaviour>().gameBoard = this.gameObject;
 
-            butterflies[i] = newButterfly;
+            //butterflies[i] = newButterfly;
+
+            float blendIn = Random.Range(0, 11);
+            blendIn /= 10;
 
             switch (butterflyRenderMode)
             {
-                case 0:
+                case 0://alpha mode
                     Color newColor = Color.white;
                     Material newMat = new Material(Shader.Find("Transparent/Diffuse"));
-                    float value = Random.Range(0, 11);
-                    value /= 10;
-                    newColor.a = value;
+                    newColor.a = blendIn;
                     newButterfly.GetComponent<Renderer>().material = newMat;
                     newButterfly.GetComponent<Renderer>().material.color = newColor;
-                    newButterfly.GetComponent<ButterflyBehaviour>().gameBoard = this.gameObject;
                     break;
 
-                case 1:
-                    
+                case 1://texture-matched mode
                     string modelName = newButterfly.GetComponent<MeshFilter>().sharedMesh.name;
                     Debug.Log(modelName);
                     string[] tempData = PlayerPrefs.GetString(keyPrefix + modelName).Split(':');
@@ -136,25 +143,25 @@ public class GameManager : MonoBehaviour
                     }
 
                     newButterfly.GetComponent<Renderer>().material = animalMaterial;
-                    newButterfly.GetComponent<Renderer>().material.SetTexture("_MainTex", backgroundTexture);
-                    newButterfly.GetComponent<Renderer>().material.SetTexture("__SecondaryTex", blendTexture);
+
+                    newButterfly.GetComponent<Renderer>().material.SetTexture("_MainTex", blendTexture);
                     newButterfly.GetComponent<Renderer>().material.SetTextureScale("_MainTex", new Vector2(
                         newButterfly.GetComponent<MeshFilter>().mesh.bounds.size.x * tilesPerUnit * newButterfly.transform.localScale.x * butterMatchX * squareY,
                         newButterfly.GetComponent<MeshFilter>().mesh.bounds.size.y * tilesPerUnit * newButterfly.transform.localScale.y * butterMatchY * squareX));
 
-                    GetComponent<Renderer>().material.SetTextureScale("_MainTex", new Vector2(
-                        GetComponent<Renderer>().bounds.size.x * tilesPerUnit,
-                        GetComponent<Renderer>().bounds.size.y * tilesPerUnit));
+                    newButterfly.GetComponent<Renderer>().material.SetTexture("_SecondaryTex", backgroundTexture);
+                    newButterfly.GetComponent<Renderer>().material.SetTextureScale("_SecondaryTex", new Vector2(
+                        newButterfly.GetComponent<MeshFilter>().mesh.bounds.size.x * tilesPerUnit * newButterfly.transform.localScale.x * butterMatchX * squareY,
+                        newButterfly.GetComponent<MeshFilter>().mesh.bounds.size.y * tilesPerUnit * newButterfly.transform.localScale.y * butterMatchY * squareX));
 
+                    newButterfly.GetComponent<Renderer>().material.SetFloat("_LerpValue", blendIn);
 
                     break;
-                    
+
                 default:
                     break;
             }
         }
-
-        gameState = 1;
     }
 
     private void Update()
@@ -175,7 +182,7 @@ public class GameManager : MonoBehaviour
                 if (TimmerManagment.Timmer(huntTime)) {
                     postGameSplash.GetComponent<Canvas>().enabled = true;
 
-                    if ((butterflyAmount - butterfliesRemaining) < minimumKills)
+                    if ((butterflyStartAmount - butterfliesRemaining) < minimumKills)
                     {
                         Debug.Log("U loose");
                         gameState = 4;//Failed! Health will be lost, energy will be lost or game will be lost here.
@@ -218,7 +225,7 @@ public class GameManager : MonoBehaviour
 
     public void ButterClick(GameObject butterfly)
     {
-        if (gameState == 2 && (butterflyAmount - butterfliesRemaining) < maximumKills)
+        if (gameState == 2 && (butterflyStartAmount - butterfliesRemaining) < maximumKills)
         {
             Destroy(butterfly);
             Debug.Log("Butterfly click detected: Removed " + butterfly.name + " from the game board");
