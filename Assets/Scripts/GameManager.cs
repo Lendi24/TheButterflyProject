@@ -120,41 +120,50 @@ public class GameManager : MonoBehaviour
                     break;
 
                 case 1://texture-matched mode
-                    string modelName = newButterfly.GetComponent<MeshFilter>().sharedMesh.name;
-                    Debug.Log(modelName);
-                    string[] tempData = PlayerPrefs.GetString(keyPrefix + modelName).Split(':');
 
-                    float butterMatchX = float.Parse(tempData[0]);
-                    float butterMatchY = float.Parse(tempData[1]);
-                    bool squareMatch = bool.Parse(tempData[2]);
-
-                    float squareX, squareY;
-
-                    if (squareMatch)
+                    try
                     {
-                        squareX = newButterfly.GetComponent<MeshFilter>().mesh.bounds.size.x;
-                        squareY = newButterfly.GetComponent<MeshFilter>().mesh.bounds.size.y;
+                        string modelName = newButterfly.GetComponent<MeshFilter>().sharedMesh.name;
+                        Debug.Log(modelName);
+                        string[] tempData = PlayerPrefs.GetString(keyPrefix + modelName).Split(':');
+
+                        float butterMatchX = float.Parse(tempData[0]);
+                        float butterMatchY = float.Parse(tempData[1]);
+                        bool squareMatch = bool.Parse(tempData[2]);
+
+                        float squareX, squareY;
+
+                        if (squareMatch)
+                        {
+                            squareX = newButterfly.GetComponent<MeshFilter>().mesh.bounds.size.x;
+                            squareY = newButterfly.GetComponent<MeshFilter>().mesh.bounds.size.y;
+                        }
+
+                        else
+                        {
+                            squareX = 1;
+                            squareY = 1;
+                        }
+
+                        newButterfly.GetComponent<Renderer>().material = animalMaterial;
+
+                        newButterfly.GetComponent<Renderer>().material.SetTexture("_MainTex", blendTexture);
+                        newButterfly.GetComponent<Renderer>().material.SetTextureScale("_MainTex", new Vector2(
+                            newButterfly.GetComponent<MeshFilter>().mesh.bounds.size.x * tilesPerUnit * newButterfly.transform.localScale.x * butterMatchX * squareY,
+                            newButterfly.GetComponent<MeshFilter>().mesh.bounds.size.y * tilesPerUnit * newButterfly.transform.localScale.y * butterMatchY * squareX));
+
+                        newButterfly.GetComponent<Renderer>().material.SetTexture("_SecondaryTex", backgroundTexture);
+                        newButterfly.GetComponent<Renderer>().material.SetTextureScale("_SecondaryTex", new Vector2(
+                            newButterfly.GetComponent<MeshFilter>().mesh.bounds.size.x * tilesPerUnit * newButterfly.transform.localScale.x * butterMatchX * squareY,
+                            newButterfly.GetComponent<MeshFilter>().mesh.bounds.size.y * tilesPerUnit * newButterfly.transform.localScale.y * butterMatchY * squareX));
+
+                        newButterfly.GetComponent<Renderer>().material.SetFloat("_LerpValue", blendIn);
                     }
 
-                    else
+                    catch (System.Exception)
                     {
-                        squareX = 1;
-                        squareY = 1;
+                        Debug.LogError("Could not load correct material for model. Try rendermode 0, or give texture a size to scale");
                     }
-
-                    newButterfly.GetComponent<Renderer>().material = animalMaterial;
-
-                    newButterfly.GetComponent<Renderer>().material.SetTexture("_MainTex", blendTexture);
-                    newButterfly.GetComponent<Renderer>().material.SetTextureScale("_MainTex", new Vector2(
-                        newButterfly.GetComponent<MeshFilter>().mesh.bounds.size.x * tilesPerUnit * newButterfly.transform.localScale.x * butterMatchX * squareY,
-                        newButterfly.GetComponent<MeshFilter>().mesh.bounds.size.y * tilesPerUnit * newButterfly.transform.localScale.y * butterMatchY * squareX));
-
-                    newButterfly.GetComponent<Renderer>().material.SetTexture("_SecondaryTex", backgroundTexture);
-                    newButterfly.GetComponent<Renderer>().material.SetTextureScale("_SecondaryTex", new Vector2(
-                        newButterfly.GetComponent<MeshFilter>().mesh.bounds.size.x * tilesPerUnit * newButterfly.transform.localScale.x * butterMatchX * squareY,
-                        newButterfly.GetComponent<MeshFilter>().mesh.bounds.size.y * tilesPerUnit * newButterfly.transform.localScale.y * butterMatchY * squareX));
-
-                    newButterfly.GetComponent<Renderer>().material.SetFloat("_LerpValue", blendIn);
 
                     break;
 
