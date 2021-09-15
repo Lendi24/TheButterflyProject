@@ -8,7 +8,7 @@ public class ButterflyBehaviour : MonoBehaviour
     private RaycastHit hit;
     public GameObject gameBoard;
 
-    public string dna;
+    public bool[] genes;
 
     // Start is called before the first frame update
     void Start()

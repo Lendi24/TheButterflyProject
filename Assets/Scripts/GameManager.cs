@@ -17,7 +17,7 @@ public class GameManager : MonoBehaviour
     float preHuntTime, huntTime, tilesPerUnit;
 
     [SerializeField]
-    int butterflyStartAmount, maximumKills, minimumKills, butterflyRenderMode;
+    int butterflyGeneLength, butterflyStartAmount, maximumKills, minimumKills, butterflyRenderMode;
 
     private int butterfliesRemaining, gameState;
     string keyPrefix = "modelMatch";
@@ -108,6 +108,8 @@ public class GameManager : MonoBehaviour
 
             float blendIn = Random.Range(0, 11);
             blendIn /= 10;
+
+            GeneticManager.GiveGenetics(butterflyGeneLength);
 
             switch (butterflyRenderMode)
             {
