@@ -61,7 +61,13 @@ public class GeneticManager : MonoBehaviour
 
     public static float BlendInCalc(bool[] genetics)
     {
+        float geneTrueLength = 0;
 
-        return 1;
+        for (int i = 0; i < genetics.Length && genetics[i]; i++)
+        {
+            geneTrueLength++;
+        }
+
+        return geneTrueLength / genetics.Length;
     } 
 }

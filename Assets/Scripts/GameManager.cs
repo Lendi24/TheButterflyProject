@@ -5,7 +5,7 @@ using UnityEngine;
 public class GameManager : MonoBehaviour
 {
     [SerializeField]
-    GameObject butterfly, preGameSplash, postGameSplash;
+    GameObject butterfly, preGameSplash, postGameSplash, butterContainer;
 
     [SerializeField]
     Material backgroundPattern, animalMaterial;
@@ -19,10 +19,11 @@ public class GameManager : MonoBehaviour
     [SerializeField]
     int butterflyGeneLength, butterflyStartAmount, maximumKills, minimumKills, butterflyRenderMode;
 
+    [SerializeField]
+    bool resetEverythingOnNextGen;
+
     private int butterfliesRemaining, gameState;
     string keyPrefix = "modelMatch";
-
-    GameObject[] butterflies;
 
     /* Butterfly Render Modes
      * 0 - Transparancy
@@ -57,7 +58,6 @@ public class GameManager : MonoBehaviour
         //Init variables
         gameState = 0;
         butterfliesRemaining = butterflyStartAmount;
-        butterflies = new GameObject[butterflyStartAmount];
         preGameSplash.GetComponent<Canvas>().enabled = true;
         postGameSplash.GetComponent<Canvas>().enabled = false;
     }
@@ -68,49 +68,50 @@ public class GameManager : MonoBehaviour
         gameState = 1;
     }
 
+    Vector3 RandomButterPos(Quaternion newButterRotate)
+    {
+        Vector2 boardSize = GetComponent<Renderer>().bounds.size;
+        float newButterX;
+        float newButterY;
+        float newButterZ = ((butterfly.GetComponent<Renderer>().bounds.size.z) / -2);
+        int nrOfLoops = 0;
+        bool noOverlap;
+
+        do
+        { //Finds empty space to spawn butterfly
+            nrOfLoops++;
+            newButterX = Random.Range((boardSize.x / 2) - butterfly.GetComponent<MeshFilter>().sharedMesh.bounds.size.x / 2, (boardSize.x / -2) + butterfly.GetComponent<Renderer>().bounds.size.x / 2);
+            newButterY = Random.Range((boardSize.y / 2) - butterfly.GetComponent<MeshFilter>().sharedMesh.bounds.size.y / 2, (boardSize.y / -2) + butterfly.GetComponent<Renderer>().bounds.size.y / 2);
+
+            noOverlap = !Physics.CheckBox(new Vector3(newButterX, newButterY, newButterZ),
+                                   butterfly.GetComponent<Renderer>().bounds.size / 2, newButterRotate);
+
+        } while (!(nrOfLoops > 500000 || noOverlap)); //Break for infinite loop 
+
+        if (nrOfLoops > 500000)//Throws error for infinite loop
+        {
+            Debug.LogError("Could not find space for butterfly, or spawner code is broken.");
+        }
+
+        return new Vector3(newButterX,newButterY,newButterZ);
+    }
+
     void SpawnButterfly(int amount)
     {
         for (int i = 0; i < amount; i++)
         {
-            Vector2 boardSize = GetComponent<Renderer>().bounds.size;
-            float newButterX;
-            float newButterY;
-            float newButterZ = ((butterfly.GetComponent<Renderer>().bounds.size.z) / -2);
-            Quaternion newButterRotate;
-            int nrOfLoops = 0;
-            bool noOverlap;
-
-            do
-            { //Finds empty space to spawn butterfly
-                nrOfLoops++;
-                newButterX = Random.Range((boardSize.x / 2) - butterfly.GetComponent<MeshFilter>().sharedMesh.bounds.size.x / 2, (boardSize.x / -2) + butterfly.GetComponent<Renderer>().bounds.size.x / 2);
-                newButterY = Random.Range((boardSize.y / 2) - butterfly.GetComponent<MeshFilter>().sharedMesh.bounds.size.y / 2, (boardSize.y / -2) + butterfly.GetComponent<Renderer>().bounds.size.y / 2);
-                newButterRotate = Quaternion.Euler(0, 0, Random.Range(1, 360));
-
-                noOverlap = !Physics.CheckBox(new Vector3(newButterX, newButterY, newButterZ),
-                                       butterfly.GetComponent<Renderer>().bounds.size / 2, newButterRotate);
-
-            } while (!(nrOfLoops > 500000 || noOverlap)); //Break for infinite loop 
-
-            if (nrOfLoops > 500000)//Throws error for infinite loop
-            {
-                Debug.LogError("Could not find space for butterfly, or spawner code is broken.");
-            }
-
-            GameObject newButterfly = Instantiate(butterfly,//Spawn butterfly
-                new Vector3(
-                    newButterX, newButterY, newButterZ), newButterRotate);
+            Quaternion randomRotation = Quaternion.Euler(0, 0, Random.Range(1, 360));
+            GameObject newButterfly = Instantiate(butterfly,                //Prefab
+                                      RandomButterPos(randomRotation),      //Random pos, without overlapp 
+                                      randomRotation);                      //Random rot. Needs to be pre-calculated for col detect
 
             newButterfly.transform.name = "Butterfly id:" + i;
+            newButterfly.transform.parent = butterContainer.transform;
             newButterfly.GetComponent<ButterflyBehaviour>().gameBoard = this.gameObject;
 
-            //butterflies[i] = newButterfly;
-
-            float blendIn = Random.Range(0, 11);
-            blendIn /= 10;
-
-            GeneticManager.GiveGenetics(butterflyGeneLength);
-
+            newButterfly.GetComponent<ButterflyBehaviour>().genes = GeneticManager.GiveGenetics(butterflyGeneLength);
+            float blendIn = GeneticManager.BlendInCalc(newButterfly.GetComponent<ButterflyBehaviour>().genes);
+            
             switch (butterflyRenderMode)
             {
                 case 0://alpha mode
@@ -202,6 +203,16 @@ public class GameManager : MonoBehaviour
                     else
                     {
                         Debug.Log("continu");
+
+                        foreach (Transform animal in butterContainer.transform)
+                        {
+                            Quaternion newRot = Quaternion.Euler(0, 0, Random.Range(1, 360));
+                            Vector3 newPos = RandomButterPos(newRot);
+
+                            animal.transform.position = newPos;
+                            animal.transform.rotation = newRot;
+                        }
+
                         gameState = 3;//Continue playing!
                     }
                 }

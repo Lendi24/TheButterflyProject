@@ -13,7 +13,6 @@ public class ButterflyBehaviour : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        transform.parent = GameObject.Find("ButterCollection").transform;
     }
 
     private void OnMouseDown()

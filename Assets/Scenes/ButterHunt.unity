@@ -242,7 +242,7 @@ MonoBehaviour:
   preHuntTime: 3
   huntTime: 3
   tilesPerUnit: 5
-  butterflyGeneLength: 2
+  butterflyGeneLength: 3
   butterflyStartAmount: 5
   maximumKills: 1
   minimumKills: 1
