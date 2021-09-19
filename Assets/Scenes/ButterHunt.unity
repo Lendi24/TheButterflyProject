@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.4465782, g: 0.49641252, b: 0.5748167, a: 1}
+  m_IndirectSpecularColor: {r: 0.44657874, g: 0.49641258, b: 0.5748172, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -136,7 +136,6 @@ GameObject:
   - component: {fileID: 549228761}
   - component: {fileID: 549228760}
   - component: {fileID: 549228764}
-  - component: {fileID: 549228765}
   m_Layer: 0
   m_Name: GameBoard
   m_TagString: GameBoard
@@ -153,7 +152,7 @@ MeshCollider:
   m_GameObject: {fileID: 549228759}
   m_Material: {fileID: 0}
   m_IsTrigger: 0
-  m_Enabled: 1
+  m_Enabled: 0
   serializedVersion: 4
   m_Convex: 0
   m_CookingOptions: 30
@@ -236,18 +235,20 @@ MonoBehaviour:
   butterfly: {fileID: 3438679882897807685, guid: db2fab70d7da23d4989f269e3a12d2d4, type: 3}
   preGameSplash: {fileID: 1568264856}
   postGameSplash: {fileID: 1745888261}
+  butterContainer: {fileID: 1419224860}
   backgroundPattern: {fileID: 2100000, guid: 4ebaffc2c9699ca4b90ba82817fbf971, type: 2}
   animalMaterial: {fileID: 2100000, guid: b97cff4e2c7e5294b9784cc35308b531, type: 2}
   backgroundTexture: {fileID: 2800000, guid: c5b870f95c190c6488d86499845664d9, type: 3}
   blendTexture: {fileID: 0}
   preHuntTime: 3
   huntTime: 3
-  tilesPerUnit: 5
+  tilesPerUnit: 6
   butterflyGeneLength: 3
-  butterflyStartAmount: 5
+  butterflyStartAmount: 10
   maximumKills: 1
   minimumKills: 1
   butterflyRenderMode: 1
+  resetEverythingOnNextGen: 0
 --- !u!1 &616003544
 GameObject:
   m_ObjectHideFlags: 0

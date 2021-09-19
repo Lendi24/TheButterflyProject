@@ -44,11 +44,12 @@ public class GameManager : MonoBehaviour
         //[INSER MENU HERE]
 
         GetComponent<Renderer>().material = backgroundPattern;
-        GetComponent<Renderer>().material.SetTexture("_MainTex", GetComponent<PerlinNoise>().GenerateTexture());
-        GetComponent<Renderer>().material.SetTextureScale("_MainTex", new Vector2(1, 1));
-            /*GetComponent<Renderer>().bounds.size.x * tilesPerUnit, 
-            GetComponent<Renderer>().bounds.size.y * tilesPerUnit));*/
+        GetComponent<Renderer>().material.SetTexture("_MainTex", backgroundTexture);
+        GetComponent<Renderer>().material.SetTextureScale("_MainTex", new Vector2(
+            GetComponent<Renderer>().bounds.size.x * tilesPerUnit,
+            GetComponent<Renderer>().bounds.size.y * tilesPerUnit));
 
+        Physics.autoSyncTransforms = true;
         ResetVariables();
         PrepareGame();
     }
@@ -83,17 +84,13 @@ public class GameManager : MonoBehaviour
             newButterX = Random.Range((boardSize.x / 2) - butterfly.GetComponent<MeshFilter>().sharedMesh.bounds.size.x / 2, (boardSize.x / -2) + butterfly.GetComponent<Renderer>().bounds.size.x / 2);
             newButterY = Random.Range((boardSize.y / 2) - butterfly.GetComponent<MeshFilter>().sharedMesh.bounds.size.y / 2, (boardSize.y / -2) + butterfly.GetComponent<Renderer>().bounds.size.y / 2);
 
-            noOverlap = !Physics.CheckBox(new Vector3(newButterX, newButterY, newButterZ),
-                                   butterfly.GetComponent<Renderer>().bounds.size / 2, newButterRotate);
+            noOverlap = !Physics.CheckBox(new Vector3(newButterX, newButterY, newButterZ), 
+                     butterfly.GetComponent<Renderer>().bounds.size / 2, newButterRotate);
 
         } while (!(nrOfLoops > 500000 || noOverlap)); //Break for infinite loop 
-
-        if (nrOfLoops > 500000)//Throws error for infinite loop
-        {
-            Debug.LogError("Could not find space for butterfly, or spawner code is broken.");
-        }
-
-        return new Vector3(newButterX,newButterY,newButterZ);
+        if (!noOverlap) Debug.LogError("Could not find space for butterfly, or code is broken.");
+        
+        return new Vector3(newButterX, newButterY, newButterZ);
     }
 
     void SpawnButterfly(int amount)
@@ -111,7 +108,7 @@ public class GameManager : MonoBehaviour
 
             newButterfly.GetComponent<ButterflyBehaviour>().genes = GeneticManager.GiveGenetics(butterflyGeneLength);
             float blendIn = GeneticManager.BlendInCalc(newButterfly.GetComponent<ButterflyBehaviour>().genes);
-            
+
             switch (butterflyRenderMode)
             {
                 case 0://alpha mode
@@ -182,7 +179,8 @@ public class GameManager : MonoBehaviour
         {
             case 1:
 
-                if (TimmerManagment.Timmer(preHuntTime)) {
+                if (TimmerManagment.Timmer(preHuntTime))
+                {
                     preGameSplash.GetComponent<Canvas>().enabled = false;
                     gameState = 2;
                 }
@@ -191,7 +189,8 @@ public class GameManager : MonoBehaviour
 
             case 2:
 
-                if (TimmerManagment.Timmer(huntTime)) {
+                if (TimmerManagment.Timmer(huntTime))
+                {
                     postGameSplash.GetComponent<Canvas>().enabled = true;
 
                     if ((butterflyStartAmount - butterfliesRemaining) < minimumKills)
@@ -206,12 +205,19 @@ public class GameManager : MonoBehaviour
 
                         foreach (Transform animal in butterContainer.transform)
                         {
+                            animal.transform.position = new Vector3(0, 0, 5);
+                        }
+
+
+                        for (int i = 0; i < butterContainer.transform.childCount; i++)
+                        {
                             Quaternion newRot = Quaternion.Euler(0, 0, Random.Range(1, 360));
                             Vector3 newPos = RandomButterPos(newRot);
 
-                            animal.transform.position = newPos;
-                            animal.transform.rotation = newRot;
+                            butterContainer.transform.GetChild(i).transform.position = newPos;
+                            butterContainer.transform.GetChild(i).rotation = newRot;
                         }
+
 
                         gameState = 3;//Continue playing!
                     }
@@ -254,6 +260,4 @@ public class GameManager : MonoBehaviour
             butterfliesRemaining--;
         }
     }
-
-    
 }
