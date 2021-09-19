@@ -40,7 +40,7 @@ public class GameManager : MonoBehaviour
 
     // Start is called before the first frame update
     void Start()
-    {
+    {        
         //[INSER MENU HERE]
 
         GetComponent<Renderer>().material = backgroundPattern;
@@ -48,6 +48,8 @@ public class GameManager : MonoBehaviour
         GetComponent<Renderer>().material.SetTextureScale("_MainTex", new Vector2(
             GetComponent<Renderer>().bounds.size.x * tilesPerUnit,
             GetComponent<Renderer>().bounds.size.y * tilesPerUnit));
+
+
 
         Physics.autoSyncTransforms = true;
         ResetVariables();
