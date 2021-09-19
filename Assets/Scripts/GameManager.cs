@@ -5,7 +5,7 @@ using UnityEngine;
 public class GameManager : MonoBehaviour
 {
     [SerializeField]
-    GameObject butterfly, preGameSplash, postGameSplash;
+    GameObject butterfly, preGameSplash, postGameSplash, butterContainer;
 
     [SerializeField]
     Material backgroundPattern, animalMaterial;
@@ -17,16 +17,20 @@ public class GameManager : MonoBehaviour
     float preHuntTime, huntTime, tilesPerUnit;
 
     [SerializeField]
-    int butterflyAmount, gameState;
+    int butterflyGeneLength, butterflyStartAmount, maximumKills, minimumKills, butterflyRenderMode;
 
     [SerializeField]
-    bool timmerRunning;
+    bool resetEverythingOnNextGen;
 
-    Color newColor = Color.white;
+    private int butterfliesRemaining, gameState;
+    string keyPrefix = "modelMatch";
 
-    GameObject[] butterflies;
+    /* Butterfly Render Modes
+     * 0 - Transparancy
+     * 1 - TextureMode
+    */
 
-    /*
+    /* Game States
     0-PreGame
     1-PreHunt
     2-Hunt
@@ -37,11 +41,7 @@ public class GameManager : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        //Init variables
-        gameState = 0;
-
         //[INSER MENU HERE]
-        butterflies = new GameObject[butterflyAmount];
 
         GetComponent<Renderer>().material = backgroundPattern;
         GetComponent<Renderer>().material.SetTexture("_MainTex", backgroundTexture);
@@ -49,74 +49,131 @@ public class GameManager : MonoBehaviour
             GetComponent<Renderer>().bounds.size.x * tilesPerUnit, 
             GetComponent<Renderer>().bounds.size.y * tilesPerUnit));
 
+        ResetVariables();
         PrepareGame();
+    }
+
+    void ResetVariables()
+    {
+        //Init variables
+        gameState = 0;
+        butterfliesRemaining = butterflyStartAmount;
+        preGameSplash.GetComponent<Canvas>().enabled = true;
+        postGameSplash.GetComponent<Canvas>().enabled = false;
     }
 
     void PrepareGame()
     {
-        for (int i = 0; i < butterflyAmount; i++)
-        {
-            Vector2 boardSize = GetComponent<Renderer>().bounds.size;
-            float newButterX;
-            float newButterY;
-            float newButterZ = ((butterfly.GetComponent<Renderer>().bounds.size.z) / -2);
-            Quaternion newButterRotate;
-            int nrOfLoops = 0;
-            bool noOverlap;
-
-            do { //Finds empty space to spawn butterfly
-                nrOfLoops++;
-                newButterX = Random.Range((boardSize.x / 2) - butterfly.GetComponent<MeshFilter>().sharedMesh.bounds.size.x / 2, (boardSize.x / -2) + butterfly.GetComponent<Renderer>().bounds.size.x / 2);
-                newButterY = Random.Range((boardSize.y / 2) - butterfly.GetComponent<MeshFilter>().sharedMesh.bounds.size.y / 2, (boardSize.y / -2) + butterfly.GetComponent<Renderer>().bounds.size.y / 2);
-                newButterRotate = Quaternion.Euler(0, 0, Random.Range(1, 360));
-
-                noOverlap = !Physics.CheckBox(new Vector3(newButterX, newButterY, newButterZ),
-                                       butterfly.GetComponent<Renderer>().bounds.size / 2, newButterRotate);
-
-            } while (!(nrOfLoops > 500000 || noOverlap));
-
-            if (nrOfLoops > 500000)
-            {
-                Debug.LogError("Could not find space for butterfly, or spawner code is broken.");
-            }
-
-            GameObject newButterfly = Instantiate(butterfly,
-                new Vector3(
-                    newButterX, newButterY, newButterZ), newButterRotate);
-
-            //newButterfly.transform.parent = this.transform; DO NOT ENABLE!! Childning game object will cause weird scaling behaviour 
-            newButterfly.transform.name =  "Butterfly id:"+i;
-            newButterfly.GetComponent<Renderer>().material = animalMaterial;
-            //newButterfly.GetComponent<Renderer>().material.SetTexture("_MainTex", backgroundTexture);
-            //newButterfly.GetComponent<Renderer>().material.SetTexture("__SecondaryTex", blendTexture);
-            //newButterfly.GetComponent<Renderer>().material.SetTextureScale("_MainTex", new Vector2(
-                //newButterfly.GetComponent<MeshFilter>().mesh.bounds.size.x * tilesPerUnit * newButterfly.transform.localScale.x, //I am not quite sure why *2 fixes it,
-                //newButterfly.GetComponent<MeshFilter>().mesh.bounds.size.y * tilesPerUnit * newButterfly.transform.localScale.y));//but I think it has to do with how x and y is messured by different functions
-                                                                                                                                      //A.K.A Don't touch it, it works :3
-
-            float value = Random.Range(0, 11);
-            value /= 10;
-            //newButterfly.GetComponent<Renderer>().material.SetFloat("_LerpValue", value);
-            newColor.a = value;
-
-            newButterfly.GetComponent<Renderer>().material.color = newColor;
-
-            butterflies[i] = newButterfly;
-        }
-        /* Code from when I tried to fix collition detection the easy way, that later turned out to be the hard way
-        for (int i = 0; i < butterflyAmount; i++)
-        {
-            butterflies[i].GetComponent<Rigidbody>().isKinematic = true;
-            butterflies[i].GetComponent<BoxCollider>().enabled = false;
-            butterflies[i].GetComponent<MeshCollider>().enabled = true;
-        } 
-        */
-
-
+        SpawnButterfly(butterflyStartAmount);
         gameState = 1;
-        //TODO: Add splash and countdown
-//        CountdownSplash();//working on it
- //       gameState = 2;
+    }
+
+    Vector3 RandomButterPos(Quaternion newButterRotate)
+    {
+        Vector2 boardSize = GetComponent<Renderer>().bounds.size;
+        float newButterX;
+        float newButterY;
+        float newButterZ = ((butterfly.GetComponent<Renderer>().bounds.size.z) / -2);
+        int nrOfLoops = 0;
+        bool noOverlap;
+
+        do
+        { //Finds empty space to spawn butterfly
+            nrOfLoops++;
+            newButterX = Random.Range((boardSize.x / 2) - butterfly.GetComponent<MeshFilter>().sharedMesh.bounds.size.x / 2, (boardSize.x / -2) + butterfly.GetComponent<Renderer>().bounds.size.x / 2);
+            newButterY = Random.Range((boardSize.y / 2) - butterfly.GetComponent<MeshFilter>().sharedMesh.bounds.size.y / 2, (boardSize.y / -2) + butterfly.GetComponent<Renderer>().bounds.size.y / 2);
+
+            noOverlap = !Physics.CheckBox(new Vector3(newButterX, newButterY, newButterZ),
+                                   butterfly.GetComponent<Renderer>().bounds.size / 2, newButterRotate);
+
+        } while (!(nrOfLoops > 500000 || noOverlap)); //Break for infinite loop 
+
+        if (nrOfLoops > 500000)//Throws error for infinite loop
+        {
+            Debug.LogError("Could not find space for butterfly, or spawner code is broken.");
+        }
+
+        return new Vector3(newButterX,newButterY,newButterZ);
+    }
+
+    void SpawnButterfly(int amount)
+    {
+        for (int i = 0; i < amount; i++)
+        {
+            Quaternion randomRotation = Quaternion.Euler(0, 0, Random.Range(1, 360));
+            GameObject newButterfly = Instantiate(butterfly,                //Prefab
+                                      RandomButterPos(randomRotation),      //Random pos, without overlapp 
+                                      randomRotation);                      //Random rot. Needs to be pre-calculated for col detect
+
+            newButterfly.transform.name = "Butterfly id:" + i;
+            newButterfly.transform.parent = butterContainer.transform;
+            newButterfly.GetComponent<ButterflyBehaviour>().gameBoard = this.gameObject;
+
+            newButterfly.GetComponent<ButterflyBehaviour>().genes = GeneticManager.GiveGenetics(butterflyGeneLength);
+            float blendIn = GeneticManager.BlendInCalc(newButterfly.GetComponent<ButterflyBehaviour>().genes);
+            
+            switch (butterflyRenderMode)
+            {
+                case 0://alpha mode
+                    Color newColor = Color.white;
+                    Material newMat = new Material(Shader.Find("Transparent/Diffuse"));
+                    newColor.a = blendIn;
+                    newButterfly.GetComponent<Renderer>().material = newMat;
+                    newButterfly.GetComponent<Renderer>().material.color = newColor;
+                    break;
+
+                case 1://texture-matched mode
+
+                    try
+                    {
+                        string modelName = newButterfly.GetComponent<MeshFilter>().sharedMesh.name;
+                        Debug.Log(modelName);
+                        string[] tempData = PlayerPrefs.GetString(keyPrefix + modelName).Split(':');
+
+                        float butterMatchX = float.Parse(tempData[0]);
+                        float butterMatchY = float.Parse(tempData[1]);
+                        bool squareMatch = bool.Parse(tempData[2]);
+
+                        float squareX, squareY;
+
+                        if (squareMatch)
+                        {
+                            squareX = newButterfly.GetComponent<MeshFilter>().mesh.bounds.size.x;
+                            squareY = newButterfly.GetComponent<MeshFilter>().mesh.bounds.size.y;
+                        }
+
+                        else
+                        {
+                            squareX = 1;
+                            squareY = 1;
+                        }
+
+                        newButterfly.GetComponent<Renderer>().material = animalMaterial;
+
+                        newButterfly.GetComponent<Renderer>().material.SetTexture("_MainTex", blendTexture);
+                        newButterfly.GetComponent<Renderer>().material.SetTextureScale("_MainTex", new Vector2(
+                            newButterfly.GetComponent<MeshFilter>().mesh.bounds.size.x * tilesPerUnit * newButterfly.transform.localScale.x * butterMatchX * squareY,
+                            newButterfly.GetComponent<MeshFilter>().mesh.bounds.size.y * tilesPerUnit * newButterfly.transform.localScale.y * butterMatchY * squareX));
+
+                        newButterfly.GetComponent<Renderer>().material.SetTexture("_SecondaryTex", backgroundTexture);
+                        newButterfly.GetComponent<Renderer>().material.SetTextureScale("_SecondaryTex", new Vector2(
+                            newButterfly.GetComponent<MeshFilter>().mesh.bounds.size.x * tilesPerUnit * newButterfly.transform.localScale.x * butterMatchX * squareY,
+                            newButterfly.GetComponent<MeshFilter>().mesh.bounds.size.y * tilesPerUnit * newButterfly.transform.localScale.y * butterMatchY * squareX));
+
+                        newButterfly.GetComponent<Renderer>().material.SetFloat("_LerpValue", blendIn);
+                    }
+
+                    catch (System.Exception)
+                    {
+                        Debug.LogError("Could not load correct material for model. Try rendermode 0, or give texture a size to scale");
+                    }
+
+                    break;
+
+                default:
+                    break;
+            }
+        }
     }
 
     private void Update()
@@ -124,15 +181,8 @@ public class GameManager : MonoBehaviour
         switch (gameState)
         {
             case 1:
-                preGameSplash.GetComponent<Canvas>().enabled = true;
 
-                if (preHuntTime > 0)
-                {
-                    preHuntTime -= Time.deltaTime;
-                }
-
-                else
-                {
+                if (TimmerManagment.Timmer(preHuntTime)) {
                     preGameSplash.GetComponent<Canvas>().enabled = false;
                     gameState = 2;
                 }
@@ -140,24 +190,49 @@ public class GameManager : MonoBehaviour
                 break;
 
             case 2:
-                postGameSplash.GetComponent<Canvas>().enabled = false;
 
-                if (huntTime > 0)
-                {
-                    huntTime -= Time.deltaTime;
-                }
-
-                else
-                {
+                if (TimmerManagment.Timmer(huntTime)) {
                     postGameSplash.GetComponent<Canvas>().enabled = true;
-                    gameState = 3;
-                }
 
+                    if ((butterflyStartAmount - butterfliesRemaining) < minimumKills)
+                    {
+                        Debug.Log("U loose");
+                        gameState = 4;//Failed! Health will be lost, energy will be lost or game will be lost here.
+                    }
+
+                    else
+                    {
+                        Debug.Log("continu");
+
+                        foreach (Transform animal in butterContainer.transform)
+                        {
+                            Quaternion newRot = Quaternion.Euler(0, 0, Random.Range(1, 360));
+                            Vector3 newPos = RandomButterPos(newRot);
+
+                            animal.transform.position = newPos;
+                            animal.transform.rotation = newRot;
+                        }
+
+                        gameState = 3;//Continue playing!
+                    }
+                }
 
                 break;
 
             case 3:
+
+                ResetVariables();
+                gameState = 1;
+                //Fix some splash about stats or smt and some wait time
+
                 break;
+
+            case 4:
+
+                //Fix some splash about stats or smt and some wait time
+
+                break;
+
 
             default:
                 break;
@@ -168,27 +243,15 @@ public class GameManager : MonoBehaviour
     |=============================|
     |==BUTTERFLY EVENT HANDELERS==|
     |=============================|
-    
-    public void RandomMoveButterfly(GameObject butterfly)
-    {
-        Vector2 boardSize = GetComponent<Renderer>().bounds.size; This code is old. We dont use this code. We do not speak of this code. 
-
-        butterfly.transform.position = new Vector3(
-                    Random.Range((boardSize.x / 2) - butterfly.GetComponent<Renderer>().bounds.size.x / 2, (boardSize.x / -2) + butterfly.GetComponent<Renderer>().bounds.size.x / 2),
-                    Random.Range((boardSize.y / 2) - butterfly.GetComponent<Renderer>().bounds.size.y / 2, (boardSize.y / -2) + butterfly.GetComponent<Renderer>().bounds.size.y / 2),
-                    (butterfly.GetComponent<Renderer>().bounds.size.z) / -2);
-
-        butterfly.transform.rotation = Quaternion.Euler(0, 0, Random.Range(1, 360));
-
-        Debug.Log("Butterfly overlap detected: Moved "+butterfly.name+" to a new random position!");
-    }*/
+    */
 
     public void ButterClick(GameObject butterfly)
     {
-        if (gameState == 2)
+        if (gameState == 2 && (butterflyStartAmount - butterfliesRemaining) < maximumKills)
         {
+            Destroy(butterfly);
             Debug.Log("Butterfly click detected: Removed " + butterfly.name + " from the game board");
-            gameState = 3;
+            butterfliesRemaining--;
         }
     }
 }

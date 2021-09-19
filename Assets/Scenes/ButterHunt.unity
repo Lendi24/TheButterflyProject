@@ -138,7 +138,7 @@ GameObject:
   - component: {fileID: 549228764}
   m_Layer: 0
   m_Name: GameBoard
-  m_TagString: Untagged
+  m_TagString: GameBoard
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -242,9 +242,11 @@ MonoBehaviour:
   preHuntTime: 3
   huntTime: 3
   tilesPerUnit: 5
-  butterflyAmount: 5
-  gameState: 0
-  timmerRunning: 0
+  butterflyGeneLength: 3
+  butterflyStartAmount: 5
+  maximumKills: 1
+  minimumKills: 1
+  butterflyRenderMode: 1
 --- !u!1 &616003544
 GameObject:
   m_ObjectHideFlags: 0
