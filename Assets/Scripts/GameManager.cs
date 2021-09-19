@@ -17,13 +17,23 @@ public class GameManager : MonoBehaviour
     float preHuntTime, huntTime, tilesPerUnit;
 
     [SerializeField]
-    int butterflyGeneLength, butterflyStartAmount, maximumKills, minimumKills, butterflyRenderMode;
+    int butterflyGeneLength, butterflyStartAmount, maximumKills, minimumKills, butterflyRenderMode, selectedBackground;
 
     [SerializeField]
     bool resetEverythingOnNextGen;
 
     private int butterfliesRemaining, gameState;
     string keyPrefix = "modelMatch";
+
+    //Perlin noise variables
+    [SerializeField]
+    int width, height;
+
+    [SerializeField]
+    float scale, offsetX, offsetY;
+
+    [SerializeField, Range(0.0f, 1.0f)]
+    float test;
 
     /* Butterfly Render Modes
      * 0 - Transparancy
@@ -42,12 +52,22 @@ public class GameManager : MonoBehaviour
     void Start()
     {
         //[INSER MENU HERE]
-
-        GetComponent<Renderer>().material = backgroundPattern;
-        GetComponent<Renderer>().material.SetTexture("_MainTex", GetComponent<PerlinNoise>().GenerateTexture());
-        GetComponent<Renderer>().material.SetTextureScale("_MainTex", new Vector2(1, 1));
-            /*GetComponent<Renderer>().bounds.size.x * tilesPerUnit, 
-            GetComponent<Renderer>().bounds.size.y * tilesPerUnit));*/
+        switch(selectedBackground)
+        {
+            case 0: //Grid Background
+                GetComponent<Renderer>().material = backgroundPattern;
+                GetComponent<Renderer>().material.SetTexture("_MainTex", backgroundTexture);
+                GetComponent<Renderer>().material.SetTextureScale("_MainTex", new Vector2(
+                GetComponent<Renderer>().bounds.size.x * tilesPerUnit, 
+                GetComponent<Renderer>().bounds.size.y * tilesPerUnit));
+                break;
+            case 1: //Perlin Noise Background
+                butterflyRenderMode = 0;
+                GetComponent<Renderer>().material = backgroundPattern;
+                GetComponent<Renderer>().material.SetTexture("_MainTex", GenerateTexture());
+                GetComponent<Renderer>().material.SetTextureScale("_MainTex", new Vector2(1, 1));
+                break;
+        }
 
         ResetVariables();
         PrepareGame();
@@ -255,5 +275,46 @@ public class GameManager : MonoBehaviour
         }
     }
 
-    
+    /*
+    ==============================
+    ****PERLIN NOISE GENERATOR****
+    ==============================
+    */
+
+    public Texture2D GenerateTexture()
+    {
+        Texture2D texture = new Texture2D(width, height);
+
+        for (int x = 0; x < width; x++)
+        {
+            for (int y = 0; y < height; y++)
+            {
+                Color color = CalculateColor(x, y);
+                texture.SetPixel(x, y, color);
+            }
+        }
+
+        texture.filterMode = FilterMode.Point;
+        texture.Apply();
+        backgroundTexture = texture;
+        return texture;
+    }
+
+    Color CalculateColor(int x, int y)
+    {
+        float xCoord = (float)x / width * scale + offsetX;
+        float yCoord = (float)y / height * scale + offsetY;
+        float sample = Mathf.PerlinNoise(xCoord, yCoord);
+        if (sample >= test)
+        {
+            return new Color(Mathf.Ceil(sample), Mathf.Ceil(sample), Mathf.Ceil(sample));
+        }
+        else
+        {
+            return new Color(Mathf.Floor(sample), Mathf.Floor(sample), Mathf.Floor(sample));
+        }
+
+        //return new Color(sample, sample, sample);
+
+    }
 }
