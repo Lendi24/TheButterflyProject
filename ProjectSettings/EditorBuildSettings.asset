@@ -4,5 +4,11 @@
 EditorBuildSettings:
   m_ObjectHideFlags: 0
   serializedVersion: 2
-  m_Scenes: []
+  m_Scenes:
+  - enabled: 1
+    path: Assets/Debug and testing/butterfly/MainMenu.unity
+    guid: da4a2c5204a882044a1b79df96e63f67
+  - enabled: 1
+    path: Assets/Scenes/ButterHunt.unity
+    guid: cb94940dc449b1648bb710c257870a29
   m_configObjects: {}
