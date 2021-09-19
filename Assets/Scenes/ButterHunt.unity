@@ -139,7 +139,7 @@ GameObject:
   - component: {fileID: 549228765}
   m_Layer: 0
   m_Name: GameBoard
-  m_TagString: Untagged
+  m_TagString: GameBoard
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -243,26 +243,11 @@ MonoBehaviour:
   preHuntTime: 3
   huntTime: 3
   tilesPerUnit: 5
-  butterflyAmount: 5
-  gameState: 0
-  timmerRunning: 0
---- !u!114 &549228765
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 549228759}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d1c4aa2fd91381b42ab3f92d210af039, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  width: 256
-  height: 256
-  scale: 20
-  offsetX: 100
-  offsetY: 100
+  butterflyGeneLength: 3
+  butterflyStartAmount: 5
+  maximumKills: 1
+  minimumKills: 1
+  butterflyRenderMode: 1
 --- !u!1 &616003544
 GameObject:
   m_ObjectHideFlags: 0
