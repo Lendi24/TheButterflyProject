@@ -123,9 +123,11 @@ public class GameManager : MonoBehaviour
 
                 case 1://texture-matched mode
 
+                    string modelName = newButterfly.GetComponent<MeshFilter>().sharedMesh.name;
+                    if (!PlayerPrefs.HasKey(GetVariable.GetKeyPrefix() + modelName)) TextureMatchManager.reset();
+
                     try
                     {
-                        string modelName = newButterfly.GetComponent<MeshFilter>().sharedMesh.name;
                         Debug.Log(modelName);
                         string[] tempData = PlayerPrefs.GetString(keyPrefix + modelName).Split(':');
 

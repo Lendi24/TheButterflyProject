@@ -38,7 +38,10 @@ public class CustomButterMatch : MonoBehaviour
 
         float newButterZ = ((butterfly.GetComponent<Renderer>().bounds.size.z) / -2);
         newButterfly = Instantiate(butterfly, new Vector3(
-        butterTransX, butterTransY, newButterZ), Quaternion.Euler(0,0,butterTransRot));
+        butterTransX, butterTransY, newButterZ), Quaternion.Euler(0, 0, butterTransRot));
+
+        modelName = newButterfly.GetComponent<MeshFilter>().sharedMesh.name;
+        Load();
     }
 
     // Update is called once per frame
@@ -80,38 +83,28 @@ public class CustomButterMatch : MonoBehaviour
 
     public void Save()
     {
-        if (canSave())
-        {
-            PlayerPrefs.SetString(keyPrefix + modelName, butterMatchX+ ":"+butterMatchY+ ":"+squareMatch);
-        }
-
-        else
-        {
-            Debug.LogError("Could not save! Is name empty? Are you trying to overwrite an already existing key?");
-        }
+        TextureMatchManager.Save(modelName, butterMatchX, butterMatchY, squareMatch);
     }
 
     public void Load()
     {
-        string[] tempData = PlayerPrefs.GetString(keyPrefix + modelName).Split(':');
+        ModelTextureMap loadedObject = TextureMatchManager.Load(modelName);
 
-        snapMatchYtoX = (tempData[0] == tempData[1]);
-        squareMatch = bool.Parse(tempData[2]);
+        snapMatchYtoX = (loadedObject.butterMatchX == loadedObject.butterMatchY);
+        squareMatch = loadedObject.squareMatch;
 
-        butterMatchX = float.Parse(tempData[0]);
-        butterMatchY = float.Parse(tempData[1]);
+        butterMatchX = loadedObject.butterMatchX;
+        butterMatchY = loadedObject.butterMatchY;
     }
 
-    bool canSave()
+    public void delete()
     {
-        bool canSave = true;
-                                                                    //Can not save if:
-        if ((modelName == "") ||                                         //name does not exist
-        //(PlayerPrefs.HasKey(keyPrefix+name)) ||                     //key with same name exists
-        (butterMatchX == 0 || butterMatchY == 0)) canSave = false;  //Saved values are 0    
-
-        return canSave;
+        TextureMatchManager.delete(modelName);
     }
 
-
+    public void reset()
+    {
+        TextureMatchManager.reset();
+        Load();
+    }
 }
