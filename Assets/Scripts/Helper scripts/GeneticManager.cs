@@ -61,7 +61,7 @@ public class GeneticManager : MonoBehaviour
 
     public static float BlendInCalc(bool[] genetics)
     {
-        float geneTrueLength = 0;
+        float geneTrueLength = 0; //this should be float. Otherwise it breaks when dividing, since an int will be returned. Don't change!
 
         for (int i = 0; i < genetics.Length && genetics[i]; i++)
         {
@@ -69,5 +69,26 @@ public class GeneticManager : MonoBehaviour
         }
 
         return geneTrueLength / genetics.Length;
-    } 
+    }
+    
+    public static bool[] EvolveNewAnimal(bool[][] animalsInPlay)
+    {
+        int geneTrueLength = 0;
+        for (int i = 0; i < animalsInPlay.Length; i++)
+        {
+            for (int j = 0; j < animalsInPlay[i].Length && animalsInPlay[i][j]; j++)
+            {
+                geneTrueLength++;
+            }
+        }
+
+        int newTrueGeneLength = geneTrueLength / animalsInPlay.Length;
+        bool[] newGenes = new bool[animalsInPlay[0].Length];
+        for (int i = 0; i < newGenes.Length; i++)
+        {
+            newGenes[i] = (i <= newTrueGeneLength);
+        }
+
+        return newGenes;
+    }
 }
