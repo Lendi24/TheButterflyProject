@@ -20,7 +20,7 @@ public class GameManager : MonoBehaviour
     int butterflyGeneLength, butterflyStartAmount, maximumKills, minimumKills, butterflyRenderMode, selectedBackground;
 
     [SerializeField]
-    bool resetEverythingOnNextGen;
+    bool resetEverythingOnNextGen, perlinNoiseShader;
 
     private int butterfliesRemaining, gameState;
     string keyPrefix = "modelMatch";
@@ -69,6 +69,29 @@ public class GameManager : MonoBehaviour
                 break;
         }
 
+<<<<<<< Updated upstream:Assets/Scripts/GameManager.cs
+=======
+        if(perlinNoiseShader)
+        {
+            GetComponent<Renderer>().material.shader = Shader.Find("Butterfly/PerlinNoise");
+            GetComponent<Renderer>().material.SetFloat("_scale", 40);
+            GetComponent<Renderer>().material.SetFloat("_value", -1.5f);
+            GetComponent<Renderer>().material.SetFloat("_amplitude", 1.3f);
+            butterflyRenderMode = 0;
+        }
+        else
+        {
+            GetComponent<Renderer>().material = backgroundPattern;
+            GetComponent<Renderer>().material.SetTexture("_MainTex", backgroundTexture);
+            GetComponent<Renderer>().material.SetTextureScale("_MainTex", new Vector2(
+                GetComponent<Renderer>().bounds.size.x * tilesPerUnit,
+                GetComponent<Renderer>().bounds.size.y * tilesPerUnit));
+        }
+
+
+
+        Physics.autoSyncTransforms = true;
+>>>>>>> Stashed changes:Assets/Scripts/Scene scripting/GameManager.cs
         ResetVariables();
         PrepareGame();
     }
