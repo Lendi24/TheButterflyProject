@@ -17,7 +17,7 @@ public class GameManager : MonoBehaviour
     float preHuntTime, huntTime, tilesPerUnit;
 
     [SerializeField]
-    int butterflyGeneLength, butterflyStartAmount, maximumKills, minimumKills, butterflyRenderMode, butterflyRoundSpawnAmount;
+    int butterflyGeneLength, butterflyStartAmountRandom, butteflyStartAmountGene, maximumKills, minimumKills, butterflyRenderMode, butterflyRoundSpawnAmount;
 
     [SerializeField]
     bool resetEverythingOnNextGen;
@@ -60,16 +60,27 @@ public class GameManager : MonoBehaviour
     {
         //Init variables
         gameState = 0;
-        butterfliesRemaining = butterflyStartAmount;
+        butterfliesRemaining = butterflyStartAmountRandom;
         preGameSplash.GetComponent<Canvas>().enabled = true;
         postGameSplash.GetComponent<Canvas>().enabled = false;
     }
 
     void PrepareGame()
     {
-        for (int i = 0; i < butterflyStartAmount; i++)
+        if (butteflyStartAmountGene > 0)
         {
-            SpawnButterfly(GeneticManager.GiveGenetics(butterflyGeneLength));
+            for (int i = 0; i < butteflyStartAmountGene; i++)
+            {
+                for (int j = 0; j <= butterflyGeneLength; j++)
+                {
+                    SpawnButterfly(GeneticManager.GiveSpecificGenetics(butterflyGeneLength, j));
+                }
+            }
+        }
+
+        for (int i = 0; i < butterflyStartAmountRandom - ((1+butterflyGeneLength) * butteflyStartAmountGene); i++)
+        {
+            SpawnButterfly(GeneticManager.GiveRandomGenetics(butterflyGeneLength));
         }
 
         gameState = 1;
@@ -199,7 +210,7 @@ public class GameManager : MonoBehaviour
                 {
                     postGameSplash.GetComponent<Canvas>().enabled = true;
 
-                    if ((butterflyStartAmount - butterfliesRemaining) < minimumKills)
+                    if ((butterflyStartAmountRandom - butterfliesRemaining) < minimumKills)
                     {
                         Debug.Log("U loose");
                         gameState = 4;//Failed! Health will be lost, energy will be lost or game will be lost here.
@@ -266,7 +277,7 @@ public class GameManager : MonoBehaviour
 
     public void ButterClick(GameObject butterfly)
     {
-        if (gameState == 2 && (butterflyStartAmount - butterfliesRemaining) < maximumKills)
+        if (gameState == 2 && (butterflyStartAmountRandom - butterfliesRemaining) < maximumKills)
         {
             Destroy(butterfly);
             Debug.Log("Butterfly click detected: Removed " + butterfly.name + " from the game board");

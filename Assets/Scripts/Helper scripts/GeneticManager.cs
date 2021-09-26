@@ -5,7 +5,19 @@ using UnityEngine;
 
 public class GeneticManager : MonoBehaviour
 {
-    public static bool[] GiveGenetics(int geneticLength)
+    public static bool[] GiveSpecificGenetics(int geneticLength, int trueGenes)
+    {
+        bool[] genes = new bool[geneticLength];
+
+        for (int i = 0; i < trueGenes; i++)
+        {
+            genes[i] = true;
+        }
+
+        return genes;
+    }
+
+    public static bool[] GiveRandomGenetics(int geneticLength)
     {
         bool[] genetics = new bool[geneticLength];
         for (int i = 0; i < geneticLength; i++)
