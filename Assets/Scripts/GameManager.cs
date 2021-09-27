@@ -52,25 +52,7 @@ public class GameManager : MonoBehaviour
     void Start()
     {
         //[INSER MENU HERE]
-        switch(selectedBackground)
-        {
-            case 0: //Grid Background
-                GetComponent<Renderer>().material = backgroundPattern;
-                GetComponent<Renderer>().material.SetTexture("_MainTex", backgroundTexture);
-                GetComponent<Renderer>().material.SetTextureScale("_MainTex", new Vector2(
-                GetComponent<Renderer>().bounds.size.x * tilesPerUnit, 
-                GetComponent<Renderer>().bounds.size.y * tilesPerUnit));
-                break;
-            case 1: //Perlin Noise Background
-                butterflyRenderMode = 0;
-                GetComponent<Renderer>().material = backgroundPattern;
-                GetComponent<Renderer>().material.SetTexture("_MainTex", GenerateTexture());
-                GetComponent<Renderer>().material.SetTextureScale("_MainTex", new Vector2(1, 1));
-                break;
-        }
-
-<<<<<<< Updated upstream:Assets/Scripts/GameManager.cs
-=======
+        
         if(perlinNoiseShader)
         {
             GetComponent<Renderer>().material.shader = Shader.Find("Butterfly/PerlinNoise");
@@ -91,7 +73,6 @@ public class GameManager : MonoBehaviour
 
 
         Physics.autoSyncTransforms = true;
->>>>>>> Stashed changes:Assets/Scripts/Scene scripting/GameManager.cs
         ResetVariables();
         PrepareGame();
     }

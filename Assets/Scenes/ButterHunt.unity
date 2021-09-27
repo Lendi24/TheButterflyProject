@@ -250,16 +250,7 @@ MonoBehaviour:
   butterflyRenderMode: 1
   selectedBackground: 1
   resetEverythingOnNextGen: 0
-<<<<<<< Updated upstream
-  width: 256
-  height: 256
-  scale: 20
-  offsetX: 100
-  offsetY: 100
-  test: 0.5
-=======
   perlinNoiseShader: 0
->>>>>>> Stashed changes
 --- !u!1 &616003544
 GameObject:
   m_ObjectHideFlags: 0
