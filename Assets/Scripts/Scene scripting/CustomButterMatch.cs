@@ -8,7 +8,6 @@ public class CustomButterMatch : MonoBehaviour
 {
     [SerializeField]
     string modelName;
-    string keyPrefix = "modelMatch";
 
     [SerializeField]
     float tilesPerUnit, butterMatchX, butterMatchY, butterTransX, butterTransY, butterTransRot;

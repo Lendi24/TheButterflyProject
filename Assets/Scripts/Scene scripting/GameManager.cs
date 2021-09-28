@@ -20,7 +20,7 @@ public class GameManager : MonoBehaviour
     int butterflyGeneLength, butterflyStartAmountRandom, butteflyStartAmountGene, maximumKills, minimumKills, butterflyRenderMode, butterflyRoundSpawnAmount;
 
     [SerializeField]
-    bool resetEverythingOnNextGen;
+    bool resetEverythingOnNextGen, perlinNoiseShader;
 
     private int butterfliesRemaining, gameState;
     string keyPrefix = "modelMatch";
@@ -141,7 +141,6 @@ public class GameManager : MonoBehaviour
 
                 try
                 {
-                    Debug.Log(modelName);
                     string[] tempData = PlayerPrefs.GetString(keyPrefix + modelName).Split(':');
 
                     float butterMatchX = float.Parse(tempData[0]);
