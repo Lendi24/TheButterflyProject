@@ -17,7 +17,7 @@ public class GameManager : MonoBehaviour
     float preHuntTime, huntTime, tilesPerUnit;
 
     [SerializeField]
-    int butterflyGeneLength, butterflyStartAmount, maximumKills, minimumKills, butterflyRenderMode;
+    int butterflyGeneLength, butterflyStartAmountRandom, butteflyStartAmountGene, maximumKills, minimumKills, butterflyRenderMode, butterflyRoundSpawnAmount;
 
     [SerializeField]
     bool resetEverythingOnNextGen;
@@ -60,14 +60,29 @@ public class GameManager : MonoBehaviour
     {
         //Init variables
         gameState = 0;
-        butterfliesRemaining = butterflyStartAmount;
+        butterfliesRemaining = butterflyStartAmountRandom;
         preGameSplash.GetComponent<Canvas>().enabled = true;
         postGameSplash.GetComponent<Canvas>().enabled = false;
     }
 
     void PrepareGame()
     {
-        SpawnButterfly(butterflyStartAmount);
+        if (butteflyStartAmountGene > 0)
+        {
+            for (int i = 0; i < butteflyStartAmountGene; i++)
+            {
+                for (int j = 0; j <= butterflyGeneLength; j++)
+                {
+                    SpawnButterfly(GeneticManager.GiveSpecificGenetics(butterflyGeneLength, j));
+                }
+            }
+        }
+
+        for (int i = 0; i < butterflyStartAmountRandom - ((1+butterflyGeneLength) * butteflyStartAmountGene); i++)
+        {
+            SpawnButterfly(GeneticManager.GiveRandomGenetics(butterflyGeneLength));
+        }
+
         gameState = 1;
     }
 
@@ -95,87 +110,85 @@ public class GameManager : MonoBehaviour
         return new Vector3(newButterX, newButterY, newButterZ);
     }
 
-    void SpawnButterfly(int amount)
+    void SpawnButterfly(bool[] genetics)
     {
-        for (int i = 0; i < amount; i++)
-        {
-            Quaternion randomRotation = Quaternion.Euler(0, 0, Random.Range(1, 360));
-            GameObject newButterfly = Instantiate(butterfly,                //Prefab
+        Quaternion randomRotation = Quaternion.Euler(0, 0, Random.Range(1, 360));
+        GameObject newButterfly = Instantiate(butterfly,                //Prefab
                                       RandomButterPos(randomRotation),      //Random pos, without overlapp 
                                       randomRotation);                      //Random rot. Needs to be pre-calculated for col detect
 
-            newButterfly.transform.name = "Butterfly id:" + i;
-            newButterfly.transform.parent = butterContainer.transform;
-            newButterfly.GetComponent<ButterflyBehaviour>().gameBoard = this.gameObject;
+        newButterfly.transform.name = "Butterfly";
+        newButterfly.transform.parent = butterContainer.transform;
+        newButterfly.GetComponent<ButterflyBehaviour>().gameBoard = this.gameObject;
 
-            newButterfly.GetComponent<ButterflyBehaviour>().genes = GeneticManager.GiveGenetics(butterflyGeneLength);
-            float blendIn = GeneticManager.BlendInCalc(newButterfly.GetComponent<ButterflyBehaviour>().genes);
+        newButterfly.GetComponent<ButterflyBehaviour>().genes = genetics;
+        float blendIn = GeneticManager.BlendInCalc(genetics);
 
-            switch (butterflyRenderMode)
-            {
-                case 0://alpha mode
-                    Color newColor = Color.white;
-                    Material newMat = new Material(Shader.Find("Transparent/Diffuse"));
-                    newColor.a = blendIn;
-                    newButterfly.GetComponent<Renderer>().material = newMat;
-                    newButterfly.GetComponent<Renderer>().material.color = newColor;
-                    break;
+        switch (butterflyRenderMode)
+        {
+            case 0://alpha mode
+                Color newColor = Color.white;
+                Material newMat = new Material(Shader.Find("Transparent/Diffuse"));
+                newColor.a = blendIn;
+                newButterfly.GetComponent<Renderer>().material = newMat;
+                newButterfly.GetComponent<Renderer>().material.color = newColor;
+                break;
 
-                case 1://texture-matched mode
+            case 1://texture-matched mode
 
-                    string modelName = newButterfly.GetComponent<MeshFilter>().sharedMesh.name;
-                    if (!PlayerPrefs.HasKey(GetVariable.GetKeyPrefix() + modelName)) TextureMatchManager.reset();
+                string modelName = newButterfly.GetComponent<MeshFilter>().sharedMesh.name;
+                if (!PlayerPrefs.HasKey(GetVariable.GetKeyPrefix() + modelName)) TextureMatchManager.reset();
 
-                    try
+                try
+                {
+                    Debug.Log(modelName);
+                    string[] tempData = PlayerPrefs.GetString(keyPrefix + modelName).Split(':');
+
+                    float butterMatchX = float.Parse(tempData[0]);
+                    float butterMatchY = float.Parse(tempData[1]);
+                    bool squareMatch = bool.Parse(tempData[2]);
+
+                    float squareX, squareY;
+
+                    if (squareMatch)
                     {
-                        Debug.Log(modelName);
-                        string[] tempData = PlayerPrefs.GetString(keyPrefix + modelName).Split(':');
-
-                        float butterMatchX = float.Parse(tempData[0]);
-                        float butterMatchY = float.Parse(tempData[1]);
-                        bool squareMatch = bool.Parse(tempData[2]);
-
-                        float squareX, squareY;
-
-                        if (squareMatch)
-                        {
-                            squareX = newButterfly.GetComponent<MeshFilter>().mesh.bounds.size.x;
-                            squareY = newButterfly.GetComponent<MeshFilter>().mesh.bounds.size.y;
-                        }
-
-                        else
-                        {
-                            squareX = 1;
-                            squareY = 1;
-                        }
-
-                        newButterfly.GetComponent<Renderer>().material = animalMaterial;
-
-                        newButterfly.GetComponent<Renderer>().material.SetTexture("_MainTex", blendTexture);
-                        newButterfly.GetComponent<Renderer>().material.SetTextureScale("_MainTex", new Vector2(
-                            newButterfly.GetComponent<MeshFilter>().mesh.bounds.size.x * tilesPerUnit * newButterfly.transform.localScale.x * butterMatchX * squareY,
-                            newButterfly.GetComponent<MeshFilter>().mesh.bounds.size.y * tilesPerUnit * newButterfly.transform.localScale.y * butterMatchY * squareX));
-
-                        newButterfly.GetComponent<Renderer>().material.SetTexture("_SecondaryTex", backgroundTexture);
-                        newButterfly.GetComponent<Renderer>().material.SetTextureScale("_SecondaryTex", new Vector2(
-                            newButterfly.GetComponent<MeshFilter>().mesh.bounds.size.x * tilesPerUnit * newButterfly.transform.localScale.x * butterMatchX * squareY,
-                            newButterfly.GetComponent<MeshFilter>().mesh.bounds.size.y * tilesPerUnit * newButterfly.transform.localScale.y * butterMatchY * squareX));
-
-                        newButterfly.GetComponent<Renderer>().material.SetFloat("_LerpValue", blendIn);
+                        squareX = newButterfly.GetComponent<MeshFilter>().mesh.bounds.size.x;
+                        squareY = newButterfly.GetComponent<MeshFilter>().mesh.bounds.size.y;
                     }
 
-                    catch (System.Exception)
+                    else
                     {
-                        Debug.LogError("Could not load correct material for model. Try rendermode 0, or give texture a size to scale");
+                        squareX = 1;
+                        squareY = 1;
                     }
 
-                    break;
+                    newButterfly.GetComponent<Renderer>().material = animalMaterial;
 
-                default:
-                    break;
-            }
+                    newButterfly.GetComponent<Renderer>().material.SetTexture("_MainTex", blendTexture);
+                    newButterfly.GetComponent<Renderer>().material.SetTextureScale("_MainTex", new Vector2(
+                        newButterfly.GetComponent<MeshFilter>().mesh.bounds.size.x * tilesPerUnit * newButterfly.transform.localScale.x * butterMatchX * squareY,
+                        newButterfly.GetComponent<MeshFilter>().mesh.bounds.size.y * tilesPerUnit * newButterfly.transform.localScale.y * butterMatchY * squareX));
+
+                    newButterfly.GetComponent<Renderer>().material.SetTexture("_SecondaryTex", backgroundTexture);
+                    newButterfly.GetComponent<Renderer>().material.SetTextureScale("_SecondaryTex", new Vector2(
+                        newButterfly.GetComponent<MeshFilter>().mesh.bounds.size.x * tilesPerUnit * newButterfly.transform.localScale.x * butterMatchX * squareY,
+                        newButterfly.GetComponent<MeshFilter>().mesh.bounds.size.y * tilesPerUnit * newButterfly.transform.localScale.y * butterMatchY * squareX));
+
+                    newButterfly.GetComponent<Renderer>().material.SetFloat("_LerpValue", blendIn);
+                }
+
+                catch (System.Exception)
+                {
+                    Debug.LogError("Could not load correct material for model. Try rendermode 0, or give texture a size to scale");
+                }
+
+                break;
+
+            default:
+                break;
         }
     }
+    
 
     private void Update()
     {
@@ -197,7 +210,7 @@ public class GameManager : MonoBehaviour
                 {
                     postGameSplash.GetComponent<Canvas>().enabled = true;
 
-                    if ((butterflyStartAmount - butterfliesRemaining) < minimumKills)
+                    if ((butterflyStartAmountRandom - butterfliesRemaining) < minimumKills)
                     {
                         Debug.Log("U loose");
                         gameState = 4;//Failed! Health will be lost, energy will be lost or game will be lost here.
@@ -231,8 +244,10 @@ public class GameManager : MonoBehaviour
 
             case 3:
 
+                for (int i = 0; i < butterflyRoundSpawnAmount; i++) SpawnButterfly(GeneticManager.EvolveNewAnimal(butterContainer.GetComponent<ButterCollection>().GetAnimalGenes()));
                 ResetVariables();
                 gameState = 1;
+
                 //Fix some splash about stats or smt and some wait time
 
                 break;
@@ -249,6 +264,11 @@ public class GameManager : MonoBehaviour
         }
     }
 
+    void GetButterflies()
+    {
+        
+    }
+
     /*
     |=============================|
     |==BUTTERFLY EVENT HANDELERS==|
@@ -257,7 +277,7 @@ public class GameManager : MonoBehaviour
 
     public void ButterClick(GameObject butterfly)
     {
-        if (gameState == 2 && (butterflyStartAmount - butterfliesRemaining) < maximumKills)
+        if (gameState == 2 && (butterflyStartAmountRandom - butterfliesRemaining) < maximumKills)
         {
             Destroy(butterfly);
             Debug.Log("Butterfly click detected: Removed " + butterfly.name + " from the game board");

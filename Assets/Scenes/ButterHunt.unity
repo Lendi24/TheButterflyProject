@@ -243,13 +243,14 @@ MonoBehaviour:
   preHuntTime: 3
   huntTime: 3
   tilesPerUnit: 6
-  butterflyGeneLength: 3
-  butterflyStartAmount: 10
+  butterflyGeneLength: 6
+  butterflyStartAmountRandom: 8
+  butteflyStartAmountGene: 1
   maximumKills: 1
   minimumKills: 1
   butterflyRenderMode: 1
+  butterflyRoundSpawnAmount: 1
   resetEverythingOnNextGen: 0
-  usePerlin: 1
 --- !u!1 &616003544
 GameObject:
   m_ObjectHideFlags: 0
@@ -641,6 +642,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1419224861}
+  - component: {fileID: 1419224862}
   m_Layer: 0
   m_Name: ButterCollection
   m_TagString: Untagged
@@ -662,6 +664,18 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1419224862
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1419224860}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a310cca25e5813341a4ca130497a917a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1568264856
 GameObject:
   m_ObjectHideFlags: 0
