@@ -6,6 +6,7 @@ public static class TimmerManagment
 {
     private static float timmerTimeLeft;
     private static bool timmerIsRunning;
+    private static bool hasClickedButterfly;
 
     public static bool Timmer(float time)
     {
@@ -13,6 +14,12 @@ public static class TimmerManagment
         {
             timmerTimeLeft = time;
             timmerIsRunning = true;
+        }
+
+        if(hasClickedButterfly)
+        {
+            GameManager.GetRemainingTime(timmerTimeLeft);
+            hasClickedButterfly = false;
         }
 
         if (timmerTimeLeft > 0)
@@ -27,5 +34,10 @@ public static class TimmerManagment
             return true;
         }
 
+    }
+
+    public static void SetButterflyClicked()
+    {
+        hasClickedButterfly = true;
     }
 }
