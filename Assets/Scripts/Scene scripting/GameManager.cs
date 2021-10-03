@@ -127,7 +127,7 @@ public class GameManager : MonoBehaviour
 
         switch (butterflyRenderMode)
         {
-            case 0://alpha mode
+            case 0://alpha mode !THIS IS OLD! REPLACE WITH CAMO TEXTURE ALPHA
                 Color newColor = Color.white;
                 Material newMat = new Material(Shader.Find("Transparent/Diffuse"));
                 newColor.a = blendIn;
@@ -136,7 +136,7 @@ public class GameManager : MonoBehaviour
                 break;
 
             case 1://texture-matched mode
-
+                newButterfly.GetComponent<Renderer>().material.SetFloat("_enablePerlin", 0);
                 string modelName = newButterfly.GetComponent<MeshFilter>().sharedMesh.name;
                 if (!PlayerPrefs.HasKey(GetVariable.GetKeyPrefix() + modelName)) TextureMatchManager.reset();
 

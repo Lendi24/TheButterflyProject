@@ -99,10 +99,10 @@ Shader "Butterfly/CamoShader"
                 float2 uv = i.uv.xy;
                 float c = fbm(uv);
                 if (_monochromatic == 0.0)
-                    return float4(c,c,c,c) * _color;
+                    return float4(c,c,c,c) * _color * _LerpValue;
                 else
                 if (c < _range)
-                    return lerp(col, tex2D(_SecondaryTex, i.uv), _enablePerlin);
+                    return col;
                 else
                     return lerp(col, _color, _enablePerlin);
             }
