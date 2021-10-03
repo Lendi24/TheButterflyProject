@@ -20,15 +20,10 @@ public class GameManager : MonoBehaviour
     int butterflyGeneLength, butterflyStartAmountRandom, butteflyStartAmountGene, maximumKills, minimumKills, butterflyRenderMode, butterflyRoundSpawnAmount;
 
     [SerializeField]
-    bool resetEverythingOnNextGen, perlinNoiseShader;
+    bool resetEverythingOnNextGen;
 
     private int butterfliesRemaining, gameState;
     string keyPrefix = "modelMatch";
-
-    /* Butterfly Render Modes
-     * 0 - Transparancy
-     * 1 - TextureMode
-    */
 
     /* Game States
     0-PreGame
@@ -40,16 +35,22 @@ public class GameManager : MonoBehaviour
 
     // Start is called before the first frame update
     void Start()
-    {        
-        //[INSER MENU HERE]
+    {
+        if (blendTexture == null)
+        {
+            Debug.LogWarning("No blend-texture selected!\nDefaulting to colour blending...");
+        }
+
+        if (backgroundTexture == null)
+        {
+            Debug.LogWarning("No background-texture selected!\nDefaulting to perlin noise...");
+        }
 
         GetComponent<Renderer>().material = backgroundPattern;
         GetComponent<Renderer>().material.SetTexture("_MainTex", backgroundTexture);
         GetComponent<Renderer>().material.SetTextureScale("_MainTex", new Vector2(
             GetComponent<Renderer>().bounds.size.x * tilesPerUnit,
             GetComponent<Renderer>().bounds.size.y * tilesPerUnit));
-
-
 
         Physics.autoSyncTransforms = true;
         ResetVariables();

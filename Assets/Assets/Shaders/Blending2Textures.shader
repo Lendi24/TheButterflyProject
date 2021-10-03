@@ -6,6 +6,7 @@ Shader "Butterfly/Blending2Textures"
 		_SecondaryTex("Filter Texture", 2D) = "white" {}
 		_LerpValue("Transition float", Range(0,1)) = 0.5
     }
+
     SubShader
     {
         Tags { "Queue" = "Transparent" "RenderType" = "Transparent" }
@@ -15,7 +16,7 @@ Shader "Butterfly/Blending2Textures"
         {
             CGPROGRAM
             #pragma vertex vert alpha
-            #pragma fragment frag frag alpha
+            #pragma fragment frag 
             // make fog work
             #pragma multi_compile_fog alpha
 

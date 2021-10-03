@@ -15,8 +15,11 @@ Shader "Butterfly/PerlinNoise"
 		_color("Color", Color) = (1.0,1.0,1.0,1.0)
 		[Toggle] _monochromatic("Monochromatic", Float) = 1
 		_range("Monochromatic Range", Range(0.0 , 1.0)) = 0.006
+
+		_LerpValue("Transition float", Range(0,1)) = 0.5
 	}
-		Subshader
+
+	Subshader
 	{
 		Pass
 		{
