@@ -248,7 +248,7 @@ MonoBehaviour:
   butteflyStartAmountGene: 1
   maximumKills: 1
   minimumKills: 1
-  butterflyRenderMode: 1
+  butterflyRenderMode: 2
   butterflyRoundSpawnAmount: 1
   resetEverythingOnNextGen: 0
 --- !u!1 &616003544
