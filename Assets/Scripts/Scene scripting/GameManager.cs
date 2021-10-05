@@ -14,7 +14,7 @@ public class GameManager : MonoBehaviour
     Texture backgroundTexture, blendTexture;
 
     [SerializeField]
-    float preHuntTime, huntTime, tilesPerUnit, huntTimeReduceValue;
+    float preHuntTime, huntTime, tilesPerUnit, huntTimeReducePercent;
 
     [SerializeField]
     int butterflyGeneLength, butterflyStartAmountRandom, butteflyStartAmountGene, maximumKills, minimumKills, butterflyRenderMode, butterflyRoundSpawnAmount;
@@ -24,7 +24,7 @@ public class GameManager : MonoBehaviour
 
     private int butterfliesRemaining, gameState;
     string keyPrefix = "modelMatch";
-    static int score = 0;
+    static int score = 0, rounds = 0;
 
     /* Butterfly Render Modes
      * 0 - Transparancy
@@ -206,8 +206,9 @@ public class GameManager : MonoBehaviour
 
             case 2:
 
-                if (TimmerManagment.Timmer(huntTime))
-                {
+                if (TimmerManagment.Timmer(huntTime * Mathf.Pow(huntTimeReducePercent, rounds)))
+                { //Checks if Timer is finished. Time is dependant on an exponential value,
+                  //y=C*a^x. Time decreases the more rounds have passed.
                     postGameSplash.GetComponent<Canvas>().enabled = true;
 
                     if ((butterflyStartAmountRandom - butterfliesRemaining) < minimumKills)
@@ -218,9 +219,9 @@ public class GameManager : MonoBehaviour
 
                     else
                     {
-                        huntTime -= huntTimeReduceValue;
+                        rounds++;
                         Debug.Log(score);
-
+                        
                         Debug.Log("continu");
 
                         foreach (Transform animal in butterContainer.transform)
@@ -272,8 +273,9 @@ public class GameManager : MonoBehaviour
         
     }
 
-    public static void GetRemainingTime(float remainingTime)
+    public static void SetScore()
     {
+        float remainingTime = TimmerManagment.GetTimeLeft();
         score += Mathf.RoundToInt(10f * remainingTime);
     }
 
@@ -287,7 +289,7 @@ public class GameManager : MonoBehaviour
     {
         if (gameState == 2 && (butterflyStartAmountRandom - butterfliesRemaining) < maximumKills)
         {
-            TimmerManagment.SetButterflyClicked();
+            SetScore();
             Destroy(butterfly);
             Debug.Log("Butterfly click detected: Removed " + butterfly.name + " from the game board");
             butterfliesRemaining--;

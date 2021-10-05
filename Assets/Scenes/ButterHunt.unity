@@ -957,5 +957,9 @@ PrefabInstance:
       propertyPath: butterContainer
       value: 
       objectReference: {fileID: 1419224860}
+    - target: {fileID: 4304629887760173346, guid: 0c22a8247677de44d96d99da8ef437be, type: 3}
+      propertyPath: huntTimeReducePercent
+      value: 0.8
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 0c22a8247677de44d96d99da8ef437be, type: 3}
