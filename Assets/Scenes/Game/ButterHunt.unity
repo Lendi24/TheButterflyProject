@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.44657874, g: 0.49641258, b: 0.5748172, a: 1}
+  m_IndirectSpecularColor: {r: 0.44658822, g: 0.49642307, b: 0.5748253, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -243,9 +243,9 @@ MonoBehaviour:
   preHuntTime: 3
   huntTime: 3
   tilesPerUnit: 6
-  butterflyGeneLength: 6
-  butterflyStartAmountRandom: 8
-  butteflyStartAmountGene: 1
+  butterflyGeneLength: 3
+  butterflyStartAmountRandom: 3
+  butterflyStartAmountGene: 1
   maximumKills: 1
   minimumKills: 1
   butterflyRenderMode: 2

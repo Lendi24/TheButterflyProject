@@ -17,7 +17,7 @@ public class GameManager : MonoBehaviour
     float preHuntTime, huntTime, tilesPerUnit;
 
     [SerializeField]
-    int butterflyGeneLength, butterflyStartAmountRandom, butteflyStartAmountGene, maximumKills, minimumKills, butterflyRenderMode, butterflyRoundSpawnAmount;
+    int butterflyGeneLength, butterflyStartAmountRandom, butterflyStartAmountGene, maximumKills, minimumKills, butterflyRenderMode, butterflyRoundSpawnAmount;
 
     [SerializeField]
     bool resetEverythingOnNextGen;
@@ -67,10 +67,21 @@ public class GameManager : MonoBehaviour
     }
 
     void PrepareGame()
-    {
-        if (butteflyStartAmountGene > 0)
+    {   
+        int minAllowed = butterflyStartAmountGene * (butterflyGeneLength+1);
+        if (butterflyStartAmountRandom < minAllowed) 
         {
-            for (int i = 0; i < butteflyStartAmountGene; i++)
+            Debug.LogWarning("ERROR: Misconfigured!\n"+
+            "ButterflyStartAmountRandom is the total amount of butterflies spawned at start.\n"+
+            "Butterfly start amount gene spawns one butterfly of each gene. (butterGeneStart*(ButterGeneLength+1))\n"+
+            "To fix this, ButterflyStartAmountRandom will be set to: "+minAllowed);
+            butterflyStartAmountRandom = minAllowed;
+        }
+        
+        //Spawns butterflys with specific genes. This is to make sure there are at least one of each type in the population
+        if (butterflyStartAmountGene > 0)
+        {
+            for (int i = 0; i < butterflyStartAmountGene; i++)
             {
                 for (int j = 0; j <= butterflyGeneLength; j++)
                 {
@@ -79,7 +90,8 @@ public class GameManager : MonoBehaviour
             }
         }
 
-        for (int i = 0; i < butterflyStartAmountRandom - ((1+butterflyGeneLength) * butteflyStartAmountGene); i++)
+        //Spawns rest of population (or all of population, if butterflyStartAmountGene was set to 0) with random genes. 
+        for (int i = 0; i < butterflyStartAmountRandom - (minAllowed); i++)
         {
             SpawnButterfly(GeneticManager.GiveRandomGenetics(butterflyGeneLength));
         }
