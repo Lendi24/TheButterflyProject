@@ -41,8 +41,9 @@ public class GameManager : MonoBehaviour
 
     // Start is called before the first frame update
     void Start()
-    {        
+    {
         //[INSER MENU HERE]
+        gameObject.transform.localScale = GameBoardResizer.GetGameBoardSize();
 
         GetComponent<Renderer>().material = backgroundPattern;
         GetComponent<Renderer>().material.SetTexture("_MainTex", backgroundTexture);
