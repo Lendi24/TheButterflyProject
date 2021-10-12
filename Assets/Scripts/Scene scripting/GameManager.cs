@@ -17,18 +17,13 @@ public class GameManager : MonoBehaviour
     float preHuntTime, huntTime, tilesPerUnit;
 
     [SerializeField]
-    int butterflyGeneLength, butterflyStartAmountRandom, butteflyStartAmountGene, maximumKills, minimumKills, butterflyRenderMode, butterflyRoundSpawnAmount;
+    int butterflyGeneLength, butterflyStartAmountRandom, butterflyStartAmountGene, maximumKills, minimumKills, butterflyRenderMode, butterflyRoundSpawnAmount;
 
     [SerializeField]
-    bool resetEverythingOnNextGen, perlinNoiseShader;
+    bool resetEverythingOnNextGen;
 
     private int butterfliesRemaining, gameState;
     string keyPrefix = "modelMatch";
-
-    /* Butterfly Render Modes
-     * 0 - Transparancy
-     * 1 - TextureMode
-    */
 
     /* Game States
     0-PreGame
@@ -40,16 +35,22 @@ public class GameManager : MonoBehaviour
 
     // Start is called before the first frame update
     void Start()
-    {        
-        //[INSER MENU HERE]
+    {
+        if (blendTexture == null)
+        {
+            Debug.LogWarning("No blend-texture selected!\nDefaulting to colour blending...");
+        }
+
+        if (backgroundTexture == null)
+        {
+            Debug.LogWarning("No background-texture selected!\nDefaulting to perlin noise...");
+        }
 
         GetComponent<Renderer>().material = backgroundPattern;
         GetComponent<Renderer>().material.SetTexture("_MainTex", backgroundTexture);
         GetComponent<Renderer>().material.SetTextureScale("_MainTex", new Vector2(
             GetComponent<Renderer>().bounds.size.x * tilesPerUnit,
             GetComponent<Renderer>().bounds.size.y * tilesPerUnit));
-
-
 
         Physics.autoSyncTransforms = true;
         ResetVariables();
@@ -66,10 +67,21 @@ public class GameManager : MonoBehaviour
     }
 
     void PrepareGame()
-    {
-        if (butteflyStartAmountGene > 0)
+    {   
+        int minAllowed = butterflyStartAmountGene * (butterflyGeneLength+1);
+        if (butterflyStartAmountRandom < minAllowed) 
         {
-            for (int i = 0; i < butteflyStartAmountGene; i++)
+            Debug.LogWarning("ERROR: Misconfigured!\n"+
+            "ButterflyStartAmountRandom is the total amount of butterflies spawned at start.\n"+
+            "Butterfly start amount gene spawns one butterfly of each gene. (butterGeneStart*(ButterGeneLength+1))\n"+
+            "To fix this, ButterflyStartAmountRandom will be set to: "+minAllowed);
+            butterflyStartAmountRandom = minAllowed;
+        }
+        
+        //Spawns butterflys with specific genes. This is to make sure there are at least one of each type in the population
+        if (butterflyStartAmountGene > 0)
+        {
+            for (int i = 0; i < butterflyStartAmountGene; i++)
             {
                 for (int j = 0; j <= butterflyGeneLength; j++)
                 {
@@ -78,7 +90,8 @@ public class GameManager : MonoBehaviour
             }
         }
 
-        for (int i = 0; i < butterflyStartAmountRandom - ((1+butterflyGeneLength) * butteflyStartAmountGene); i++)
+        //Spawns rest of population (or all of population, if butterflyStartAmountGene was set to 0) with random genes. 
+        for (int i = 0; i < butterflyStartAmountRandom - (minAllowed); i++)
         {
             SpawnButterfly(GeneticManager.GiveRandomGenetics(butterflyGeneLength));
         }
@@ -126,65 +139,79 @@ public class GameManager : MonoBehaviour
 
         switch (butterflyRenderMode)
         {
-            case 0://alpha mode
+            case 0://alpha mode !THIS IS OLD! Use camo shader for this effect with transparant material if possible!
                 Color newColor = Color.white;
                 Material newMat = new Material(Shader.Find("Transparent/Diffuse"));
                 newColor.a = blendIn;
                 newButterfly.GetComponent<Renderer>().material = newMat;
                 newButterfly.GetComponent<Renderer>().material.color = newColor;
+                GetComponent<Renderer>().material.SetFloat("_enablePerlin", 0);
                 break;
 
             case 1://texture-matched mode
+                TextureMatchedRender();
+                newButterfly.GetComponent<Renderer>().material.SetFloat("_LerpValue", blendIn);
+                newButterfly.GetComponent<Renderer>().material.SetFloat("_enablePerlin", 0);
+                GetComponent<Renderer>().material.SetFloat("_enablePerlin", 0);
+                break;
 
-                string modelName = newButterfly.GetComponent<MeshFilter>().sharedMesh.name;
-                if (!PlayerPrefs.HasKey(GetVariable.GetKeyPrefix() + modelName)) TextureMatchManager.reset();
-
-                try
-                {
-                    string[] tempData = PlayerPrefs.GetString(keyPrefix + modelName).Split(':');
-
-                    float butterMatchX = float.Parse(tempData[0]);
-                    float butterMatchY = float.Parse(tempData[1]);
-                    bool squareMatch = bool.Parse(tempData[2]);
-
-                    float squareX, squareY;
-
-                    if (squareMatch)
-                    {
-                        squareX = newButterfly.GetComponent<MeshFilter>().mesh.bounds.size.x;
-                        squareY = newButterfly.GetComponent<MeshFilter>().mesh.bounds.size.y;
-                    }
-
-                    else
-                    {
-                        squareX = 1;
-                        squareY = 1;
-                    }
-
-                    newButterfly.GetComponent<Renderer>().material = animalMaterial;
-
-                    newButterfly.GetComponent<Renderer>().material.SetTexture("_MainTex", blendTexture);
-                    newButterfly.GetComponent<Renderer>().material.SetTextureScale("_MainTex", new Vector2(
-                        newButterfly.GetComponent<MeshFilter>().mesh.bounds.size.x * tilesPerUnit * newButterfly.transform.localScale.x * butterMatchX * squareY,
-                        newButterfly.GetComponent<MeshFilter>().mesh.bounds.size.y * tilesPerUnit * newButterfly.transform.localScale.y * butterMatchY * squareX));
-
-                    newButterfly.GetComponent<Renderer>().material.SetTexture("_SecondaryTex", backgroundTexture);
-                    newButterfly.GetComponent<Renderer>().material.SetTextureScale("_SecondaryTex", new Vector2(
-                        newButterfly.GetComponent<MeshFilter>().mesh.bounds.size.x * tilesPerUnit * newButterfly.transform.localScale.x * butterMatchX * squareY,
-                        newButterfly.GetComponent<MeshFilter>().mesh.bounds.size.y * tilesPerUnit * newButterfly.transform.localScale.y * butterMatchY * squareX));
-
-                    newButterfly.GetComponent<Renderer>().material.SetFloat("_LerpValue", blendIn);
-                }
-
-                catch (System.Exception)
-                {
-                    Debug.LogError("Could not load correct material for model. Try rendermode 0, or give texture a size to scale");
-                }
-
+            case 2://texture-matched perlin mode
+                TextureMatchedRender();
+                newButterfly.GetComponent<Renderer>().material.SetFloat("_LerpValue", blendIn);
+                newButterfly.GetComponent<Renderer>().material.SetFloat("_enablePerlin", blendIn);
+                GetComponent<Renderer>().material.SetFloat("_enablePerlin", 1);
                 break;
 
             default:
                 break;
+        }
+
+        void TextureMatchedRender() {
+
+            try
+            {
+                string modelName = newButterfly.GetComponent<MeshFilter>().sharedMesh.name;
+                if (!PlayerPrefs.HasKey(GetVariable.GetKeyPrefix() + modelName)) TextureMatchManager.reset();
+
+                string[] tempData = PlayerPrefs.GetString(keyPrefix + modelName).Split(':');
+
+                float butterMatchX = float.Parse(tempData[0]);
+                float butterMatchY = float.Parse(tempData[1]);
+                bool squareMatch = bool.Parse(tempData[2]);
+
+                float squareX, squareY;
+
+                if (squareMatch)
+                {
+                    squareX = newButterfly.GetComponent<MeshFilter>().mesh.bounds.size.x;
+                    squareY = newButterfly.GetComponent<MeshFilter>().mesh.bounds.size.y;
+                }
+
+                else
+                {
+                    squareX = 1;
+                    squareY = 1;
+                }
+
+                newButterfly.GetComponent<Renderer>().material = animalMaterial;
+
+                newButterfly.GetComponent<Renderer>().material.SetTexture("_MainTex", blendTexture);
+                newButterfly.GetComponent<Renderer>().material.SetTextureScale("_MainTex", new Vector2(
+                    newButterfly.GetComponent<MeshFilter>().mesh.bounds.size.x * tilesPerUnit * newButterfly.transform.localScale.x * butterMatchX * squareY,
+                    newButterfly.GetComponent<MeshFilter>().mesh.bounds.size.y * tilesPerUnit * newButterfly.transform.localScale.y * butterMatchY * squareX));
+
+                newButterfly.GetComponent<Renderer>().material.SetTexture("_SecondaryTex", backgroundTexture);
+                newButterfly.GetComponent<Renderer>().material.SetTextureScale("_SecondaryTex", new Vector2(
+                    newButterfly.GetComponent<MeshFilter>().mesh.bounds.size.x * tilesPerUnit * newButterfly.transform.localScale.x * butterMatchX * squareY,
+                    newButterfly.GetComponent<MeshFilter>().mesh.bounds.size.y * tilesPerUnit * newButterfly.transform.localScale.y * butterMatchY * squareX));
+            }
+
+            catch (System.Exception)
+            {
+                Debug.LogError("Could not load correct material for model. Try rendermode 0, or give texture a size to scale");
+            }
+
+
         }
     }
     

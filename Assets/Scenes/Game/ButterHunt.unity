@@ -236,22 +236,21 @@ MonoBehaviour:
   preGameSplash: {fileID: 1568264856}
   postGameSplash: {fileID: 1745888261}
   butterContainer: {fileID: 1419224860}
-  backgroundPattern: {fileID: 2100000, guid: 4ebaffc2c9699ca4b90ba82817fbf971, type: 2}
-  animalMaterial: {fileID: 2100000, guid: b97cff4e2c7e5294b9784cc35308b531, type: 2}
+  backgroundPattern: {fileID: 2100000, guid: 8a23c427c61bca34ba9215c6d475c6b9, type: 2}
+  animalMaterial: {fileID: 2100000, guid: 8a23c427c61bca34ba9215c6d475c6b9, type: 2}
   backgroundTexture: {fileID: 2800000, guid: c5b870f95c190c6488d86499845664d9, type: 3}
   blendTexture: {fileID: 0}
   preHuntTime: 3
   huntTime: 3
   tilesPerUnit: 6
-  butterflyGeneLength: 6
-  butterflyStartAmountRandom: 8
-  butteflyStartAmountGene: 1
+  butterflyGeneLength: 3
+  butterflyStartAmountRandom: 4
+  butterflyStartAmountGene: 1
   maximumKills: 1
   minimumKills: 1
-  butterflyRenderMode: 1
+  butterflyRenderMode: 2
   butterflyRoundSpawnAmount: 1
   resetEverythingOnNextGen: 0
-  perlinNoiseShader: 0
 --- !u!1 &616003544
 GameObject:
   m_ObjectHideFlags: 0
