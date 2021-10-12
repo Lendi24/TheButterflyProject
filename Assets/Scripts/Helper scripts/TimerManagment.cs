@@ -28,4 +28,6 @@ public static class TimmerManagment
         }
 
     }
+
+    public static float GetTimeLeft(){ return timmerTimeLeft; }
 }

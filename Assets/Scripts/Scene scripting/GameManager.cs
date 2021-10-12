@@ -14,7 +14,7 @@ public class GameManager : MonoBehaviour
     Texture backgroundTexture, blendTexture;
 
     [SerializeField]
-    float preHuntTime, huntTime, tilesPerUnit;
+    float preHuntTime, huntTime, tilesPerUnit, huntTimeReducePercent;
 
     [SerializeField]
     int butterflyGeneLength, butterflyStartAmountRandom, butterflyStartAmountGene, maximumKills, minimumKills, butterflyRenderMode, butterflyRoundSpawnAmount;
@@ -24,6 +24,7 @@ public class GameManager : MonoBehaviour
 
     private int butterfliesRemaining, gameState;
     string keyPrefix = "modelMatch";
+    static int score = 0, rounds = 0;
 
     /* Game States
     0-PreGame
@@ -46,6 +47,10 @@ public class GameManager : MonoBehaviour
             Debug.LogWarning("No background-texture selected!\nDefaulting to perlin noise...");
         }
 
+        //[INSER MENU HERE]
+        gameObject.transform.localScale = GameBoardResizer.GetGameBoardSize();
+
+
         GetComponent<Renderer>().material = backgroundPattern;
         GetComponent<Renderer>().material.SetTexture("_MainTex", backgroundTexture);
         GetComponent<Renderer>().material.SetTextureScale("_MainTex", new Vector2(
@@ -55,6 +60,7 @@ public class GameManager : MonoBehaviour
         Physics.autoSyncTransforms = true;
         ResetVariables();
         PrepareGame();
+
     }
 
     void ResetVariables()
@@ -67,9 +73,9 @@ public class GameManager : MonoBehaviour
     }
 
     void PrepareGame()
-    {   
+    {
         int minAllowed = butterflyStartAmountGene * (butterflyGeneLength+1);
-        if (butterflyStartAmountRandom < minAllowed) 
+        if (butterflyStartAmountRandom < minAllowed)
         {
             Debug.LogWarning("ERROR: Misconfigured!\n"+
             "ButterflyStartAmountRandom is the total amount of butterflies spawned at start.\n"+
@@ -77,7 +83,7 @@ public class GameManager : MonoBehaviour
             "To fix this, ButterflyStartAmountRandom will be set to: "+minAllowed);
             butterflyStartAmountRandom = minAllowed;
         }
-        
+
         //Spawns butterflys with specific genes. This is to make sure there are at least one of each type in the population
         if (butterflyStartAmountGene > 0)
         {
@@ -90,7 +96,7 @@ public class GameManager : MonoBehaviour
             }
         }
 
-        //Spawns rest of population (or all of population, if butterflyStartAmountGene was set to 0) with random genes. 
+        //Spawns rest of population (or all of population, if butterflyStartAmountGene was set to 0) with random genes.
         for (int i = 0; i < butterflyStartAmountRandom - (minAllowed); i++)
         {
             SpawnButterfly(GeneticManager.GiveRandomGenetics(butterflyGeneLength));
@@ -114,12 +120,12 @@ public class GameManager : MonoBehaviour
             newButterX = Random.Range((boardSize.x / 2) - butterfly.GetComponent<MeshFilter>().sharedMesh.bounds.size.x / 2, (boardSize.x / -2) + butterfly.GetComponent<Renderer>().bounds.size.x / 2);
             newButterY = Random.Range((boardSize.y / 2) - butterfly.GetComponent<MeshFilter>().sharedMesh.bounds.size.y / 2, (boardSize.y / -2) + butterfly.GetComponent<Renderer>().bounds.size.y / 2);
 
-            noOverlap = !Physics.CheckBox(new Vector3(newButterX, newButterY, newButterZ), 
+            noOverlap = !Physics.CheckBox(new Vector3(newButterX, newButterY, newButterZ),
                      butterfly.GetComponent<Renderer>().bounds.size / 2, newButterRotate);
 
-        } while (!(nrOfLoops > 500000 || noOverlap)); //Break for infinite loop 
+        } while (!(nrOfLoops > 500000 || noOverlap)); //Break for infinite loop
         if (!noOverlap) Debug.LogError("Could not find space for butterfly, or code is broken.");
-        
+
         return new Vector3(newButterX, newButterY, newButterZ);
     }
 
@@ -127,7 +133,7 @@ public class GameManager : MonoBehaviour
     {
         Quaternion randomRotation = Quaternion.Euler(0, 0, Random.Range(1, 360));
         GameObject newButterfly = Instantiate(butterfly,                //Prefab
-                                      RandomButterPos(randomRotation),      //Random pos, without overlapp 
+                                      RandomButterPos(randomRotation),      //Random pos, without overlapp
                                       randomRotation);                      //Random rot. Needs to be pre-calculated for col detect
 
         newButterfly.transform.name = "Butterfly";
@@ -214,7 +220,7 @@ public class GameManager : MonoBehaviour
 
         }
     }
-    
+
 
     private void Update()
     {
@@ -232,8 +238,9 @@ public class GameManager : MonoBehaviour
 
             case 2:
 
-                if (TimmerManagment.Timmer(huntTime))
-                {
+                if (TimmerManagment.Timmer(huntTime * Mathf.Pow(huntTimeReducePercent, rounds)))
+                { //Checks if Timer is finished. Time is dependant on an exponential value,
+                  //y=C*a^x. Time decreases the more rounds have passed.
                     postGameSplash.GetComponent<Canvas>().enabled = true;
 
                     if ((butterflyStartAmountRandom - butterfliesRemaining) < minimumKills)
@@ -244,6 +251,9 @@ public class GameManager : MonoBehaviour
 
                     else
                     {
+                        rounds++;
+                        Debug.Log(score);
+
                         Debug.Log("continu");
 
                         foreach (Transform animal in butterContainer.transform)
@@ -292,7 +302,13 @@ public class GameManager : MonoBehaviour
 
     void GetButterflies()
     {
-        
+
+    }
+
+    public static void SetScore()
+    {
+        float remainingTime = TimmerManagment.GetTimeLeft();
+        score += Mathf.RoundToInt(10f * remainingTime);
     }
 
     /*
@@ -305,6 +321,7 @@ public class GameManager : MonoBehaviour
     {
         if (gameState == 2 && (butterflyStartAmountRandom - butterfliesRemaining) < maximumKills)
         {
+            SetScore();
             Destroy(butterfly);
             Debug.Log("Butterfly click detected: Removed " + butterfly.name + " from the game board");
             butterfliesRemaining--;
