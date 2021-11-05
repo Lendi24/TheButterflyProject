@@ -19,18 +19,33 @@ public class StartMenuUI : MonoBehaviour
         hardModeBtn = root.Q<Button>("menu-button-hard");
         backBtn = root.Q<Button>("menu-button-back");
 
-        easyModeBtn.clicked += StartGame;
-        mediumModeBtn.clicked += StartGame;
-        hardModeBtn.clicked += StartGame;
+        easyModeBtn.clicked += StartEasyGame;
+        mediumModeBtn.clicked += StartMediumGame;
+        hardModeBtn.clicked += StartHardGame;
 
         backBtn.clicked += BackToMain;
 
     }
 
-    void StartGame()
+    void StartEasyGame()
     {
+        ButterHuntVariables.SetMode(1);
         SceneManager.LoadScene("ButterHunt");
     }
+
+    void StartMediumGame()
+    {
+        ButterHuntVariables.SetMode(2);
+        SceneManager.LoadScene("ButterHunt");
+    }
+
+
+    void StartHardGame()
+    {
+        ButterHuntVariables.SetMode(3);
+        SceneManager.LoadScene("ButterHunt");
+    }
+
 
     void BackToMain()
     {
