@@ -4,9 +4,9 @@
             <ui:Label text="The Butterfly Project" display-tooltip-when-elided="true" style="-unity-font-style: bold; font-size: 40%; color: rgb(255, 255, 255); left: 5%;" />
             <ui:Label text="A game with a fancy caption" display-tooltip-when-elided="true" style="-unity-font-style: italic; font-size: 20px; color: rgb(255, 255, 255); left: 5%;" />
         </ui:IMGUIContainer>
-        <ui:VisualElement name="CenterBar" style="border-left-color: rgb(138, 138, 138); border-right-color: rgb(138, 138, 138); border-top-color: rgb(138, 138, 138); border-bottom-color: rgb(138, 138, 138); background-color: rgba(138, 138, 138, 0.35); width: 100%; max-height: none; max-width: 100%; min-width: 100%;">
-            <ui:VisualElement name="MenuButtonContainer" style="height: auto; width: 20%; left: 5%; margin-left: 5px; margin-right: 5px; margin-top: 5px; margin-bottom: 5px; justify-content: center; align-items: stretch;">
-                <ui:Button text="Start" display-tooltip-when-elided="true" name="menu-button-start" />
+        <ui:VisualElement name="CenterBar" style="border-left-color: rgb(138, 138, 138); border-right-color: rgb(138, 138, 138); border-top-color: rgb(138, 138, 138); border-bottom-color: rgb(138, 138, 138); background-color: rgba(138, 138, 138, 0.35); width: 100%; max-height: none; max-width: 100%; min-width: 100%; justify-content: center;">
+            <ui:VisualElement name="MenuButtonContainer" style="height: auto; width: 25%; left: 5%; margin-left: 5px; margin-right: 5px; margin-top: 5px; margin-bottom: 5px; justify-content: center; align-items: stretch; max-width: 25%; min-width: 200px;">
+                <ui:Button text="Start" display-tooltip-when-elided="true" name="menu-button-start" style="min-width: auto; max-width: none;" />
                 <ui:Button text="Load Custom" display-tooltip-when-elided="true" name="menu-button-load" tabindex="1" />
                 <ui:Button text="Settings" display-tooltip-when-elided="true" name="menu-button-settings" tabindex="2" />
                 <ui:Button text="Credits" display-tooltip-when-elided="true" name="menu-button-credits" tabindex="3" />

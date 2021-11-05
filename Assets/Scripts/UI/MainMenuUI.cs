@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UIElements;
 using UnityEngine.SceneManagement;
@@ -26,6 +24,6 @@ public class MainMenuUI : MonoBehaviour
 
     void StartButtonPressed()
     {
-        SceneManager.LoadScene("ButterHunt");
+        SceneManager.LoadScene("StartMenu");
     }
 }
