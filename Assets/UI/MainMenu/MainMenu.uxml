@@ -1,0 +1,17 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" xsi="http://www.w3.org/2001/XMLSchema-instance" engine="UnityEngine.UIElements" editor="UnityEditor.UIElements" noNamespaceSchemaLocation="../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
+    <Style src="/Assets/Editor Default Resources/USS/MainMenu/SmallScreens.uss" />
+    <ui:VisualElement name="Container">
+        <ui:IMGUIContainer name="TextContainer" style="top: 7%; position: absolute;">
+            <ui:Label text="The Butterfly Project" display-tooltip-when-elided="true" enable-rich-text="true" class="title" />
+            <ui:Label text="A game with a fancy caption" display-tooltip-when-elided="true" class="caption" />
+        </ui:IMGUIContainer>
+        <ui:VisualElement name="CenterBar">
+            <ui:VisualElement name="MenuButtonContainer">
+                <ui:Button text="Start" display-tooltip-when-elided="true" name="menu-button-start" style="position: relative; top: 0;" />
+                <ui:Button text="Load Custom" display-tooltip-when-elided="true" name="menu-button-load" tabindex="1" />
+                <ui:Button text="Settings" display-tooltip-when-elided="true" name="menu-button-settings" tabindex="2" />
+                <ui:Button text="Credits" display-tooltip-when-elided="true" name="menu-button-credits" tabindex="3" />
+            </ui:VisualElement>
+        </ui:VisualElement>
+    </ui:VisualElement>
+</ui:UXML>

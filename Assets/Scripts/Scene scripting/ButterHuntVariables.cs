@@ -12,15 +12,15 @@ public static class ButterHuntVariables
     {
         switch (mode) {
             case 1: //Easy
-                preHuntTime = 10f;
-                huntTime = 10f;
+                preHuntTime = 1.5f;
+                huntTime = 3f;
 
                 butterflyGeneLength = 3;
-                butterflyStartAmountRandom = 2;
+                butterflyStartAmountRandom = 6;
                 butterflyStartAmountGene = 1;
                 maximumKills = 3;
                 minimumKills = 1;
-                butterflyRenderMode = 1;
+                butterflyRenderMode = 2;
                 butterflyRoundSpawnAmount = 2;
 
                 resetEverythingOnNextGen = true;

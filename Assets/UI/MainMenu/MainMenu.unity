@@ -196,6 +196,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4dcef767920c4c1b990afc7e19f0d7ed, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  ussSmallScreens: {fileID: 7433441132597879392, guid: a9295efcdb9d74a4e9a5c85fca9c78ea, type: 3}
+  ussBigScreens: {fileID: 7433441132597879392, guid: 995c2f977ec979d428578257c5953b27, type: 3}
 --- !u!1 &1367184605
 GameObject:
   m_ObjectHideFlags: 0
