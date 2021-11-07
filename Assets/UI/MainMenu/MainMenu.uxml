@@ -1,7 +1,7 @@
 <ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" xsi="http://www.w3.org/2001/XMLSchema-instance" engine="UnityEngine.UIElements" editor="UnityEditor.UIElements" noNamespaceSchemaLocation="../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
-    <Style src="/Assets/Editor Default Resources/USS/MainMenu/SmallScreens.uss" />
+    <Style src="/Assets/UI/StartMenu/USS/SmallScreens.uss" />
     <ui:VisualElement name="Container">
-        <ui:IMGUIContainer name="TextContainer" style="top: 7%; position: absolute;">
+        <ui:IMGUIContainer name="TextContainer">
             <ui:Label text="The Butterfly Project" display-tooltip-when-elided="true" enable-rich-text="true" class="title" />
             <ui:Label text="A game with a fancy caption" display-tooltip-when-elided="true" class="caption" />
         </ui:IMGUIContainer>

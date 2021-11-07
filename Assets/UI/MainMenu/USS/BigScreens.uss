@@ -1,32 +1,33 @@
 #Container {
     justify-content: center;
     flex-direction: column;
-    justify-content: space-around;
     height: 100%;
     width: 100%;
     left: 0;
-    top: 0;
+    top: 0; 
     right: 0;
-    bottom: 0;
-    background-color: rgba(123, 123, 123, 0.61);
-    opacity: 1;
-    position: absolute;
-    visibility: visible;
-    overflow: visible;
+    bottom: 0; 
+    background-color: rgba(123, 123, 123, 0.61); 
+    opacity: 1; 
+    position: absolute; 
+    visibility: visible; 
+    overflow: visible; 
     display: flex;
 }
 
 #TextContainer {
-    position: relative;
-    align-items: center;
-    justify-content: center;
-    width: 100%;
+    top: 7%; 
+    position: absolute; 
+    align-items: flex-start; 
+    justify-content: center; 
+    width: 100%; 
     height: 20%;
+    margin-left: 25px;
 }
 
 .title {
     -unity-font-style: bold;
-    font-size: 17px;
+    font-size: 40px;
     color: rgb(255, 255, 255);
     height: auto;
     white-space: nowrap;
@@ -34,9 +35,10 @@
 
 .caption {
     -unity-font-style: italic;
-    font-size: 10px;
+    font-size: 20px;
     color: rgb(255, 255, 255);
 }
+
 
 #CenterBar {
     border-left-color: rgb(138, 138, 138);
@@ -45,22 +47,23 @@
     border-bottom-color: rgb(138, 138, 138);
     background-color: rgba(138, 138, 138, 0.35);
     width: 100%;
+    max-height: none;
     max-width: 100%;
     min-width: 100%;
     justify-content: center;
     align: center;
     align-items: center;
-    position: relative;
 }
 
 #MenuButtonContainer {
+    height: auto;
+    width: 25%;
     margin-left: 25px;
-    margin-right: 25px;
+    margin-right: 5px;
     margin-top: 5px;
     margin-bottom: 5px;
+    justify-content: center;
+    align-items: stretch;
+    max-width: 25%;
+    min-width: 200px;
 }
-
-#MenuButtonContainer Button {
-    height: 25px;
-}
-
