@@ -48,6 +48,17 @@ public class GameManager : MonoBehaviour
         }
 
         //[INSER MENU HERE]
+        SetScreenSize();
+
+
+
+        Physics.autoSyncTransforms = true;
+        ResetVariables();
+        PrepareGame();
+    }
+
+    public void SetScreenSize()
+    {
         gameObject.transform.localScale = GameBoardResizer.GetGameBoardSize();
 
 
