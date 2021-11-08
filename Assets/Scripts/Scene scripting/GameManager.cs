@@ -43,6 +43,17 @@ public class GameManager : MonoBehaviour
     void Start()
     {
         //[INSER MENU HERE]
+        SetScreenSize();
+
+
+
+        Physics.autoSyncTransforms = true;
+        ResetVariables();
+        PrepareGame();
+    }
+
+    public void SetScreenSize()
+    {
         gameObject.transform.localScale = GameBoardResizer.GetGameBoardSize();
 
         GetComponent<Renderer>().material = backgroundPattern;
@@ -50,12 +61,6 @@ public class GameManager : MonoBehaviour
         GetComponent<Renderer>().material.SetTextureScale("_MainTex", new Vector2(
             GetComponent<Renderer>().bounds.size.x * tilesPerUnit,
             GetComponent<Renderer>().bounds.size.y * tilesPerUnit));
-
-
-
-        Physics.autoSyncTransforms = true;
-        ResetVariables();
-        PrepareGame();
     }
 
     void ResetVariables()
