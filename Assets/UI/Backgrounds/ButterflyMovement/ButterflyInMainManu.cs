@@ -46,11 +46,13 @@ public class ButterflyInMainManu : MonoBehaviour
             startMarker.transform.parent = butterContainer.transform;
             startMarker.transform.name = "Start" + i;
             startMarker.transform.position = new Vector3(i*3 - (size/2)+1, butterContainer.transform.position.y - ((size + 0.5f) / 2),0);
+            startMarker.GetComponent<MeshRenderer>().enabled = false;
 
             GameObject endMarker = GameObject.CreatePrimitive(PrimitiveType.Cube);
             endMarker.transform.parent = startMarker.transform;
             endMarker.transform.name = "End" + i;
             endMarker.transform.position = new Vector3(i * 3 - (size / 2) + 1, startMarker.transform.position.y + (size + 0.8f), 0);
+            endMarker.GetComponent<MeshRenderer>().enabled = false;
         }
     }
 
