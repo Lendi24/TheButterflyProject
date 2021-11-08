@@ -5,7 +5,7 @@ using UnityEngine;
 public static class ButterHuntVariables 
 {
     static public float preHuntTime, huntTime;
-    static public int butterflyGeneLength, butterflyStartAmountRandom, butterflyStartAmountGene, maximumKills, minimumKills, butterflyRenderMode, butterflyRoundSpawnAmount;
+    static public int butterflyGeneLength, butterflyStartAmountRandom, butterflyStartAmountGene, maximumKills, minimumKills, butterflyRenderMode, butterflyRoundSpawnAmount, healthAmount;
     static public bool resetEverythingOnNextGen;
 
     static public void SetMode(int mode)
@@ -16,43 +16,46 @@ public static class ButterHuntVariables
                 huntTime = 3f;
 
                 butterflyGeneLength = 3;
-                butterflyStartAmountRandom = 6;
+                butterflyStartAmountRandom = 8;
                 butterflyStartAmountGene = 1;
                 maximumKills = 3;
                 minimumKills = 1;
                 butterflyRenderMode = 2;
                 butterflyRoundSpawnAmount = 2;
+                healthAmount = 7;
 
                 resetEverythingOnNextGen = true;
                 break;
 
             case 2: //Medium
-                preHuntTime = 10f;
-                huntTime = 10f;
+                preHuntTime = 1f;
+                huntTime = 2.5f;
 
                 butterflyGeneLength = 3;
-                butterflyStartAmountRandom = 2;
+                butterflyStartAmountRandom = 6;
                 butterflyStartAmountGene = 1;
                 maximumKills = 3;
                 minimumKills = 1;
                 butterflyRenderMode = 1;
                 butterflyRoundSpawnAmount = 2;
+                healthAmount = 3;
 
                 resetEverythingOnNextGen = true;
                 break;
 
 
             case 3: //Hard
-                preHuntTime = 10f;
-                huntTime = 10f;
+                preHuntTime = 0.5f;
+                huntTime = 2f;
 
                 butterflyGeneLength = 3;
-                butterflyStartAmountRandom = 2;
+                butterflyStartAmountRandom = 4;
                 butterflyStartAmountGene = 1;
                 maximumKills = 3;
                 minimumKills = 1;
                 butterflyRenderMode = 1;
                 butterflyRoundSpawnAmount = 2;
+                healthAmount = 1;
 
                 resetEverythingOnNextGen = true;
                 break;

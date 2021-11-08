@@ -17,7 +17,7 @@ public class GameManager : MonoBehaviour
     float preHuntTime, huntTime, tilesPerUnit, huntTimeReducePercent;
 
     [SerializeField]
-    int butterflyGeneLength, butterflyStartAmountRandom, butterflyStartAmountGene, maximumKills, minimumKills, butterflyRenderMode, butterflyRoundSpawnAmount;
+    int butterflyGeneLength, butterflyStartAmountRandom, butterflyStartAmountGene, maximumKills, minimumKills, butterflyRenderMode, butterflyRoundSpawnAmount, healthAmount;
 
     [SerializeField]
     bool resetEverythingOnNextGen;
@@ -47,6 +47,7 @@ public class GameManager : MonoBehaviour
         minimumKills = ButterHuntVariables.minimumKills;
         butterflyRenderMode = ButterHuntVariables.butterflyRenderMode;
         butterflyRoundSpawnAmount = ButterHuntVariables.butterflyRoundSpawnAmount;
+        healthAmount = ButterHuntVariables.healthAmount;
 
         resetEverythingOnNextGen = ButterHuntVariables.resetEverythingOnNextGen;
 
@@ -270,11 +271,20 @@ public class GameManager : MonoBehaviour
 
                     if ((butterflyStartAmountRandom - butterfliesRemaining) < minimumKills)
                     {
-                        Debug.Log("U loose");
-                        gameState = 4;//Failed! Health will be lost, energy will be lost or game will be lost here.
+                        healthAmount--;
+                        if(healthAmount != 0)
+                        {
+                            Debug.Log("U loose heart");
+                            Debug.Log(healthAmount);
+                        }
+                        else
+                        {
+                            Debug.Log("U loose");
+                            gameState = 4;//Failed! Health will be lost, energy will be lost or game will be lost here.
+                        }
                     }
 
-                    else
+                    if(gameState != 4)
                     {
                         rounds++;
                         Debug.Log(score);
