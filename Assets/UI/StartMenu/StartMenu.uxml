@@ -1,0 +1,15 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" xsi="http://www.w3.org/2001/XMLSchema-instance" engine="UnityEngine.UIElements" editor="UnityEditor.UIElements" noNamespaceSchemaLocation="../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
+    <ui:VisualElement name="Container" style="justify-content: center; flex-direction: column; height: 100%; width: 100%; left: 0; top: 0; right: 0; bottom: 0; background-color: rgba(123, 123, 123, 0.61); opacity: 1; position: absolute; visibility: visible; overflow: visible; display: flex;">
+        <ui:IMGUIContainer name="TextContainer" style="">
+            <ui:Label text="Select a mode" display-tooltip-when-elided="true" style="" />
+        </ui:IMGUIContainer>
+        <ui:VisualElement name="CenterBar" style="">
+            <ui:VisualElement name="MenuButtonContainer" style="">
+                <ui:Button text="Easy" display-tooltip-when-elided="true" name="menu-button-easy" />
+                <ui:Button text="Medium" display-tooltip-when-elided="true" name="menu-button-medium" tabindex="1" />
+                <ui:Button text="Hard" display-tooltip-when-elided="true" name="menu-button-hard" tabindex="2" />
+                <ui:Button text="&lt;-" display-tooltip-when-elided="true" name="menu-button-back" tabindex="3" style="padding-top: 5px; padding-bottom: 5px;" />
+            </ui:VisualElement>
+        </ui:VisualElement>
+    </ui:VisualElement>
+</ui:UXML>

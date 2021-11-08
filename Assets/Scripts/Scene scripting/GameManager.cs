@@ -37,6 +37,20 @@ public class GameManager : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        preHuntTime = ButterHuntVariables.preHuntTime;
+        huntTime = ButterHuntVariables.huntTime;
+
+        butterflyGeneLength = ButterHuntVariables.butterflyGeneLength;
+        butterflyStartAmountRandom = ButterHuntVariables.butterflyStartAmountRandom;
+        butterflyStartAmountGene = ButterHuntVariables.butterflyStartAmountGene;
+        maximumKills = ButterHuntVariables.maximumKills;
+        minimumKills = ButterHuntVariables.minimumKills;
+        butterflyRenderMode = ButterHuntVariables.butterflyRenderMode;
+        butterflyRoundSpawnAmount = ButterHuntVariables.butterflyRoundSpawnAmount;
+
+        resetEverythingOnNextGen = ButterHuntVariables.resetEverythingOnNextGen;
+
+
         if (blendTexture == null)
         {
             Debug.LogWarning("No blend-texture selected!\nDefaulting to colour blending...");
