@@ -332,8 +332,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   butterContainer: {fileID: 2123829210}
-  cam: {fileID: 1955422826}
   butterfly: {fileID: 919132149155446097, guid: 7497411dd27fc104485e7dce75de1dba, type: 3}
+  cam: {fileID: 1955422826}
 --- !u!64 &2123829212
 MeshCollider:
   m_ObjectHideFlags: 0
