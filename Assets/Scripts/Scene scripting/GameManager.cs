@@ -1,11 +1,15 @@
 using System.Collections;
 using System.Collections.Generic;
+using UnityEngine.UIElements;
 using UnityEngine;
 
 public class GameManager : MonoBehaviour
 {
     [SerializeField]
-    GameObject butterfly, preGameSplash, postGameSplash, butterContainer;
+    GameObject butterfly, butterContainer;
+
+    [SerializeField]
+    VisualTreeAsset preHuntSplash, gameOverSplash;
 
     [SerializeField]
     Material backgroundPattern, animalMaterial;
@@ -82,10 +86,6 @@ public class GameManager : MonoBehaviour
             GetComponent<Renderer>().bounds.size.x * tilesPerUnit,
             GetComponent<Renderer>().bounds.size.y * tilesPerUnit));
 
-        Physics.autoSyncTransforms = true;
-        ResetVariables();
-        PrepareGame();
-
     }
 
     void ResetVariables()
@@ -93,8 +93,9 @@ public class GameManager : MonoBehaviour
         //Init variables
         gameState = 0;
         butterfliesRemaining = butterflyStartAmountRandom;
+        GetComponent<SplashShifter>().ShowSplash(0, preHuntSplash);/*
         preGameSplash.GetComponent<Canvas>().enabled = true;
-        postGameSplash.GetComponent<Canvas>().enabled = false;
+        postGameSplash.GetComponent<Canvas>().enabled = false;*/
     }
 
     void PrepareGame()
@@ -255,7 +256,8 @@ public class GameManager : MonoBehaviour
 
                 if (TimmerManagment.Timmer(preHuntTime))
                 {
-                    preGameSplash.GetComponent<Canvas>().enabled = false;
+                    //preGameSplash.GetComponent<Canvas>().enabled = false;
+                    GetComponent<SplashShifter>().HideSplash();
                     gameState = 2;
                 }
 
@@ -266,10 +268,12 @@ public class GameManager : MonoBehaviour
                 if (TimmerManagment.Timmer(huntTime * Mathf.Pow(huntTimeReducePercent, rounds)))
                 { //Checks if Timer is finished. Time is dependant on an exponential value,
                   //y=C*a^x. Time decreases the more rounds have passed.
-                    postGameSplash.GetComponent<Canvas>().enabled = true;
+                  //postGameSplash.GetComponent<Canvas>().enabled = true;
+                   GetComponent<SplashShifter>().ShowSplash(0, preHuntSplash);
 
                     if ((butterflyStartAmountRandom - butterfliesRemaining) < minimumKills)
                     {
+                        GetComponent<SplashShifter>().ShowSplash(0, gameOverSplash);
                         Debug.Log("U loose");
                         gameState = 4;//Failed! Health will be lost, energy will be lost or game will be lost here.
                     }
@@ -352,4 +356,6 @@ public class GameManager : MonoBehaviour
             butterfliesRemaining--;
         }
     }
+
+
 }

@@ -393,6 +393,9 @@ GameObject:
   - component: {fileID: 7729880897258956079}
   - component: {fileID: 3564115909313110811}
   - component: {fileID: 7178107181814647026}
+  - component: {fileID: 2969985802711769031}
+  - component: {fileID: 5565954702245006090}
+  - component: {fileID: 9085601051903058378}
   m_Layer: 0
   m_Name: GameBoard
   m_TagString: GameBoard
@@ -507,10 +510,49 @@ MonoBehaviour:
   huntTimeReducePercent: 0.8
   butterflyGeneLength: 6
   butterflyStartAmountRandom: 8
-  butteflyStartAmountGene: 1
+  butterflyStartAmountGene: 0
   maximumKills: 1
   minimumKills: 1
   butterflyRenderMode: 1
   butterflyRoundSpawnAmount: 1
   resetEverythingOnNextGen: 0
-  perlinNoiseShader: 0
+--- !u!114 &2969985802711769031
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6427596877661526487}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0a82f9b079bd19841817bbfe787f6d1d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &5565954702245006090
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6427596877661526487}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f21c074d86024caca2a0034ce4f53f73, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_PanelSettings: {fileID: 11400000, guid: ad3dd4536807e8e4aa930ac0a702c35c, type: 2}
+  m_ParentUI: {fileID: 0}
+  sourceAsset: {fileID: 0}
+  m_SortingOrder: 0
+--- !u!114 &9085601051903058378
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6427596877661526487}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: afe6c4600f907e64ca01409d01326a60, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
