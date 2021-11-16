@@ -1,10 +1,32 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.UIElements;
 
 public class SplashShifter : MonoBehaviour
 {
+    [SerializeField]
+    Button restart, main, exit;
+
+    private void Start()
+    {
+        GetComponent<LoadSceneFunctions>().RestarGametPress();
+    }
+
+    private void AssignBittons()
+    {
+        var root = GetComponent<UIDocument>().rootVisualElement;
+
+        restart = root.Q<Button>("restart-game");
+        main = root.Q<Button>("main-menu");
+        //exit = root.Q<Button>("exit-game");
+
+        restart.clicked += GetComponent<LoadSceneFunctions>().RestarGametPress;
+        main.clicked += GetComponent<LoadSceneFunctions>().BackToMain;
+        //exit.clicked += GetComponent<LoadSceneFunctions>().ExitGamePress;
+    }
+
     public void ShowSplash(float time, VisualTreeAsset splash)
     {
         GetComponent<UIDocument>().visualTreeAsset = splash;
@@ -14,10 +36,22 @@ public class SplashShifter : MonoBehaviour
         {
             //yield return new WaitForSeconds(time);
         }
+
+        try
+        {
+            AssignBittons();
+        }
+
+        catch (System.Exception e)
+        {
+            //Debug.LogError(e);
+        }
     }
 
     public void HideSplash()
     {
         GetComponent<UIDocument>().enabled = false;
     }
+
+    
 }

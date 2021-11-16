@@ -20,11 +20,6 @@ public class MainMenuUI : MonoBehaviour
         settingsButton = root.Q<Button>("menu-button-settings");
         creditsButton = root.Q<Button>("menu-button-credits");
 
-        startButton.clicked += StartButtonPressed;
-    }
-
-    void StartButtonPressed()
-    {
-        SceneManager.LoadScene("StartMenu");
+        startButton.clicked += GetComponent<LoadSceneFunctions>().StartButtonPressed;
     }
 }

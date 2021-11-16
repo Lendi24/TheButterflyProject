@@ -21,14 +21,13 @@ public class GameManager : MonoBehaviour
     float preHuntTime, huntTime, tilesPerUnit, huntTimeReducePercent;
 
     [SerializeField]
-    int butterflyGeneLength, butterflyStartAmountRandom, butterflyStartAmountGene, maximumKills, minimumKills, butterflyRenderMode, butterflyRoundSpawnAmount, healthAmount;
+    int butterflyGeneLength, butterflyStartAmountRandom, butterflyStartAmountGene, maximumKills, minimumKills, butterflyRenderMode, butterflyRoundSpawnAmount, healthAmount, score, rounds;
 
     [SerializeField]
     bool resetEverythingOnNextGen;
 
     private int butterfliesRemaining, gameState;
     string keyPrefix = "modelMatch";
-    static int score = 0, rounds = 0;
 
     /* Game States
     0-PreGame
@@ -39,8 +38,35 @@ public class GameManager : MonoBehaviour
      */
 
     // Start is called before the first frame update
-    void Start()
+    public void Start()
     {
+        GetComponent<SplashShifter>().ShowSplash(0, preHuntSplash);
+        Physics.autoSyncTransforms = true;
+        GetVariables();
+        ResetVariables();
+        ClearBoard();
+        SetScreenSize();
+        PrepareGame();
+    }
+
+    public void SetScreenSize()
+    {
+        gameObject.transform.localScale = GameBoardResizer.GetGameBoardSize();
+
+        GetComponent<Renderer>().material = backgroundPattern;
+        GetComponent<Renderer>().material.SetTexture("_MainTex", backgroundTexture);
+        GetComponent<Renderer>().material.SetTextureScale("_MainTex", new Vector2(
+            GetComponent<Renderer>().bounds.size.x * tilesPerUnit,
+            GetComponent<Renderer>().bounds.size.y * tilesPerUnit));
+
+    }
+
+    void GetVariables()
+    {
+        rounds = 0;
+        score = 0;
+        gameState = 0;
+
         preHuntTime = ButterHuntVariables.preHuntTime;
         huntTime = ButterHuntVariables.huntTime;
 
@@ -54,8 +80,21 @@ public class GameManager : MonoBehaviour
         healthAmount = ButterHuntVariables.healthAmount;
 
         resetEverythingOnNextGen = ButterHuntVariables.resetEverythingOnNextGen;
+    }
 
+    void ResetVariables()
+    {
+        //Init variables
+        gameState = 1;
+        butterfliesRemaining = butterflyStartAmountRandom;
+        GetComponent<SplashShifter>().ShowSplash(0, preHuntSplash);
+        /*
+        preGameSplash.GetComponent<Canvas>().enabled = true;
+        postGameSplash.GetComponent<Canvas>().enabled = false;*/
+    }
 
+    void PrepareGame()
+    {
         if (blendTexture == null)
         {
             Debug.LogWarning("No blend-texture selected!\nDefaulting to colour blending...");
@@ -66,41 +105,6 @@ public class GameManager : MonoBehaviour
             Debug.LogWarning("No background-texture selected!\nDefaulting to perlin noise...");
         }
 
-        //[INSER MENU HERE]
-        SetScreenSize();
-
-
-
-        Physics.autoSyncTransforms = true;
-        ResetVariables();
-        PrepareGame();
-    }
-
-    public void SetScreenSize()
-    {
-        gameObject.transform.localScale = GameBoardResizer.GetGameBoardSize();
-
-
-        GetComponent<Renderer>().material = backgroundPattern;
-        GetComponent<Renderer>().material.SetTexture("_MainTex", backgroundTexture);
-        GetComponent<Renderer>().material.SetTextureScale("_MainTex", new Vector2(
-            GetComponent<Renderer>().bounds.size.x * tilesPerUnit,
-            GetComponent<Renderer>().bounds.size.y * tilesPerUnit));
-
-    }
-
-    void ResetVariables()
-    {
-        //Init variables
-        gameState = 0;
-        butterfliesRemaining = butterflyStartAmountRandom;
-        GetComponent<SplashShifter>().ShowSplash(0, preHuntSplash);/*
-        preGameSplash.GetComponent<Canvas>().enabled = true;
-        postGameSplash.GetComponent<Canvas>().enabled = false;*/
-    }
-
-    void PrepareGame()
-    {
         int minAllowed = butterflyStartAmountGene * (butterflyGeneLength+1);
         if (butterflyStartAmountRandom < minAllowed)
         {
@@ -265,32 +269,35 @@ public class GameManager : MonoBehaviour
                 break;
 
             case 2:
-
                 if (TimmerManagment.Timmer(huntTime * Mathf.Pow(huntTimeReducePercent, rounds)))
                 { //Checks if Timer is finished. Time is dependant on an exponential value,
                   //y=C*a^x. Time decreases the more rounds have passed.
                   //postGameSplash.GetComponent<Canvas>().enabled = true;
-                   GetComponent<SplashShifter>().ShowSplash(0, preHuntSplash);
 
                     if ((butterflyStartAmountRandom - butterfliesRemaining) < minimumKills)
                     {
                         healthAmount--;
-                        if(healthAmount != 0)
+
+                        switch (healthAmount)
                         {
-                            Debug.Log("U loose heart");
-                            Debug.Log(healthAmount);
-                        }
-                        else
-                        {
-                            Debug.Log("U loose");
-                            gameState = 4;//Failed! Health will be lost, energy will be lost or game will be lost here.
+                            case 0:
+                                GetComponent<SplashShifter>().ShowSplash(0, gameOverSplash);
+                                Debug.Log("U loose");
+                                gameState = 4;//Failed! Health will be lost, energy will be lost or game will be lost here.
+                                break;
+
+                            default:
+                                GetComponent<SplashShifter>().ShowSplash(0, preHuntSplash);
+                                Debug.Log("U loose heart");
+                                Debug.Log(healthAmount);
+                                break;
                         }
                     }
 
-                    if(gameState != 4)
+                    else
                     {
                         rounds++;
-                        Debug.Log(score);
+                        Debug.Log("Score: "+score);
 
                         Debug.Log("continu");
 
@@ -320,30 +327,23 @@ public class GameManager : MonoBehaviour
 
                 for (int i = 0; i < butterflyRoundSpawnAmount; i++) SpawnButterfly(GeneticManager.EvolveNewAnimal(butterContainer.GetComponent<ButterCollection>().GetAnimalGenes()));
                 ResetVariables();
-                gameState = 1;
-
                 //Fix some splash about stats or smt and some wait time
-
                 break;
-
-            case 4:
-
-                //Fix some splash about stats or smt and some wait time
-
-                break;
-
 
             default:
                 break;
         }
     }
 
-    void GetButterflies()
+    void ClearBoard()
     {
-
+        foreach (Transform butterfly in butterContainer.GetComponentInChildren<Transform>())
+        {
+            Destroy(butterfly.gameObject);
+        }
     }
 
-    public static void SetScore()
+    public void SetScore()
     {
         float remainingTime = TimmerManagment.GetTimeLeft();
         score += Mathf.RoundToInt(10f * remainingTime);

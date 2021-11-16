@@ -394,6 +394,7 @@ GameObject:
   - component: {fileID: 3564115909313110811}
   - component: {fileID: 7178107181814647026}
   - component: {fileID: 2969985802711769031}
+  - component: {fileID: 7767626428439074211}
   - component: {fileID: 5565954702245006090}
   - component: {fileID: 9085601051903058378}
   m_Layer: 0
@@ -497,9 +498,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   butterfly: {fileID: 3438679882897807685, guid: db2fab70d7da23d4989f269e3a12d2d4, type: 3}
-  preGameSplash: {fileID: 0}
-  postGameSplash: {fileID: 0}
   butterContainer: {fileID: 0}
+  preHuntSplash: {fileID: 0}
+  gameOverSplash: {fileID: 0}
   backgroundPattern: {fileID: 2100000, guid: 4ebaffc2c9699ca4b90ba82817fbf971, type: 2}
   animalMaterial: {fileID: 2100000, guid: b97cff4e2c7e5294b9784cc35308b531, type: 2}
   backgroundTexture: {fileID: 2800000, guid: c5b870f95c190c6488d86499845664d9, type: 3}
@@ -515,6 +516,7 @@ MonoBehaviour:
   minimumKills: 1
   butterflyRenderMode: 1
   butterflyRoundSpawnAmount: 1
+  healthAmount: 0
   resetEverythingOnNextGen: 0
 --- !u!114 &2969985802711769031
 MonoBehaviour:
@@ -526,6 +528,19 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 0a82f9b079bd19841817bbfe787f6d1d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  loadSceneFunctions: {fileID: 0}
+--- !u!114 &7767626428439074211
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6427596877661526487}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4cd0c013d617d6c4b8f5e90f1abc1d1e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!114 &5565954702245006090
