@@ -29,7 +29,7 @@ public class MenuButterflyMovement : MonoBehaviour
         {
             if(collision.gameObject.transform.name == "End"+i)
             {
-                ButterflyInMainManu.CreateButterfly(collision.gameObject.transform.parent.position.x, collision.gameObject.transform.parent.position.y,0);
+                //ButterflyInMainManu.CreateButterfly(collision.gameObject.transform.parent.position.x, collision.gameObject.transform.parent.position.y,0);
                 Destroy(this.gameObject);
             }
         }

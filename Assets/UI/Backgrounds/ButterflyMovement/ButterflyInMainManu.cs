@@ -37,13 +37,22 @@ public class ButterflyInMainManu : MonoBehaviour
             transform.rotation = new Quaternion(0, 0, 0, 0);
             LoadBackground();
         }
+
+
+        if (TimmerManagment.Timmer(0.5f))
+        {
+            for (int i = 0; i < Mathf.CeilToInt(size) / 3; i++)
+            {
+                GameObject startMarker = transform.GetChild(i).gameObject;
+                CreateButterfly(startMarker.transform.position.x, startMarker.transform.position.y, startMarker.transform.position.z);
+            }
+        }
     }
 
     void LoadBackground()
     {
         SetContainerSize();
         SpawnMarkers();
-        SpawnButterflies();
         butterContainer.transform.Rotate(new Vector3(0, 0, 180 - rot), Space.Self);
     }
 
