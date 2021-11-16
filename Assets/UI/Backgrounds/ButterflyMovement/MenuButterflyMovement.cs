@@ -5,10 +5,12 @@ using UnityEngine;
 public class MenuButterflyMovement : MonoBehaviour
 {
     Renderer m_Renderer;
+    float speed;
     // Start is called before the first frame update
     void Start()
     {
-        
+        speed = Vector3.Distance(new Vector3(0, 0, 0), transform.up * 3);
+        ButterflyInMainManu.SetSpeed(speed);
     }
 
     // Update is called once per frame
@@ -25,7 +27,7 @@ public class MenuButterflyMovement : MonoBehaviour
 
     private void OnCollisionEnter(Collision collision)
     {
-        for(int i = 0; i < ButterflyInMainManu.GetContPos()/3; i++)
+        for(int i = 0; i < ButterflyInMainManu.GetContSize()/3; i++)
         {
             if(collision.gameObject.transform.name == "End"+i)
             {
