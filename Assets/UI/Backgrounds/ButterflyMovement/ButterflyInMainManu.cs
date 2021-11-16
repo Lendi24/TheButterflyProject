@@ -11,6 +11,7 @@ public class ButterflyInMainManu : MonoBehaviour
     Camera cam;
 
     static float size;
+    float screenWidth;
     float rot;
     Vector3 topLeft;
     Vector3 bottomRight;
@@ -21,6 +22,25 @@ public class ButterflyInMainManu : MonoBehaviour
     {
         staticButterfly = butterfly;
         staticButterContainer = butterContainer;
+        LoadBackground();
+    }
+
+    private void Update()
+    {
+        if(screenWidth != Screen.width)
+        {
+            Debug.Log("ee");
+            for(int i = 0; i < transform.childCount; i++)
+            {
+                Destroy(transform.GetChild(i).gameObject);
+            } 
+            transform.rotation = new Quaternion(0, 0, 0, 0);
+            LoadBackground();
+        }
+    }
+
+    void LoadBackground()
+    {
         SetContainerSize();
         SpawnMarkers();
         SpawnButterflies();
@@ -33,6 +53,7 @@ public class ButterflyInMainManu : MonoBehaviour
         bottomRight = cam.ScreenToWorldPoint(new Vector3(Screen.width, 0, 10));
 
         size = Vector3.Distance(topLeft, bottomRight);
+        screenWidth = Screen.width;
         rot = Mathf.Acos((bottomRight.x - topLeft.x) / size) * Mathf.Rad2Deg;
 
         butterContainer.transform.localScale = new Vector3(Mathf.Ceil(size), Mathf.Ceil(size)+1, butterContainer.transform.localScale.z);
