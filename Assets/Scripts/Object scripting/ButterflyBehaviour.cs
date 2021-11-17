@@ -21,6 +21,8 @@ public class ButterflyBehaviour : MonoBehaviour
         if (Physics.Raycast(ray, out hit))
         {
             gameBoard.GetComponent<GameManager>().ButterClick(gameObject);
+            
+
             //GameObject.Find("GameBoard").GetComponent<GameManager>().ButterClick(this.gameObject);
             //Destroy(this.gameObject);
         }
