@@ -84,5 +84,8 @@ public class TextureMatchManager : MonoBehaviour
     public static void reset()
     {
         PlayerPrefs.SetString(GetVariable.GetKeyPrefix() + "Classic Butterfly", 117 + ":" + 117 + ":" + true);
+        PlayerPrefs.SetString(GetVariable.GetKeyPrefix() + "ClassicButterfly", 117 + ":" + 117 + ":" + true);
+        PlayerPrefs.SetString(GetVariable.GetKeyPrefix() + "Butterfly", 117 + ":" + 117 + ":" + true);
+
     }
 }
