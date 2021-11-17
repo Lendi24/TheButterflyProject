@@ -8,6 +8,7 @@ public class SplashShifter : MonoBehaviour
 {
     [SerializeField]
     Button restart, main, exit;
+    Label score;
 
     private void Start()
     {
@@ -20,8 +21,10 @@ public class SplashShifter : MonoBehaviour
 
         restart = root.Q<Button>("restart-game");
         main = root.Q<Button>("main-menu");
+        score = root.Q<Label>("score");
         //exit = root.Q<Button>("exit-game");
 
+        score.text = GetComponent<GameManager>().GetScore().ToString();
         restart.clicked += GetComponent<LoadSceneFunctions>().RestarGametPress;
         main.clicked += GetComponent<LoadSceneFunctions>().BackToMain;
         //exit.clicked += GetComponent<LoadSceneFunctions>().ExitGamePress;

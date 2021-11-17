@@ -1,8 +1,11 @@
 <ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" xsi="http://www.w3.org/2001/XMLSchema-instance" engine="UnityEngine.UIElements" editor="UnityEditor.UIElements" noNamespaceSchemaLocation="../../../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
     <ui:VisualElement name="VisualElement" style="width: 100%; height: 100%; align-items: center; justify-content: space-around; background-color: rgb(77, 77, 77);">
         <ui:VisualElement name="Text">
-            <ui:Label text="Please wait" display-tooltip-when-elided="true" name="Wait" style="align-items: center; justify-content: center; -unity-font-style: bold; font-size: 48px; -unity-text-align: upper-center; white-space: normal; color: rgba(255, 255, 255, 255);" />
-            <ui:Label text="Score: &amp;num" display-tooltip-when-elided="true" name="Score" style="align-items: center; justify-content: center; font-size: 24px; -unity-text-align: upper-center; white-space: normal; color: rgba(255, 255, 255, 255);" />
+            <ui:Label text="Please wait" display-tooltip-when-elided="true" name="Wait" style="align-items: center; justify-content: center; -unity-font-style: bold; font-size: 48px; -unity-text-align: upper-center; white-space: normal; color: rgb(255, 255, 255);" />
+            <ui:VisualElement style="align-items: center; justify-content: center; flex-direction: row;">
+                <ui:Label text="Score: " display-tooltip-when-elided="true" style="align-items: center; justify-content: center; font-size: 24px; -unity-text-align: upper-center; white-space: normal; color: rgb(255, 255, 255);" />
+                <ui:Label text="0" display-tooltip-when-elided="true" name="score" style="align-items: center; justify-content: center; font-size: 24px; -unity-text-align: upper-center; white-space: normal; color: rgb(255, 255, 255);" />
+            </ui:VisualElement>
         </ui:VisualElement>
     </ui:VisualElement>
 </ui:UXML>

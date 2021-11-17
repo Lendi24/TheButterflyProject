@@ -349,6 +349,12 @@ public class GameManager : MonoBehaviour
         score += Mathf.RoundToInt(10f * remainingTime);
     }
 
+    public int GetScore()
+    {
+        return score;
+    }
+
+
     /*
     |=============================|
     |==BUTTERFLY EVENT HANDELERS==|
