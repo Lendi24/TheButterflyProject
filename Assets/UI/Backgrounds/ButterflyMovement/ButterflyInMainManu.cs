@@ -16,6 +16,7 @@ public class ButterflyInMainManu : MonoBehaviour
     float rot;
     static float speed;
     float screenWidth;
+    float screenHeight;
     Vector3 topLeft;
     Vector3 bottomRight;
     static GameObject staticButterfly;
@@ -33,30 +34,24 @@ public class ButterflyInMainManu : MonoBehaviour
     void Update()
     {
 
-        if (screenWidth != Screen.width)
+        if (screenWidth != Screen.width || screenHeight != Screen.height)
         {
-            allowSpawning = false;
+            for (int i = 0; i < transform.childCount; i++)
+            {
+                Destroy(transform.GetChild(i).gameObject);
+            }
+            LoadBackground();
+            butterContainer.transform.Rotate(new Vector3(0, 0, 180 - rot), Space.Self);
         }
-
-        if (TimmerManagment.Timmer(0.5f))
+        else
         {
-            if (allowSpawning)
+            if (TimmerManagment.Timmer(0.5f))
             {
                 for (int i = 0; i < Mathf.CeilToInt(size / 3); i++)
                 {
                     GameObject startMarker = transform.GetChild(i).gameObject;
                     CreateButterfly(startMarker.transform.position.x, startMarker.transform.position.y, startMarker.transform.position.z - 0.5f);
                 }
-            }
-            else
-            {
-                allowSpawning = true;
-                for (int i = 0; i < transform.childCount; i++)
-                {
-                    Destroy(transform.GetChild(i).gameObject);
-                }
-                LoadBackground();
-                butterContainer.transform.Rotate(new Vector3(0, 0, 180 - rot), Space.Self);
             }
         }
     }
@@ -74,6 +69,7 @@ public class ButterflyInMainManu : MonoBehaviour
         topLeft = cam.ScreenToWorldPoint(new Vector3(0, Screen.height, 10));
         bottomRight = cam.ScreenToWorldPoint(new Vector3(Screen.width, 0, 10));
         screenWidth = Screen.width;
+        screenHeight = Screen.height;
         size = Vector3.Distance(topLeft, bottomRight);
         ButterflySpawning.SetSize(size);
         rot = Mathf.Acos((bottomRight.x - topLeft.x) / size) * Mathf.Rad2Deg;
