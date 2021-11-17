@@ -174,30 +174,44 @@ public class GameManager : MonoBehaviour
         newButterfly.GetComponent<ButterflyBehaviour>().genes = genetics;
         float blendIn = GeneticManager.BlendInCalc(genetics);
 
+        Renderer butterRender = newButterfly.GetComponent<Renderer>();
+        Renderer boardRender = GetComponent<Renderer>();
+
         switch (butterflyRenderMode)
         {
             case 0://alpha mode !THIS IS OLD! Use camo shader for this effect with transparant material if possible!
                 Color newColor = Color.white;
                 Material newMat = new Material(Shader.Find("Transparent/Diffuse"));
                 newColor.a = blendIn;
-                newButterfly.GetComponent<Renderer>().material = newMat;
-                newButterfly.GetComponent<Renderer>().material.color = newColor;
-                GetComponent<Renderer>().material.SetFloat("_enablePerlin", 0);
+                butterRender.material = newMat;
+                butterRender.material.color = newColor;
+                boardRender.material.SetFloat("_enablePerlin", 0);
                 break;
 
             case 1://texture-matched mode
                 TextureMatchedRender();
-                newButterfly.GetComponent<Renderer>().material.SetFloat("_LerpValue", blendIn);
-                newButterfly.GetComponent<Renderer>().material.SetFloat("_enablePerlin", 0);
-                GetComponent<Renderer>().material.SetFloat("_enablePerlin", 0);
+                butterRender.material.SetFloat("_LerpValue", blendIn);
+                butterRender.material.SetFloat("_enablePerlin", 0);
+                boardRender.material.SetFloat("_enablePerlin", 0);
                 break;
 
-            case 2://texture-matched perlin mode
+            case 2://Hybride
                 TextureMatchedRender();
-                newButterfly.GetComponent<Renderer>().material.SetFloat("_LerpValue", blendIn);
-                newButterfly.GetComponent<Renderer>().material.SetFloat("_enablePerlin", blendIn);
-                GetComponent<Renderer>().material.SetFloat("_enablePerlin", 1);
+                butterRender.material.SetFloat("_LerpValue", blendIn);
+                butterRender.material.SetFloat("_enablePerlin", blendIn);
+                boardRender.material.SetFloat("_enablePerlin", 1);
                 break;
+
+            case 3://texture-matched perlin mode
+                TextureMatchedRender();
+                butterRender.material.SetFloat("_LerpValue", blendIn);
+                butterRender.material.SetFloat("_enablePerlin", blendIn);
+                boardRender.material.SetFloat("_enablePerlin", 1);
+
+                butterRender.material.SetTexture("_SecondaryTex", null);
+                boardRender.material.SetTexture("_SecondaryTex", null);
+                break;
+
 
             default:
                 break;
@@ -290,44 +304,42 @@ public class GameManager : MonoBehaviour
                                 GetComponent<SplashShifter>().ShowSplash(0, preHuntSplash);
                                 Debug.Log("U loose heart");
                                 Debug.Log(healthAmount);
+                                gameState = 3;
                                 break;
                         }
                     }
 
                     else
                     {
-                        rounds++;
-                        Debug.Log("Score: "+score);
-
-                        Debug.Log("continu");
-
-                        foreach (Transform animal in butterContainer.transform)
-                        {
-                            animal.transform.position = new Vector3(0, 0, 5);
-                        }
-
-
-                        for (int i = 0; i < butterContainer.transform.childCount; i++)
-                        {
-                            Quaternion newRot = Quaternion.Euler(0, 0, Random.Range(1, 360));
-                            Vector3 newPos = RandomButterPos(newRot);
-
-                            butterContainer.transform.GetChild(i).transform.position = newPos;
-                            butterContainer.transform.GetChild(i).rotation = newRot;
-                        }
-
-
-                        gameState = 3;//Continue playing!
+                        gameState = 3;
                     }
                 }
 
                 break;
 
             case 3:
+                rounds++;
+                Debug.Log("Score: " + score);
+
+                Debug.Log("continu");
+
+                foreach (Transform animal in butterContainer.transform)
+                {
+                    animal.transform.position = new Vector3(0, 0, 5);
+                }
+
+
+                for (int i = 0; i < butterContainer.transform.childCount; i++)
+                {
+                    Quaternion newRot = Quaternion.Euler(0, 0, Random.Range(1, 360));
+                    Vector3 newPos = RandomButterPos(newRot);
+
+                    butterContainer.transform.GetChild(i).transform.position = newPos;
+                    butterContainer.transform.GetChild(i).rotation = newRot;
+                }
 
                 for (int i = 0; i < butterflyRoundSpawnAmount; i++) SpawnButterfly(GeneticManager.EvolveNewAnimal(butterContainer.GetComponent<ButterCollection>().GetAnimalGenes()));
                 ResetVariables();
-                //Fix some splash about stats or smt and some wait time
                 break;
 
             default:

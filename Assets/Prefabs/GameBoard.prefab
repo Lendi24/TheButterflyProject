@@ -501,8 +501,8 @@ MonoBehaviour:
   butterContainer: {fileID: 0}
   preHuntSplash: {fileID: 0}
   gameOverSplash: {fileID: 0}
-  backgroundPattern: {fileID: 2100000, guid: 4ebaffc2c9699ca4b90ba82817fbf971, type: 2}
-  animalMaterial: {fileID: 2100000, guid: b97cff4e2c7e5294b9784cc35308b531, type: 2}
+  backgroundPattern: {fileID: 2100000, guid: 8a23c427c61bca34ba9215c6d475c6b9, type: 2}
+  animalMaterial: {fileID: 2100000, guid: 8a23c427c61bca34ba9215c6d475c6b9, type: 2}
   backgroundTexture: {fileID: 2800000, guid: c5b870f95c190c6488d86499845664d9, type: 3}
   blendTexture: {fileID: 0}
   preHuntTime: 3
@@ -517,6 +517,8 @@ MonoBehaviour:
   butterflyRenderMode: 1
   butterflyRoundSpawnAmount: 1
   healthAmount: 0
+  score: 0
+  rounds: 0
   resetEverythingOnNextGen: 0
 --- !u!114 &2969985802711769031
 MonoBehaviour:
@@ -530,7 +532,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0a82f9b079bd19841817bbfe787f6d1d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  loadSceneFunctions: {fileID: 0}
 --- !u!114 &7767626428439074211
 MonoBehaviour:
   m_ObjectHideFlags: 0

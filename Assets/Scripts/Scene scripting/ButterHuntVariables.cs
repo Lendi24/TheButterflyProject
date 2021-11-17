@@ -20,7 +20,7 @@ public static class ButterHuntVariables
                 butterflyStartAmountGene = 1;
                 maximumKills = 3;
                 minimumKills = 1;
-                butterflyRenderMode = 2;
+                butterflyRenderMode = 1;
                 butterflyRoundSpawnAmount = 2;
                 healthAmount = 7;
 
@@ -36,7 +36,7 @@ public static class ButterHuntVariables
                 butterflyStartAmountGene = 1;
                 maximumKills = 3;
                 minimumKills = 1;
-                butterflyRenderMode = 1;
+                butterflyRenderMode = 2;
                 butterflyRoundSpawnAmount = 2;
                 healthAmount = 3;
 
@@ -53,7 +53,7 @@ public static class ButterHuntVariables
                 butterflyStartAmountGene = 1;
                 maximumKills = 3;
                 minimumKills = 1;
-                butterflyRenderMode = 1;
+                butterflyRenderMode = 3;
                 butterflyRoundSpawnAmount = 2;
                 healthAmount = 1;
 
