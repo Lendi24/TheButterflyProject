@@ -344,11 +344,6 @@ public class GameManager : MonoBehaviour
         }
     }
 
-    void GetButterflies()
-    {
-
-    }
-
     public static void SetScore()
     {
         float remainingTime = TimmerManagment.GetTimeLeft();

@@ -10,7 +10,6 @@ public class ButterflyInMainManu : MonoBehaviour
     [SerializeField]
     Camera cam;
 
-    bool allowSpawning;
     static float size;
     static float time;
     float rot;
@@ -24,7 +23,6 @@ public class ButterflyInMainManu : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        allowSpawning = true;
         staticButterfly = butterfly;
         staticButterContainer = butterContainer;
         LoadBackground();
@@ -71,7 +69,6 @@ public class ButterflyInMainManu : MonoBehaviour
         screenWidth = Screen.width;
         screenHeight = Screen.height;
         size = Vector3.Distance(topLeft, bottomRight);
-        ButterflySpawning.SetSize(size);
         rot = Mathf.Acos((bottomRight.x - topLeft.x) / size) * Mathf.Rad2Deg;
 
         butterContainer.transform.localScale = new Vector3(Mathf.Ceil(size), Mathf.Ceil(size)+1, butterContainer.transform.localScale.z);

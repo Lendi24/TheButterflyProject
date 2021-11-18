@@ -15,7 +15,7 @@ public class MainMenuUI : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        root = GetComponent<UIDocument>().rootVisualElement;
+        root = GetComponent<UIDocument>().rootVisualElement; 
         startButton = root.Q<Button>("menu-button-start");
         loadButton = root.Q<Button>("menu-button-load");
         settingsButton = root.Q<Button>("menu-button-settings");
