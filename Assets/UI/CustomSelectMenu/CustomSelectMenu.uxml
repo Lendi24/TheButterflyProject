@@ -1,0 +1,17 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" xsi="http://www.w3.org/2001/XMLSchema-instance" engine="UnityEngine.UIElements" editor="UnityEditor.UIElements" noNamespaceSchemaLocation="../../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
+    <ui:Label text="Custom Game" display-tooltip-when-elided="true" style="-unity-text-align: upper-center; font-size: 20px; -unity-font-style: bold;" />
+    <ui:Slider picking-mode="Ignore" label="Pre Hunt Time" value="2" high-value="10" name="menu-slider-prehunttime" low-value="1" style="align-items: stretch; justify-content: flex-start; flex-direction: row;" />
+    <ui:SliderInt picking-mode="Ignore" label="Start Amount Random" value="5" high-value="10" name="menu-slider-startamountrandom" low-value="1" />
+    <ui:MinMaxSlider picking-mode="Ignore" label="Min/Max Kills" min-value="1" max-value="3" low-limit="1" high-limit="6" name="menu-minmaxslider-kills" />
+    <ui:SliderInt picking-mode="Ignore" label="Gene Length" value="3" high-value="10" low-value="1" name="menu-slider-genelength" />
+    <ui:SliderInt picking-mode="Ignore" label="Render Mode" value="1" high-value="3" name="menu-slider-rendermode" low-value="1" />
+    <ui:SliderInt picking-mode="Ignore" label="Start Amount Gene" value="1" high-value="10" name="menu-slider-startamountgene" low-value="1" />
+    <ui:SliderInt picking-mode="Ignore" label="Health Amount" value="3" high-value="7" name="menu-slider-healthamount" low-value="1" />
+    <ui:SliderInt picking-mode="Ignore" label="Round Spawn Amount" value="2" high-value="10" name="menu-slider-roundspawnamount" low-value="1" />
+    <ui:Toggle label="Keep Butterfly Amount" name="menu-toggle-keepbutterflyamount" />
+    <ui:Toggle label="No Safe Click" name="menu-toggle-nosafeclick" value="true" />
+    <ui:Toggle label="Reset On Next Gen" name="menu-toggle-resetonnextgen" value="true" />
+    <ui:Slider picking-mode="Ignore" label="Hunt Time" value="4" high-value="10" name="menu-slider-hunttime" low-value="2" />
+    <ui:Button text="Play" display-tooltip-when-elided="true" name="menu-button-play" />
+    <ui:Button text="Back" display-tooltip-when-elided="true" name="menu-button-back" />
+</ui:UXML>

@@ -14,4 +14,7 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/Game/ButterHunt.unity
     guid: cb94940dc449b1648bb710c257870a29
+  - enabled: 1
+    path: Assets/UI/CustomSelectMenu/CustomSelectMenu.unity
+    guid: 3a4450737b253fe4c9fcf2c414a2c19c
   m_configObjects: {}

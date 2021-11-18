@@ -22,7 +22,8 @@ public class MainMenuUI : MonoBehaviour
         creditsButton = root.Q<Button>("menu-button-credits");
 
         startButton.clicked += GetComponent<LoadSceneFunctions>().StartButtonPressed;
-        if(GameObject.Find("ClickSound") == null)
+        loadButton.clicked += GetComponent<LoadSceneFunctions>().LoadButtonPressed;
+        if (GameObject.Find("ClickSound") == null)
         {
             GameObject newSoundObject = Instantiate<GameObject>(soundObject);
             newSoundObject.transform.parent = transform.parent;
