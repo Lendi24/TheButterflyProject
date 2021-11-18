@@ -33,6 +33,7 @@ public class GameManager : MonoBehaviour
     private int butterfliesRemaining, gameState;
     string keyPrefix = "modelMatch";
     List<GameObject> deadButterflies;
+    List<StatSave> statsLogList = new List<StatSave>();
 
     /* Game States
     0-PreGame
@@ -312,7 +313,7 @@ public class GameManager : MonoBehaviour
                 { //Checks if Timer is finished. Time is dependant on an exponential value,
                   //y=C*a^x. Time decreases the more rounds have passed.
                   //postGameSplash.GetComponent<Canvas>().enabled = true;
-
+                    statsLogList.Add(new StatSave() { populationAmount = butterContainer.transform.childCount, GeneData = butterContainer.GetComponent<ButterCollection>().GetAnimalGenes() });
                     if ((butterflyStartAmountRandom - butterfliesRemaining) < minimumKills)
                     {
                         healthAmount--;
@@ -357,7 +358,6 @@ public class GameManager : MonoBehaviour
                 {
                     animal.transform.position = new Vector3(0, 0, 5);
                 }
-
 
                 for (int i = 0; i < butterContainer.transform.childCount; i++)
                 {
