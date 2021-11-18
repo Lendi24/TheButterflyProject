@@ -387,7 +387,7 @@ public class GameManager : MonoBehaviour
     public void SetScore()
     {
         float remainingTime = TimmerManagment.GetTimeLeft();
-        score += Mathf.RoundToInt(10f * remainingTime);
+        score += Mathf.CeilToInt(10f * remainingTime / ((huntTime * Mathf.Pow(huntTimeReducePercent, rounds)) - remainingTime));
     }
 
     public int GetScore()
@@ -402,10 +402,14 @@ public class GameManager : MonoBehaviour
     |=============================|
     */
 
-    public void ButterClick(GameObject butterfly)
+    public void ButterClick(GameObject butterfly, AudioClip audioClip)
     {
         if (gameState == 2 && (allowedClicks > 0))
         {
+            if (butterfly.transform.parent.name == "ButterCollection")
+            {
+                SoundScript.PlayAudio(audioClip);
+            }
             SetScore();
             butterfliesRemaining--;
             butterfly.transform.parent = deadButterContainer.transform;
