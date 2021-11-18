@@ -5,38 +5,41 @@ public class Countdown : MonoBehaviour
 {
     public static bool allowInputs;
 
-    public Slider countdownBar;
-    private bool countDown = true;
+    public GameObject countdownBar;
+    private static bool countDown = false;
 
-    public float countDownTime = 8;
+    public float countDownTime;
     public float refillTime = 10;
+    static float k;
 
     private void Start()
     {
         //Set the max value to the refill time
-        countdownBar.maxValue = refillTime;
+        
+    }
+
+    public static void SetK(float time)
+    {
+        //Debug.Log("Look! Time! " + 1 /time);
+        k = 1 / time;
+        countDown = true;
     }
 
     private void Update()
     {
-        if (countdownBar.maxValue != refillTime)
-            countdownBar.maxValue = refillTime;
-
-        if (countDown) //Scale the countdown time to go faster than the refill time
-            countdownBar.value -= Time.deltaTime / countDownTime * refillTime;
-        else
-            countdownBar.value += Time.deltaTime;
-
-        //If we are at 0, start to refill
-        if (countdownBar.value <= 0)
+        /*if (countdownBar.transform.localScale.x != Camera.main.ScreenToWorldPoint(new Vector3(Screen.width, Screen.height, 0)).x * 2)
+            countdownBar.transform.localScale = new Vector3(Camera.main.ScreenToWorldPoint(new Vector3(Screen.width, Screen.height, 0)).x * 2, countdownBar.transform.localScale.y, countdownBar.transform.localScale.z);*/
+        transform.position = new Vector3(Camera.main.ScreenToWorldPoint(new Vector3(0, 0, 0)).x, transform.position.y, transform.position.z);
+        if (countDown)
         {
-            countDown = false;
-            allowInputs = false;
+            
+            Debug.Log("Time: "+ TimmerManagment.GetTimeLeft());
+            transform.localScale = new Vector3(Camera.main.ScreenToWorldPoint(new Vector3(Screen.width, Screen.height, 0)).x * 2 * (k * TimmerManagment.GetTimeLeft()), transform.localScale.y, transform.localScale.z);
+            if(countDownTime <= 0)
+            {
+                countDown = false;
+            }
         }
-        else if (countdownBar.value >= refillTime)
-        {
-            countDown = true;
-            allowInputs = true;
-        }
+        
     }
 }

@@ -149,7 +149,6 @@ public class GameManager : MonoBehaviour
         {
             SpawnButterfly(GeneticManager.GiveRandomGenetics(butterflyGeneLength));
         }
-
         gameState = 1;
     }
 
@@ -291,11 +290,11 @@ public class GameManager : MonoBehaviour
         {
             case 1:
                 spriteOverlayMan.GetComponent<SpriteOverlay>().MakeClickSpriteUI(maximumKills);
-
                 if (TimmerManagment.Timmer(preHuntTime))
                 {
                     //preGameSplash.GetComponent<Canvas>().enabled = false;
                     GetComponent<SplashShifter>().HideSplash();
+                    Countdown.SetK(huntTime * Mathf.Pow(huntTimeReducePercent, rounds));
                     gameState = 2;
                 }
 
