@@ -30,4 +30,5 @@ public static class TimmerManagment
     }
 
     public static float GetTimeLeft(){ return timmerTimeLeft; }
+    public static void SetTimeLeft(float time) { timmerTimeLeft = 0; }
 }

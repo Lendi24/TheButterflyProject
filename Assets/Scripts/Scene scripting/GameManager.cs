@@ -18,6 +18,9 @@ public class GameManager : MonoBehaviour
     Texture backgroundTexture, blendTexture;
 
     [SerializeField]
+    Mesh destroyedButterfly;
+
+    [SerializeField]
     float preHuntTime, huntTime, tilesPerUnit, huntTimeReducePercent;
 
     [SerializeField]
@@ -28,6 +31,7 @@ public class GameManager : MonoBehaviour
 
     private int butterfliesRemaining, gameState;
     string keyPrefix = "modelMatch";
+    List<GameObject> deadButterflies;
 
     /* Game States
     0-PreGame
@@ -91,6 +95,7 @@ public class GameManager : MonoBehaviour
         /*
         preGameSplash.GetComponent<Canvas>().enabled = true;
         postGameSplash.GetComponent<Canvas>().enabled = false;*/
+        deadButterflies = new List<GameObject>();
     }
 
     void PrepareGame()
@@ -319,6 +324,10 @@ public class GameManager : MonoBehaviour
 
             case 3:
                 rounds++;
+                for(int i = 0; i < deadButterflies.Count; i++)
+                {
+                    Destroy(deadButterflies[i].gameObject);
+                }
                 Debug.Log("Score: " + score);
 
                 Debug.Log("continu");
@@ -378,9 +387,10 @@ public class GameManager : MonoBehaviour
         if (gameState == 2 && (butterflyStartAmountRandom - butterfliesRemaining) < maximumKills)
         {
             SetScore();
-            Destroy(butterfly);
-            Debug.Log("Butterfly click detected: Removed " + butterfly.name + " from the game board");
             butterfliesRemaining--;
+            butterfly.GetComponent<MeshFilter>().mesh = destroyedButterfly;
+            deadButterflies.Add(butterfly);
+            Debug.Log("Butterfly click detected: Removed " + butterfly.name + " from the game board");
         }
     }
 
