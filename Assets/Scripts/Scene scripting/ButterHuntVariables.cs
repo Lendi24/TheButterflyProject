@@ -6,54 +6,58 @@ public static class ButterHuntVariables
 {
     static public float preHuntTime, huntTime;
     static public int butterflyGeneLength, butterflyStartAmountRandom, butterflyStartAmountGene, maximumKills, minimumKills, butterflyRenderMode, butterflyRoundSpawnAmount, healthAmount;
-    static public bool resetEverythingOnNextGen, noSafeClick;
+    static public bool resetEverythingOnNextGen, noSafeClick, keepButterAmount;
 
     static public void SetMode(int mode)
     {
         switch (mode) {
             case 1: //Easy
-                preHuntTime = 1.5f;
+                preHuntTime = 1f;
                 huntTime = 3f;
-                noSafeClick = true;
 
                 butterflyGeneLength = 3;
-                butterflyStartAmountRandom = 8;
-                butterflyStartAmountGene = 1;
+                butterflyStartAmountRandom = 6;
+                butterflyStartAmountGene = 2;
                 maximumKills = 3;
                 minimumKills = 1;
                 butterflyRenderMode = 1;
                 butterflyRoundSpawnAmount = 2;
-                healthAmount = 7;
+                healthAmount = 3;
 
                 resetEverythingOnNextGen = true;
+                keepButterAmount = false;
+                noSafeClick = true;
+
                 break;
 
             case 2: //Medium
                 preHuntTime = 1f;
-                huntTime = 3f;
-                noSafeClick = true;
+                huntTime = 4f;
 
                 butterflyGeneLength = 3;
                 butterflyStartAmountRandom = 6;
-                butterflyStartAmountGene = 1;
+                butterflyStartAmountGene = 2;
                 maximumKills = 3;
                 minimumKills = 1;
                 butterflyRenderMode = 2;
                 butterflyRoundSpawnAmount = 2;
-                healthAmount = 3;
+                healthAmount = 2;
 
                 resetEverythingOnNextGen = true;
+                keepButterAmount = false;
+                noSafeClick = true;
+
                 break;
 
 
             case 3: //Hard
-                preHuntTime = 0.5f;
-                huntTime = 4f;
+                preHuntTime = 1f;
+                huntTime = 5f;
                 noSafeClick = true;
 
                 butterflyGeneLength = 3;
-                butterflyStartAmountRandom = 4;
-                butterflyStartAmountGene = 1;
+                butterflyStartAmountRandom = 6;
+                butterflyStartAmountGene = 2;
                 maximumKills = 3;
                 minimumKills = 1;
                 butterflyRenderMode = 3;
@@ -61,6 +65,9 @@ public static class ButterHuntVariables
                 healthAmount = 1;
 
                 resetEverythingOnNextGen = true;
+                keepButterAmount = false;
+                noSafeClick = true;
+
                 break;
 
         }

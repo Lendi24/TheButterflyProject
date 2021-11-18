@@ -5,6 +5,8 @@ using UnityEngine;
 
 public class GeneticManager : MonoBehaviour
 {
+    static int lastSpawnedTrueGeneLen;
+
     public static bool[] GiveSpecificGenetics(int geneticLength, int trueGenes)
     {
         bool[] genes = new bool[geneticLength];
@@ -83,21 +85,32 @@ public class GeneticManager : MonoBehaviour
         return geneTrueLength / genetics.Length;
     }
     
-    public static bool[] EvolveNewAnimal(bool[][] animalsInPlay)
+    public static bool[] EvolveNewAnimal(bool[][] animalsInPlay, int butterflyGeneLength)
     {
-        int geneTrueLength = 0;
-        for (int i = 0; i < animalsInPlay.Length; i++)
+        int newTrueGeneLength;
+
+        if (animalsInPlay.Length <= 0)
         {
-            for (int j = 0; j < animalsInPlay[i].Length && animalsInPlay[i][j]; j++)
-            {
-                geneTrueLength++;
-            }
+            newTrueGeneLength = lastSpawnedTrueGeneLen;
         }
 
-        int newTrueGeneLength = geneTrueLength / animalsInPlay.Length;
-        newTrueGeneLength += Mutation(-1,1);
-        Debug.Log("Mutation:" + newTrueGeneLength.ToString() + " GenLen:" + (geneTrueLength / animalsInPlay.Length).ToString());
-        bool[] newGenes = new bool[animalsInPlay[0].Length];
+        else
+        {
+            int geneTrueLength = 0;
+            for (int i = 0; i < animalsInPlay.Length; i++)
+            {
+                for (int j = 0; j < animalsInPlay[i].Length && animalsInPlay[i][j]; j++)
+                {
+                    geneTrueLength++;
+                }
+            }
+
+            newTrueGeneLength = geneTrueLength / animalsInPlay.Length;
+            if (lastSpawnedTrueGeneLen == newTrueGeneLength) newTrueGeneLength += Mutation(-1, 1);
+            lastSpawnedTrueGeneLen = newTrueGeneLength;
+        }
+
+        bool[] newGenes = new bool[butterflyGeneLength];
         for (int i = 0; i < newGenes.Length; i++)
         {
             newGenes[i] = i < newTrueGeneLength;
@@ -108,6 +121,10 @@ public class GeneticManager : MonoBehaviour
 
     public static int Mutation(int low, int max)
     {
-        return Random.Range(low, max+1);
+        if (Random.Range(0,15) == 0)
+        {
+            return Random.Range(low, max + 1);
+        }
+        return 0;
     }
 }

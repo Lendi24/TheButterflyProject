@@ -31,9 +31,7 @@ public class Countdown : MonoBehaviour
             countdownBar.transform.localScale = new Vector3(Camera.main.ScreenToWorldPoint(new Vector3(Screen.width, Screen.height, 0)).x * 2, countdownBar.transform.localScale.y, countdownBar.transform.localScale.z);*/
         transform.position = new Vector3(Camera.main.ScreenToWorldPoint(new Vector3(0, 0, 0)).x, transform.position.y, transform.position.z);
         if (countDown)
-        {
-            
-            Debug.Log("Time: "+ TimmerManagment.GetTimeLeft());
+        {            
             transform.localScale = new Vector3(Camera.main.ScreenToWorldPoint(new Vector3(Screen.width, Screen.height, 0)).x * 2 * (k * TimmerManagment.GetTimeLeft()), transform.localScale.y, transform.localScale.z);
             if(countDownTime <= 0)
             {
