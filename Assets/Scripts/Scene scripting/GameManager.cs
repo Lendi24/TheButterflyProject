@@ -51,6 +51,7 @@ public class GameManager : MonoBehaviour
         ClearBoard();
         spriteOverlayMan.GetComponent<SpriteOverlay>().MakeHealthSpriteUI(healthAmount);
         SetScreenSize();
+        ClearBoard();
         PrepareGame();
     }
 
@@ -63,6 +64,13 @@ public class GameManager : MonoBehaviour
         GetComponent<Renderer>().material.SetTextureScale("_MainTex", new Vector2(
             GetComponent<Renderer>().bounds.size.x * tilesPerUnit,
             GetComponent<Renderer>().bounds.size.y * tilesPerUnit));
+
+        /*foreach(Transform selectedButterfly in butterContainer.GetComponentInChildren<Transform>())
+        {
+            Debug.Log(butterContainer.transform.childCount);
+            selectedButterfly.localScale = new Vector3(100 * transform.localScale.x * 0.5f, 100 * transform.localScale.x * 0.5f, 100 * transform.localScale.x * 0.5f);
+            TextureMatchedRender(selectedButterfly.gameObject);
+        }*/
 
     }
 
@@ -175,6 +183,7 @@ public class GameManager : MonoBehaviour
 
         newButterfly.transform.name = "Butterfly";
         newButterfly.transform.parent = butterContainer.transform;
+        newButterfly.transform.localScale = new Vector3(100 * transform.localScale.x * 0.5f, 100 * transform.localScale.x * 0.5f, 100 * transform.localScale.x * 0.5f);
         newButterfly.GetComponent<ButterflyBehaviour>().gameBoard = this.gameObject;
 
         newButterfly.GetComponent<ButterflyBehaviour>().genes = genetics;
@@ -195,21 +204,21 @@ public class GameManager : MonoBehaviour
                 break;
 
             case 1://texture-matched mode
-                TextureMatchedRender();
+                TextureMatchedRender(newButterfly);
                 butterRender.material.SetFloat("_LerpValue", blendIn);
                 butterRender.material.SetFloat("_enablePerlin", 0);
                 boardRender.material.SetFloat("_enablePerlin", 0);
                 break;
 
             case 2://Hybride
-                TextureMatchedRender();
+                TextureMatchedRender(newButterfly);
                 butterRender.material.SetFloat("_LerpValue", blendIn);
                 butterRender.material.SetFloat("_enablePerlin", blendIn);
                 boardRender.material.SetFloat("_enablePerlin", 1);
                 break;
 
             case 3://texture-matched perlin mode
-                TextureMatchedRender();
+                TextureMatchedRender(newButterfly);
                 butterRender.material.SetFloat("_LerpValue", blendIn);
                 butterRender.material.SetFloat("_enablePerlin", blendIn);
                 boardRender.material.SetFloat("_enablePerlin", 1);
@@ -222,54 +231,55 @@ public class GameManager : MonoBehaviour
             default:
                 break;
         }
+    }
 
-        void TextureMatchedRender() {
+    void TextureMatchedRender(GameObject _newButterfly)
+    {
 
-            try
+        try
+        {
+            string modelName = _newButterfly.GetComponent<MeshFilter>().sharedMesh.name;
+            if (!PlayerPrefs.HasKey(GetVariable.GetKeyPrefix() + modelName)) TextureMatchManager.reset();
+
+            string[] tempData = PlayerPrefs.GetString(keyPrefix + modelName).Split(':');
+
+            float butterMatchX = float.Parse(tempData[0]);
+            float butterMatchY = float.Parse(tempData[1]);
+            bool squareMatch = bool.Parse(tempData[2]);
+
+            float squareX, squareY;
+
+            if (squareMatch)
             {
-                string modelName = newButterfly.GetComponent<MeshFilter>().sharedMesh.name;
-                if (!PlayerPrefs.HasKey(GetVariable.GetKeyPrefix() + modelName)) TextureMatchManager.reset();
-
-                string[] tempData = PlayerPrefs.GetString(keyPrefix + modelName).Split(':');
-
-                float butterMatchX = float.Parse(tempData[0]);
-                float butterMatchY = float.Parse(tempData[1]);
-                bool squareMatch = bool.Parse(tempData[2]);
-
-                float squareX, squareY;
-
-                if (squareMatch)
-                {
-                    squareX = newButterfly.GetComponent<MeshFilter>().mesh.bounds.size.x;
-                    squareY = newButterfly.GetComponent<MeshFilter>().mesh.bounds.size.y;
-                }
-
-                else
-                {
-                    squareX = 1;
-                    squareY = 1;
-                }
-
-                newButterfly.GetComponent<Renderer>().material = animalMaterial;
-
-                newButterfly.GetComponent<Renderer>().material.SetTexture("_MainTex", blendTexture);
-                newButterfly.GetComponent<Renderer>().material.SetTextureScale("_MainTex", new Vector2(
-                    newButterfly.GetComponent<MeshFilter>().mesh.bounds.size.x * tilesPerUnit * newButterfly.transform.localScale.x * butterMatchX * squareY,
-                    newButterfly.GetComponent<MeshFilter>().mesh.bounds.size.y * tilesPerUnit * newButterfly.transform.localScale.y * butterMatchY * squareX));
-
-                newButterfly.GetComponent<Renderer>().material.SetTexture("_SecondaryTex", backgroundTexture);
-                newButterfly.GetComponent<Renderer>().material.SetTextureScale("_SecondaryTex", new Vector2(
-                    newButterfly.GetComponent<MeshFilter>().mesh.bounds.size.x * tilesPerUnit * newButterfly.transform.localScale.x * butterMatchX * squareY,
-                    newButterfly.GetComponent<MeshFilter>().mesh.bounds.size.y * tilesPerUnit * newButterfly.transform.localScale.y * butterMatchY * squareX));
+                squareX = _newButterfly.GetComponent<MeshFilter>().mesh.bounds.size.x;
+                squareY = _newButterfly.GetComponent<MeshFilter>().mesh.bounds.size.y;
             }
 
-            catch (System.Exception)
+            else
             {
-                Debug.LogError("Could not load correct material for model. Try rendermode 0, or give texture a size to scale");
+                squareX = 1;
+                squareY = 1;
             }
 
+            _newButterfly.GetComponent<Renderer>().material = animalMaterial;
 
+            _newButterfly.GetComponent<Renderer>().material.SetTexture("_MainTex", blendTexture);
+            _newButterfly.GetComponent<Renderer>().material.SetTextureScale("_MainTex", new Vector2(
+                _newButterfly.GetComponent<MeshFilter>().mesh.bounds.size.x * tilesPerUnit * _newButterfly.transform.localScale.x * butterMatchX * squareY,
+                _newButterfly.GetComponent<MeshFilter>().mesh.bounds.size.y * tilesPerUnit * _newButterfly.transform.localScale.y * butterMatchY * squareX));
+
+            _newButterfly.GetComponent<Renderer>().material.SetTexture("_SecondaryTex", backgroundTexture);
+            _newButterfly.GetComponent<Renderer>().material.SetTextureScale("_SecondaryTex", new Vector2(
+                _newButterfly.GetComponent<MeshFilter>().mesh.bounds.size.x * tilesPerUnit * _newButterfly.transform.localScale.x * butterMatchX * squareY,
+                _newButterfly.GetComponent<MeshFilter>().mesh.bounds.size.y * tilesPerUnit * _newButterfly.transform.localScale.y * butterMatchY * squareX));
         }
+
+        catch (System.Exception)
+        {
+            Debug.LogError("Could not load correct material for model. Try rendermode 0, or give texture a size to scale");
+        }
+
+
     }
 
 

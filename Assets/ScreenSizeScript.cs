@@ -4,18 +4,22 @@ using UnityEngine;
 
 public class ScreenSizeScript : MonoBehaviour
 {
+    float screenWidth;
+    float screenHeight;
     // Start is called before the first frame update
     void Start()
     {
-        
+        screenWidth = Screen.width;
+        screenHeight = Screen.height;
     }
 
     // Update is called once per frame
     void Update()
     {
-        if(GameBoardResizer.ChangedScreenSize(gameObject.transform.localScale.x *10f))
+        if(screenWidth != Screen.width || screenHeight != Screen.height)
         {
-            Debug.Log("true");
+            screenWidth = Screen.width;
+            screenHeight = Screen.height;
             GetComponent<GameManager>().SetScreenSize();
         }
     }
