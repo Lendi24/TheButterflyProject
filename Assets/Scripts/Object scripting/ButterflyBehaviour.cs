@@ -7,6 +7,8 @@ public class ButterflyBehaviour : MonoBehaviour
     private Ray ray;
     private RaycastHit hit;
     public GameObject gameBoard;
+    public AudioClip audioClip;
+    bool dead = false;
 
     public bool[] genes;
 
@@ -18,10 +20,11 @@ public class ButterflyBehaviour : MonoBehaviour
     private void OnMouseDown()
     {
         ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-        if (Physics.Raycast(ray, out hit))
+        if (Physics.Raycast(ray, out hit) && !dead)
         {
+            SoundScript.PlayAudio(audioClip);
             gameBoard.GetComponent<GameManager>().ButterClick(gameObject);
-            
+            dead = true;
 
             //GameObject.Find("GameBoard").GetComponent<GameManager>().ButterClick(this.gameObject);
             //Destroy(this.gameObject);

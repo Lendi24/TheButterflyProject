@@ -777,6 +777,10 @@ PrefabInstance:
       propertyPath: huntTimeReducePercent
       value: 0.9
       objectReference: {fileID: 0}
+    - target: {fileID: 7767626428439074211, guid: 0c22a8247677de44d96d99da8ef437be, type: 3}
+      propertyPath: audioClip
+      value: 
+      objectReference: {fileID: 8300000, guid: 0c8f87e55d0130a4199e9f01270e2b22, type: 3}
     - target: {fileID: 8407719361813239784, guid: 0c22a8247677de44d96d99da8ef437be, type: 3}
       propertyPath: m_RootOrder
       value: 5

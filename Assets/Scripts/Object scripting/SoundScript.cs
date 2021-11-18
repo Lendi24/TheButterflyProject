@@ -21,4 +21,10 @@ public class SoundScript : MonoBehaviour
     {
         
     }
+
+    public static void PlayAudio(AudioClip audioClip)
+    {
+        instance.gameObject.GetComponent<AudioSource>().clip = audioClip;
+        instance.gameObject.GetComponent<AudioSource>().Play();
+    }
 }
