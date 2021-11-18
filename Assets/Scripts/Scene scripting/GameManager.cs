@@ -6,7 +6,7 @@ using UnityEngine;
 public class GameManager : MonoBehaviour
 {
     [SerializeField]
-    GameObject butterfly, butterContainer;
+    GameObject butterfly, butterContainer, spriteOverlayMan;
 
     [SerializeField]
     VisualTreeAsset preHuntSplash, gameOverSplash;
@@ -49,6 +49,7 @@ public class GameManager : MonoBehaviour
         GetVariables();
         ResetVariables();
         ClearBoard();
+        spriteOverlayMan.GetComponent<SpriteOverlay>().MakeHealthSpriteUI(healthAmount);
         SetScreenSize();
         PrepareGame();
     }
@@ -277,6 +278,7 @@ public class GameManager : MonoBehaviour
         switch (gameState)
         {
             case 1:
+                spriteOverlayMan.GetComponent<SpriteOverlay>().MakeClickSpriteUI(maximumKills);
 
                 if (TimmerManagment.Timmer(preHuntTime))
                 {
@@ -296,6 +298,7 @@ public class GameManager : MonoBehaviour
                     if ((butterflyStartAmountRandom - butterfliesRemaining) < minimumKills)
                     {
                         healthAmount--;
+                        spriteOverlayMan.GetComponent<SpriteOverlay>().RemoveHeart();
 
                         switch (healthAmount)
                         {
@@ -303,12 +306,12 @@ public class GameManager : MonoBehaviour
                                 GetComponent<SplashShifter>().ShowSplash(0, gameOverSplash);
                                 Debug.Log("U loose");
                                 gameState = 4;//Failed! Health will be lost, energy will be lost or game will be lost here.
+
                                 break;
 
                             default:
                                 GetComponent<SplashShifter>().ShowSplash(0, preHuntSplash);
                                 Debug.Log("U loose heart");
-                                Debug.Log(healthAmount);
                                 gameState = 3;
                                 break;
                         }
@@ -390,6 +393,7 @@ public class GameManager : MonoBehaviour
             butterfliesRemaining--;
             butterfly.GetComponent<MeshFilter>().mesh = destroyedButterfly;
             deadButterflies.Add(butterfly);
+            spriteOverlayMan.GetComponent<SpriteOverlay>().RemoveKlick();
             Debug.Log("Butterfly click detected: Removed " + butterfly.name + " from the game board");
         }
     }
