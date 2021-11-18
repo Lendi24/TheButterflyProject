@@ -6,7 +6,7 @@ using UnityEngine;
 public class GameManager : MonoBehaviour
 {
     [SerializeField]
-    GameObject butterfly, butterContainer, spriteOverlayMan;
+    GameObject butterfly, butterContainer, deadButterContainer, spriteOverlayMan;
 
     [SerializeField]
     VisualTreeAsset preHuntSplash, gameOverSplash;
@@ -401,6 +401,7 @@ public class GameManager : MonoBehaviour
         {
             SetScore();
             butterfliesRemaining--;
+            butterfly.transform.parent = deadButterContainer.transform;
             butterfly.GetComponent<MeshFilter>().mesh = destroyedButterfly;
             deadButterflies.Add(butterfly);
             spriteOverlayMan.GetComponent<SpriteOverlay>().RemoveKlick();

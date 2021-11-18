@@ -95,12 +95,19 @@ public class GeneticManager : MonoBehaviour
         }
 
         int newTrueGeneLength = geneTrueLength / animalsInPlay.Length;
+        newTrueGeneLength += Mutation(-1,1);
+        Debug.Log("Mutation:" + newTrueGeneLength.ToString() + " GenLen:" + (geneTrueLength / animalsInPlay.Length).ToString());
         bool[] newGenes = new bool[animalsInPlay[0].Length];
         for (int i = 0; i < newGenes.Length; i++)
         {
-            newGenes[i] = (i <= newTrueGeneLength);
+            newGenes[i] = i < newTrueGeneLength;
         }
 
         return newGenes;
+    }
+
+    public static int Mutation(int low, int max)
+    {
+        return Random.Range(low, max+1);
     }
 }
