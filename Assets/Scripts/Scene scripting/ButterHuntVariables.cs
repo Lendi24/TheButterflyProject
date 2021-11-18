@@ -29,7 +29,7 @@ public static class ButterHuntVariables
 
             case 2: //Medium
                 preHuntTime = 1f;
-                huntTime = 2.5f;
+                huntTime = 3f;
 
                 butterflyGeneLength = 3;
                 butterflyStartAmountRandom = 6;
@@ -46,7 +46,7 @@ public static class ButterHuntVariables
 
             case 3: //Hard
                 preHuntTime = 0.5f;
-                huntTime = 2f;
+                huntTime = 4f;
 
                 butterflyGeneLength = 3;
                 butterflyStartAmountRandom = 4;

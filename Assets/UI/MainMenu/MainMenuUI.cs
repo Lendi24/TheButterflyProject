@@ -5,6 +5,7 @@ using UnityEngine.SceneManagement;
 
 public class MainMenuUI : MonoBehaviour
 {
+    public GameObject soundObject;
     public Button startButton;
     public Button loadButton;
     public Button settingsButton;
@@ -21,6 +22,11 @@ public class MainMenuUI : MonoBehaviour
         creditsButton = root.Q<Button>("menu-button-credits");
 
         startButton.clicked += GetComponent<LoadSceneFunctions>().StartButtonPressed;
-
+        if(GameObject.Find("ClickSound") == null)
+        {
+            GameObject newSoundObject = Instantiate<GameObject>(soundObject);
+            newSoundObject.transform.parent = transform.parent;
+            newSoundObject.name = "ClickSound";
+        }
     }
 }
