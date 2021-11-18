@@ -25,10 +25,10 @@ public class GameManager : MonoBehaviour
 
     [SerializeField]
     int butterflyGeneLength, butterflyStartAmountRandom, butterflyStartAmountGene, maximumKills, minimumKills, butterflyRenderMode, butterflyRoundSpawnAmount, healthAmount, score, rounds;
-    int allowedClicks;
+    int roundAllowedClicks;
 
     [SerializeField]
-    bool resetEverythingOnNextGen, noSafeClick;
+    bool resetEverythingOnNextGen, noSafeClick, keepButterAmount;
 
     private int butterfliesRemaining, gameState;
     string keyPrefix = "modelMatch";
@@ -95,13 +95,14 @@ public class GameManager : MonoBehaviour
 
         resetEverythingOnNextGen = ButterHuntVariables.resetEverythingOnNextGen;
         noSafeClick = ButterHuntVariables.noSafeClick;
+        keepButterAmount = ButterHuntVariables.keepButterAmount;
     }
 
     void ResetVariables()
     {
         //Init variables
         gameState = 1;
-        allowedClicks = maximumKills;
+        roundAllowedClicks = maximumKills; //This vaiable name is stupid. Change it to "round clicks" and allowed klicks or smt. 
         butterfliesRemaining = butterflyStartAmountRandom;
         GetComponent<SplashShifter>().ShowSplash(0, preHuntSplash);
         /*
@@ -289,7 +290,7 @@ public class GameManager : MonoBehaviour
         switch (gameState)
         {
             case 1:
-                spriteOverlayMan.GetComponent<SpriteOverlay>().MakeClickSpriteUI(maximumKills);
+                spriteOverlayMan.GetComponent<SpriteOverlay>().MakeClickSpriteUI(roundAllowedClicks);
                 if (TimmerManagment.Timmer(preHuntTime))
                 {
                     //preGameSplash.GetComponent<Canvas>().enabled = false;
@@ -303,7 +304,7 @@ public class GameManager : MonoBehaviour
             case 2:
                 if (noSafeClick && Input.GetMouseButtonDown(0))
                 {
-                    allowedClicks--;
+                    roundAllowedClicks--;
                     spriteOverlayMan.GetComponent<SpriteOverlay>().RemoveKlick();
                 }
 
@@ -367,7 +368,12 @@ public class GameManager : MonoBehaviour
                     butterContainer.transform.GetChild(i).rotation = newRot;
                 }
 
-                for (int i = 0; i < butterflyRoundSpawnAmount; i++) SpawnButterfly(GeneticManager.EvolveNewAnimal(butterContainer.GetComponent<ButterCollection>().GetAnimalGenes()));
+                if (keepButterAmount)
+                {
+                    butterflyRoundSpawnAmount = deadButterContainer.transform.childCount;
+                }
+
+                for (int i = 0; i < butterflyRoundSpawnAmount; i++) SpawnButterfly(GeneticManager.EvolveNewAnimal(butterContainer.GetComponent<ButterCollection>().GetAnimalGenes(), butterflyGeneLength));
                 ResetVariables();
                 break;
 
@@ -404,7 +410,7 @@ public class GameManager : MonoBehaviour
 
     public void ButterClick(GameObject butterfly, AudioClip audioClip)
     {
-        if (gameState == 2 && (allowedClicks > 0))
+        if (gameState == 2 && (roundAllowedClicks > 0))
         {
             if (butterfly.transform.parent.name == "ButterCollection")
             {
@@ -415,7 +421,7 @@ public class GameManager : MonoBehaviour
             butterfly.transform.parent = deadButterContainer.transform;
             butterfly.GetComponent<MeshFilter>().mesh = destroyedButterfly;
             deadButterflies.Add(butterfly);
-            if (!noSafeClick) { spriteOverlayMan.GetComponent<SpriteOverlay>().RemoveKlick(); allowedClicks--; }
+            if (!noSafeClick) { spriteOverlayMan.GetComponent<SpriteOverlay>().RemoveKlick(); roundAllowedClicks--; }
             Debug.Log("Butterfly click detected: Removed " + butterfly.name + " from the game board");
         }
     }
