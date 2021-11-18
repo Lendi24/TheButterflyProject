@@ -6,7 +6,7 @@ public static class ButterHuntVariables
 {
     static public float preHuntTime, huntTime;
     static public int butterflyGeneLength, butterflyStartAmountRandom, butterflyStartAmountGene, maximumKills, minimumKills, butterflyRenderMode, butterflyRoundSpawnAmount, healthAmount;
-    static public bool resetEverythingOnNextGen;
+    static public bool resetEverythingOnNextGen, noSafeClick;
 
     static public void SetMode(int mode)
     {
@@ -14,6 +14,7 @@ public static class ButterHuntVariables
             case 1: //Easy
                 preHuntTime = 1.5f;
                 huntTime = 3f;
+                noSafeClick = true;
 
                 butterflyGeneLength = 3;
                 butterflyStartAmountRandom = 8;
@@ -30,6 +31,7 @@ public static class ButterHuntVariables
             case 2: //Medium
                 preHuntTime = 1f;
                 huntTime = 3f;
+                noSafeClick = true;
 
                 butterflyGeneLength = 3;
                 butterflyStartAmountRandom = 6;
@@ -47,6 +49,7 @@ public static class ButterHuntVariables
             case 3: //Hard
                 preHuntTime = 0.5f;
                 huntTime = 4f;
+                noSafeClick = true;
 
                 butterflyGeneLength = 3;
                 butterflyStartAmountRandom = 4;

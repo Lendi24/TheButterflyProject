@@ -25,9 +25,10 @@ public class GameManager : MonoBehaviour
 
     [SerializeField]
     int butterflyGeneLength, butterflyStartAmountRandom, butterflyStartAmountGene, maximumKills, minimumKills, butterflyRenderMode, butterflyRoundSpawnAmount, healthAmount, score, rounds;
+    int allowedClicks;
 
     [SerializeField]
-    bool resetEverythingOnNextGen;
+    bool resetEverythingOnNextGen, noSafeClick;
 
     private int butterfliesRemaining, gameState;
     string keyPrefix = "modelMatch";
@@ -93,12 +94,14 @@ public class GameManager : MonoBehaviour
         healthAmount = ButterHuntVariables.healthAmount;
 
         resetEverythingOnNextGen = ButterHuntVariables.resetEverythingOnNextGen;
+        noSafeClick = ButterHuntVariables.noSafeClick;
     }
 
     void ResetVariables()
     {
         //Init variables
         gameState = 1;
+        allowedClicks = maximumKills;
         butterfliesRemaining = butterflyStartAmountRandom;
         GetComponent<SplashShifter>().ShowSplash(0, preHuntSplash);
         /*
@@ -282,7 +285,6 @@ public class GameManager : MonoBehaviour
 
     }
 
-
     private void Update()
     {
         switch (gameState)
@@ -300,6 +302,12 @@ public class GameManager : MonoBehaviour
                 break;
 
             case 2:
+                if (noSafeClick && Input.GetMouseButtonDown(0))
+                {
+                    allowedClicks--;
+                    spriteOverlayMan.GetComponent<SpriteOverlay>().RemoveKlick();
+                }
+
                 if (TimmerManagment.Timmer(huntTime * Mathf.Pow(huntTimeReducePercent, rounds)))
                 { //Checks if Timer is finished. Time is dependant on an exponential value,
                   //y=C*a^x. Time decreases the more rounds have passed.
@@ -397,17 +405,15 @@ public class GameManager : MonoBehaviour
 
     public void ButterClick(GameObject butterfly)
     {
-        if (gameState == 2 && (butterflyStartAmountRandom - butterfliesRemaining) < maximumKills)
+        if (gameState == 2 && (allowedClicks > 0))
         {
             SetScore();
             butterfliesRemaining--;
             butterfly.transform.parent = deadButterContainer.transform;
             butterfly.GetComponent<MeshFilter>().mesh = destroyedButterfly;
             deadButterflies.Add(butterfly);
-            spriteOverlayMan.GetComponent<SpriteOverlay>().RemoveKlick();
+            if (!noSafeClick) { spriteOverlayMan.GetComponent<SpriteOverlay>().RemoveKlick(); allowedClicks--; }
             Debug.Log("Butterfly click detected: Removed " + butterfly.name + " from the game board");
         }
     }
-
-
 }
