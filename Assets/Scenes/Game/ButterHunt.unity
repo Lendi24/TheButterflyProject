@@ -738,6 +738,10 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 3438679882897807685, guid: cafb791c9306ef5419bb199f1782b246, type: 3}
     - target: {fileID: 7178107181814647026, guid: 0c22a8247677de44d96d99da8ef437be, type: 3}
+      propertyPath: huntTimeMin
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7178107181814647026, guid: 0c22a8247677de44d96d99da8ef437be, type: 3}
       propertyPath: noSafeClick
       value: 1
       objectReference: {fileID: 0}

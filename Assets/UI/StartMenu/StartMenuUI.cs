@@ -7,7 +7,7 @@ public class StartMenuUI : MonoBehaviour
     public Button easyModeBtn;
     public Button mediumModeBtn;
     public Button hardModeBtn;
-    public Button backBtn;
+    public Button backBtn; 
 
     // Start is called before the first frame update
     void Start()

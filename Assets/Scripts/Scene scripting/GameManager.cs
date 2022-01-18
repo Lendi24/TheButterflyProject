@@ -21,7 +21,7 @@ public class GameManager : MonoBehaviour
     Mesh destroyedButterfly;
 
     [SerializeField]
-    float preHuntTime, huntTime, tilesPerUnit, huntTimeReducePercent;
+    float preHuntTime, huntTime, tilesPerUnit, huntTimeReducePercent, huntTimeMin;
 
     [SerializeField]
     int butterflyGeneLength, butterflyStartAmountRandom, butterflyStartAmountGene, maximumKills, minimumKills, butterflyRenderMode, butterflyRoundSpawnAmount, healthAmount, score, rounds;
@@ -295,7 +295,7 @@ public class GameManager : MonoBehaviour
                 {
                     //preGameSplash.GetComponent<Canvas>().enabled = false;
                     GetComponent<SplashShifter>().HideSplash();
-                    Countdown.SetK(huntTime * Mathf.Pow(huntTimeReducePercent, rounds));
+                    Countdown.SetK(GetHuntTime());
                     gameState = 2;
                 }
 
@@ -308,7 +308,7 @@ public class GameManager : MonoBehaviour
                     spriteOverlayMan.GetComponent<SpriteOverlay>().RemoveKlick();
                 }
 
-                if (TimmerManagment.Timmer(huntTime * Mathf.Pow(huntTimeReducePercent, rounds)))
+                if (TimmerManagment.Timmer(GetHuntTime()))
                 { //Checks if Timer is finished. Time is dependant on an exponential value,
                   //y=C*a^x. Time decreases the more rounds have passed.
                   //postGameSplash.GetComponent<Canvas>().enabled = true;
@@ -393,12 +393,24 @@ public class GameManager : MonoBehaviour
     public void SetScore()
     {
         float remainingTime = TimmerManagment.GetTimeLeft();
-        score += Mathf.CeilToInt(10f * remainingTime / ((huntTime * Mathf.Pow(huntTimeReducePercent, rounds)) - remainingTime));
+        score += Mathf.CeilToInt(10f * remainingTime / (GetHuntTime() - remainingTime));
     }
 
     public int GetScore()
     {
         return score;
+    }
+
+    public float GetHuntTime()
+    {
+        if(huntTime * Mathf.Pow(huntTimeReducePercent, rounds) > huntTimeMin)
+        {
+            return huntTime * Mathf.Pow(huntTimeReducePercent, rounds);
+        }
+        else
+        {
+            return huntTimeMin;
+        }
     }
 
 
