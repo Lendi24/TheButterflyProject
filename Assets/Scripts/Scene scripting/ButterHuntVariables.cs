@@ -16,7 +16,7 @@ public static class ButterHuntVariables
                 huntTime = 3f;
 
                 butterflyGeneLength = 3;
-                butterflyStartAmountRandom = 6;
+                butterflyStartAmountRandom = 8;
                 butterflyStartAmountGene = 2;
                 maximumKills = 3;
                 minimumKills = 1;
@@ -35,7 +35,7 @@ public static class ButterHuntVariables
                 huntTime = 4f;
 
                 butterflyGeneLength = 3;
-                butterflyStartAmountRandom = 6;
+                butterflyStartAmountRandom = 8;
                 butterflyStartAmountGene = 2;
                 maximumKills = 3;
                 minimumKills = 1;
@@ -56,7 +56,7 @@ public static class ButterHuntVariables
                 noSafeClick = true;
 
                 butterflyGeneLength = 3;
-                butterflyStartAmountRandom = 6;
+                butterflyStartAmountRandom = 8;
                 butterflyStartAmountGene = 2;
                 maximumKills = 3;
                 minimumKills = 1;

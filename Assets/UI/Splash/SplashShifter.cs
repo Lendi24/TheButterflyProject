@@ -14,7 +14,7 @@ public class SplashShifter : MonoBehaviour
     {
         GetComponent<LoadSceneFunctions>().RestarGametPress();
     }
-
+     
     private void AssignBittons()
     {
         var root = GetComponent<UIDocument>().rootVisualElement;
@@ -34,7 +34,7 @@ public class SplashShifter : MonoBehaviour
 
     public void ShowSplash(float time, VisualTreeAsset splash)
     {
-        GetComponent<UIDocument>().visualTreeAsset = splash;
+        GetComponent<UIDocument>().visualTreeAsset = splash; 
         GetComponent<UIDocument>().enabled = true;
 
         if (time > 0)
