@@ -8,7 +8,8 @@
             </ui:VisualElement>
         </ui:VisualElement>
         <ui:VisualElement name="Button">
-            <ui:Button text="Try again" display-tooltip-when-elided="true" name="restart-game" style="font-size: 28px; color: rgb(255, 255, 255);" />
+            <ui:Button text="Try again" display-tooltip-when-elided="true" name="restart-game" usage-hints="None" focusable="true" enable-rich-text="true" style="font-size: 28px; color: rgb(255, 255, 255); padding-left: 6px; padding-right: 6px; justify-content: flex-start; align-items: stretch; flex-wrap: nowrap; position: relative;" />
+            <ui:Button text="Graph Stats" display-tooltip-when-elided="true" name="graph-stats" style="font-size: 28px; color: rgb(255, 255, 255);" />
             <ui:Button text="Main menu" display-tooltip-when-elided="true" name="main-menu" style="font-size: 28px; color: rgb(255, 255, 255);" />
         </ui:VisualElement>
     </ui:VisualElement>

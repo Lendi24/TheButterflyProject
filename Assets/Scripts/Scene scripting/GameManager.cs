@@ -324,7 +324,6 @@ public class GameManager : MonoBehaviour
                                 GetComponent<SplashShifter>().ShowSplash(0, gameOverSplash);
                                 Debug.Log("U loose");
                                 gameState = 4;//Failed! Health will be lost, energy will be lost or game will be lost here.
-
                                 break;
 
                             default:
