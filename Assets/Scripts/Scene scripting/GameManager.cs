@@ -30,9 +30,11 @@ public class GameManager : MonoBehaviour
     [SerializeField]
     bool resetEverythingOnNextGen, noSafeClick, keepButterAmount;
 
+    private bool isPaused;
     private int butterfliesRemaining, gameState;
     string keyPrefix = "modelMatch";
     List<GameObject> deadButterflies;
+    List<StatSave> statsLogList = new List<StatSave>();
 
     /* Game States
     0-PreGame
@@ -52,7 +54,6 @@ public class GameManager : MonoBehaviour
         ClearBoard();
         spriteOverlayMan.GetComponent<SpriteOverlay>().MakeHealthSpriteUI(healthAmount);
         SetScreenSize();
-        ClearBoard();
         PrepareGame();
     }
 
@@ -109,6 +110,7 @@ public class GameManager : MonoBehaviour
         preGameSplash.GetComponent<Canvas>().enabled = true;
         postGameSplash.GetComponent<Canvas>().enabled = false;*/
         deadButterflies = new List<GameObject>();
+        isPaused = false;
     }
 
     void PrepareGame()
@@ -126,11 +128,13 @@ public class GameManager : MonoBehaviour
         int minAllowed = butterflyStartAmountGene * (butterflyGeneLength+1);
         if (butterflyStartAmountRandom < minAllowed)
         {
-            Debug.LogWarning("ERROR: Misconfigured!\n"+
+            Debug.LogError("ERROR: Misconfigured!\n"+
             "ButterflyStartAmountRandom is the total amount of butterflies spawned at start.\n"+
             "Butterfly start amount gene spawns one butterfly of each gene. (butterGeneStart*(ButterGeneLength+1))\n"+
             "To fix this, ButterflyStartAmountRandom will be set to: "+minAllowed);
             butterflyStartAmountRandom = minAllowed;
+
+            ResetVariables();
         }
 
         //Spawns butterflys with specific genes. This is to make sure there are at least one of each type in the population
@@ -287,6 +291,24 @@ public class GameManager : MonoBehaviour
 
     private void Update()
     {
+        if (Input.GetKeyDown(KeyCode.Escape))
+        {
+            isPaused = !isPaused;
+            PauseGame();
+        }
+
+        void PauseGame()
+        {
+            if (isPaused)
+            {
+                Time.timeScale = 0f;
+            }
+            else
+            {
+                Time.timeScale = 1;
+            }
+        }
+
         switch (gameState)
         {
             case 1:
@@ -302,7 +324,7 @@ public class GameManager : MonoBehaviour
                 break;
 
             case 2:
-                if (noSafeClick && Input.GetMouseButtonDown(0))
+                if (noSafeClick && Input.GetMouseButtonDown(0) && !isPaused)
                 {
                     roundAllowedClicks--;
                     spriteOverlayMan.GetComponent<SpriteOverlay>().RemoveKlick();
@@ -312,7 +334,7 @@ public class GameManager : MonoBehaviour
                 { //Checks if Timer is finished. Time is dependant on an exponential value,
                   //y=C*a^x. Time decreases the more rounds have passed.
                   //postGameSplash.GetComponent<Canvas>().enabled = true;
-
+                    statsLogList.Add(new StatSave() { populationAmount = butterContainer.transform.childCount, GeneData = butterContainer.GetComponent<ButterCollection>().GetAnimalGenes() });
                     if ((butterflyStartAmountRandom - butterfliesRemaining) < minimumKills)
                     {
                         healthAmount--;
@@ -357,7 +379,6 @@ public class GameManager : MonoBehaviour
                 {
                     animal.transform.position = new Vector3(0, 0, 5);
                 }
-
 
                 for (int i = 0; i < butterContainer.transform.childCount; i++)
                 {
@@ -410,7 +431,7 @@ public class GameManager : MonoBehaviour
 
     public void ButterClick(GameObject butterfly, AudioClip audioClip)
     {
-        if (gameState == 2 && (roundAllowedClicks > 0))
+        if (gameState == 2 && (roundAllowedClicks > 0) && !isPaused)
         {
             if (butterfly.transform.parent.name == "ButterCollection")
             {
