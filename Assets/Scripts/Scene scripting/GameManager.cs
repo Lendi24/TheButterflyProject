@@ -53,7 +53,6 @@ public class GameManager : MonoBehaviour
         ClearBoard();
         spriteOverlayMan.GetComponent<SpriteOverlay>().MakeHealthSpriteUI(healthAmount);
         SetScreenSize();
-        ClearBoard();
         PrepareGame();
     }
 
@@ -127,11 +126,13 @@ public class GameManager : MonoBehaviour
         int minAllowed = butterflyStartAmountGene * (butterflyGeneLength+1);
         if (butterflyStartAmountRandom < minAllowed)
         {
-            Debug.LogWarning("ERROR: Misconfigured!\n"+
+            Debug.LogError("ERROR: Misconfigured!\n"+
             "ButterflyStartAmountRandom is the total amount of butterflies spawned at start.\n"+
             "Butterfly start amount gene spawns one butterfly of each gene. (butterGeneStart*(ButterGeneLength+1))\n"+
             "To fix this, ButterflyStartAmountRandom will be set to: "+minAllowed);
             butterflyStartAmountRandom = minAllowed;
+
+            ResetVariables();
         }
 
         //Spawns butterflys with specific genes. This is to make sure there are at least one of each type in the population
