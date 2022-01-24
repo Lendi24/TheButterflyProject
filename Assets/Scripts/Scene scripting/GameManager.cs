@@ -9,7 +9,7 @@ public class GameManager : MonoBehaviour
     GameObject butterfly, butterContainer, deadButterContainer, spriteOverlayMan;
 
     [SerializeField]
-    VisualTreeAsset preHuntSplash, gameOverSplash;
+    VisualTreeAsset preHuntSplash, gameOverSplash, pauseMenu;
 
     [SerializeField]
     Material backgroundPattern, animalMaterial;
@@ -289,26 +289,24 @@ public class GameManager : MonoBehaviour
 
     }
 
+    void PauseGame()
+    {
+        if (isPaused)
+        {
+            Time.timeScale = 0f;
+            GetComponent<SplashShifter>().ShowSplash(0, pauseMenu);
+        }
+        else
+        {
+            Time.timeScale = 1;
+            RandomizeAnimalPos();
+            GetComponent<SplashShifter>().HideSplash();
+        }
+    }
+
+
     private void Update()
     {
-        if (Input.GetKeyDown(KeyCode.Escape))
-        {
-            isPaused = !isPaused;
-            PauseGame();
-        }
-
-        void PauseGame()
-        {
-            if (isPaused)
-            {
-                Time.timeScale = 0f;
-            }
-            else
-            {
-                Time.timeScale = 1;
-            }
-        }
-
         switch (gameState)
         {
             case 1:
@@ -324,6 +322,12 @@ public class GameManager : MonoBehaviour
                 break;
 
             case 2:
+                if (Input.GetKeyDown(KeyCode.Escape))
+                {
+                    isPaused = !isPaused;
+                    PauseGame();
+                }
+
                 if (noSafeClick && Input.GetMouseButtonDown(0) && !isPaused)
                 {
                     roundAllowedClicks--;
@@ -374,19 +378,7 @@ public class GameManager : MonoBehaviour
 
                 Debug.Log("continu");
 
-                foreach (Transform animal in butterContainer.transform)
-                {
-                    animal.transform.position = new Vector3(0, 0, 5);
-                }
-
-                for (int i = 0; i < butterContainer.transform.childCount; i++)
-                {
-                    Quaternion newRot = Quaternion.Euler(0, 0, Random.Range(1, 360));
-                    Vector3 newPos = RandomButterPos(newRot);
-
-                    butterContainer.transform.GetChild(i).transform.position = newPos;
-                    butterContainer.transform.GetChild(i).rotation = newRot;
-                }
+                RandomizeAnimalPos();
 
                 if (keepButterAmount)
                 {
@@ -400,6 +392,26 @@ public class GameManager : MonoBehaviour
             default:
                 break;
         }
+    }
+
+    void RandomizeAnimalPos()
+    {
+        //Move outside box. This will keep auto-col detect from triggering
+        foreach (Transform animal in butterContainer.transform)
+        {
+            animal.transform.position = new Vector3(0, 0, 5);
+        }
+
+        //Randomize pos and rot
+        for (int i = 0; i < butterContainer.transform.childCount; i++)
+        {
+            Quaternion newRot = Quaternion.Euler(0, 0, Random.Range(1, 360));
+            Vector3 newPos = RandomButterPos(newRot);
+
+            butterContainer.transform.GetChild(i).transform.position = newPos;
+            butterContainer.transform.GetChild(i).rotation = newRot;
+        }
+
     }
 
     void ClearBoard()
