@@ -30,6 +30,7 @@ public class GameManager : MonoBehaviour
     [SerializeField]
     bool resetEverythingOnNextGen, noSafeClick, keepButterAmount;
 
+    private bool isPaused;
     private int butterfliesRemaining, gameState;
     string keyPrefix = "modelMatch";
     List<GameObject> deadButterflies;
@@ -109,6 +110,7 @@ public class GameManager : MonoBehaviour
         preGameSplash.GetComponent<Canvas>().enabled = true;
         postGameSplash.GetComponent<Canvas>().enabled = false;*/
         deadButterflies = new List<GameObject>();
+        isPaused = false;
     }
 
     void PrepareGame()
@@ -289,6 +291,24 @@ public class GameManager : MonoBehaviour
 
     private void Update()
     {
+        if (Input.GetKeyDown(KeyCode.Escape))
+        {
+            isPaused = !isPaused;
+            PauseGame();
+        }
+
+        void PauseGame()
+        {
+            if (isPaused)
+            {
+                Time.timeScale = 0f;
+            }
+            else
+            {
+                Time.timeScale = 1;
+            }
+        }
+
         switch (gameState)
         {
             case 1:
@@ -304,7 +324,7 @@ public class GameManager : MonoBehaviour
                 break;
 
             case 2:
-                if (noSafeClick && Input.GetMouseButtonDown(0))
+                if (noSafeClick && Input.GetMouseButtonDown(0) && !isPaused)
                 {
                     roundAllowedClicks--;
                     spriteOverlayMan.GetComponent<SpriteOverlay>().RemoveKlick();
@@ -411,7 +431,7 @@ public class GameManager : MonoBehaviour
 
     public void ButterClick(GameObject butterfly, AudioClip audioClip)
     {
-        if (gameState == 2 && (roundAllowedClicks > 0))
+        if (gameState == 2 && (roundAllowedClicks > 0) && !isPaused)
         {
             if (butterfly.transform.parent.name == "ButterCollection")
             {
