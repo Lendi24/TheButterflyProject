@@ -72,4 +72,24 @@ public static class ButterHuntVariables
 
         }
     }
+
+    static public void SetCustom(float _preHuntTime, float _huntTime, int _butterflyGeneLength, int _butterflyStartAmountRandom, int _butterflyStartAmountGene, int _maximumKills, int _minimumKills, int _butterflyRenderMode, int _butterflyRoundSpawnAmount, int _healthAmount, bool _resetEverythingOnNextGen, bool _noSafeClick, bool _keepButterAmount)
+    {
+        preHuntTime = _preHuntTime;
+        huntTime = _huntTime;
+        noSafeClick = _noSafeClick;
+
+        butterflyGeneLength = _butterflyGeneLength;
+        butterflyStartAmountRandom = _butterflyStartAmountRandom;
+        butterflyStartAmountGene = _butterflyStartAmountGene;
+        maximumKills = _maximumKills;
+        minimumKills = _minimumKills;
+        butterflyRenderMode = _butterflyRenderMode;
+        butterflyRoundSpawnAmount = _butterflyRoundSpawnAmount;
+        healthAmount = _healthAmount;
+
+        resetEverythingOnNextGen = _resetEverythingOnNextGen;
+        keepButterAmount = _keepButterAmount;
+        noSafeClick = _noSafeClick;
+    }
 }

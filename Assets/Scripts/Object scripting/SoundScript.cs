@@ -9,6 +9,7 @@ public class SoundScript : MonoBehaviour
     void Start()
     {
         instance = this;
+        DontDestroyOnLoad(gameObject);
     }
 
     public static SoundScript Instance

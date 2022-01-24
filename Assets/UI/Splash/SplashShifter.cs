@@ -7,7 +7,7 @@ using UnityEngine.UIElements;
 public class SplashShifter : MonoBehaviour
 {
     [SerializeField]
-    Button restart, main, exit;
+    Button restart, main, exit, graph;
     Label score;
 
     private void Start()
@@ -21,12 +21,14 @@ public class SplashShifter : MonoBehaviour
 
         restart = root.Q<Button>("restart-game");
         main = root.Q<Button>("main-menu");
+        graph = root.Q<Button>("graph-stats");
         score = root.Q<Label>("score");
         //exit = root.Q<Button>("exit-game");
 
         score.text = GetComponent<GameManager>().GetScore().ToString();
         restart.clicked += GetComponent<LoadSceneFunctions>().RestarGametPress;
-        main.clicked += GetComponent<LoadSceneFunctions>().BackToMain; 
+        main.clicked += GetComponent<LoadSceneFunctions>().BackToMain;
+        graph.clicked += GetComponent<LoadSceneFunctions>().ToGraph;
         //exit.clicked += GetComponent<LoadSceneFunctions>().ExitGamePress;
     }
 
