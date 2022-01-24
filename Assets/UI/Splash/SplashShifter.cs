@@ -58,5 +58,5 @@ public class SplashShifter : MonoBehaviour
         GetComponent<UIDocument>().enabled = false;
     }
 
-    
+
 }
