@@ -464,6 +464,7 @@ public class GameManager : MonoBehaviour
             SetScore();
             butterfliesRemaining--;
             butterfly.transform.parent = deadButterContainer.transform;
+            butterfly.GetComponent<MeshCollider>().enabled = false;
             butterfly.GetComponent<MeshFilter>().mesh = destroyedButterfly;
             deadButterflies.Add(butterfly);
             if (!noSafeClick) { spriteOverlayMan.GetComponent<SpriteOverlay>().RemoveKlick(); roundAllowedClicks--; }
