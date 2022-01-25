@@ -6,27 +6,27 @@ public class GraphScript : MonoBehaviour
 {
     public Material mat;
     public GameObject graphBoard;
-    public int timeValue;
-    public int maxValue;
-    public int geneAmount;
+    int timeValue; //
+    public int maxValue; //
+    int colorAmount; //
     //LineRenderer lineRenderer;
     Vector3[] vertices;
     //Vector2[] uv;
     Vector3 origo;
-    int[] values;
-    int[,] genesArr;
+    List<StatSave> values; //
+    int[,] colorValueArr;
     int[] triangles;
     Color[] graphColors;
     // Start is called before the first frame update
     void Start()
     {
-        values = new int[timeValue+1];
+        GetVariables();
+        
         vertices = new Vector3[(timeValue+1)*2];
-        genesArr = new int[geneAmount, timeValue + 1];
+        //colorValueArr = new int[colorAmount, timeValue + 1];
         //int[] triangles = new int[timeValue+3];
-
         SetColors();
-        RandomizeValues();
+        //RandomizeValues();
         
         origo = new Vector3(graphBoard.transform.position.x - (graphBoard.transform.localScale.x / 2), graphBoard.transform.position.y - (graphBoard.transform.localScale.y / 2), 0);
         triangles = new int[(timeValue + 1) * 6];
@@ -67,7 +67,7 @@ public class GraphScript : MonoBehaviour
         
     }
 
-    void RandomizeValues()
+    /*void RandomizeValues()
     {
         for (int i = 0; i < timeValue + 1; i++)
         {
@@ -75,25 +75,25 @@ public class GraphScript : MonoBehaviour
         }
         for (int i = 0; i < timeValue + 1; i++)
         {
-            int remainingValues = values[i];
-            for (int j = 0; j < geneAmount; j++)
+            StatSave remainingValues = values[i];
+            for (int j = 0; j < colorAmount; j++)
             {
-                if (j == geneAmount - 1)
+                if (j == colorAmount - 1)
                 {
-                    genesArr[j, i] = remainingValues;
+                    colorValueArr[j, i] = remainingValues;
                 }
                 else
                 {
-                    genesArr[j, i] = Random.Range(0, remainingValues + 1);
-                    remainingValues -= genesArr[j, i];
+                    colorValueArr[j, i] = Random.Range(0, remainingValues + 1);
+                    remainingValues -= colorValueArr[j, i];
                 }
             }
         }
-    }
+    }*/
 
     void CreateMeshes()
     {
-        for (int i = 0; i < geneAmount; i++)
+        for (int i = 0; i < colorAmount; i++)
         {
             vertices = new Vector3[(timeValue + 1) * 2];
             triangles = new int[(timeValue + 1) * 6];
@@ -128,13 +128,13 @@ public class GraphScript : MonoBehaviour
         for (int j = 0; j < (timeValue+1) * 2; j += 2)
         {
 
-            if (index == geneAmount-1)
+            if (index == colorAmount-1)
             {
-                vertices[j] = new Vector3(origo.x + (valuesIndex * (graphBoard.transform.localScale.x / timeValue)), origo.y + (values[valuesIndex] * (graphBoard.transform.localScale.y / maxValue) * 0.75f), graphBoard.transform.position.z - 1);
+                vertices[j] = new Vector3(origo.x + (valuesIndex * (graphBoard.transform.localScale.x / timeValue)), origo.y + (values[valuesIndex].populationAmount * (graphBoard.transform.localScale.y / maxValue) * 0.75f), graphBoard.transform.position.z - 1);
             }
             else
             {
-                vertices[j] = new Vector3(origo.x + (valuesIndex * (graphBoard.transform.localScale.x / timeValue)), origo.y + ((values[valuesIndex] * (graphBoard.transform.localScale.y / maxValue) * 0.75f) * (((float)genesArr[index , valuesIndex] + (float)GetOffset(index, valuesIndex)) / (float)values[valuesIndex])), graphBoard.transform.position.z - 1);
+                vertices[j] = new Vector3(origo.x + (valuesIndex * (graphBoard.transform.localScale.x / timeValue)), origo.y + ((values[valuesIndex].populationAmount * (graphBoard.transform.localScale.y / maxValue) * 0.75f) * (((float)colorValueArr[index , valuesIndex] + (float)GetOffset(index, valuesIndex)) / (float)values[valuesIndex].populationAmount)), graphBoard.transform.position.z - 1);
             }
 
             if (index == 0)
@@ -143,7 +143,7 @@ public class GraphScript : MonoBehaviour
             }
             else
             {
-                vertices[j + 1] = new Vector3(origo.x + (valuesIndex * (graphBoard.transform.localScale.x / timeValue)), origo.y + ((values[valuesIndex] * (graphBoard.transform.localScale.y / maxValue) * 0.75f) * (((float)genesArr[index - 1, valuesIndex] + +(float)GetOffset(index-1, valuesIndex)) / (float)values[valuesIndex])), graphBoard.transform.position.z - 1);
+                vertices[j + 1] = new Vector3(origo.x + (valuesIndex * (graphBoard.transform.localScale.x / timeValue)), origo.y + ((values[valuesIndex].populationAmount * (graphBoard.transform.localScale.y / maxValue) * 0.75f) * (((float)colorValueArr[index - 1, valuesIndex] + +(float)GetOffset(index-1, valuesIndex)) / (float)values[valuesIndex].populationAmount)), graphBoard.transform.position.z - 1);
             }
 
             //Debug.Log("Success!")
@@ -174,7 +174,7 @@ public class GraphScript : MonoBehaviour
         float offset = 0;
         for(int i = 0; i < index; i++)
         {
-            offset += (float)genesArr[i, valuesIndex];
+            offset += (float)colorValueArr[i, valuesIndex];
         }
         return offset;
     }
@@ -186,5 +186,44 @@ public class GraphScript : MonoBehaviour
                                     new Color(0.3f, 0.8f, 0.8f), new Color(0.85f, 0.4f, 0.7f), new Color(0.5f, 0.35f, 0.25f), 
                                     new Color(0.6f, 0.25f, 0.25f), new Color(0.3f, 0.5f, 0.25f), new Color(0.2f, 0.2f, 0.4f), 
                                     new Color(0.3f, 0.2f, 0.4f), new Color(0.4f, 0.2f, 0.35f), new Color(0.25f, 0.4f, 0.4f) };
+    }
+
+    public void GetVariables()
+    {
+        timeValue = SoundScript.timeValue;
+        Debug.Log(timeValue);
+        colorAmount = SoundScript.colorValue;
+        Debug.Log(colorAmount);
+        values = SoundScript.values;
+
+        Debug.Log(values.Count);
+        colorValueArr = new int[colorAmount, timeValue + 1];
+        for(int i = 0; i < values.Count; i++)
+        {
+            bool[][] arrData = values[i].GeneData;
+            for (int j = 0; j < arrData.Length; j++)
+            {
+                int gene = 0;
+                for(int k = 0; k < arrData[j].Length; k++)
+                {
+                    if(arrData[j][k])
+                    {
+                        gene++;
+                    }
+                    else
+                    {
+                        break;
+                    }
+                }
+                colorValueArr[gene, i]++;
+            }
+        }
+        for(int i = 0; i < values.Count; i++)
+        {
+            if(maxValue < values[i].populationAmount)
+            {
+                maxValue = values[i].populationAmount;
+            }
+        }
     }
 }
