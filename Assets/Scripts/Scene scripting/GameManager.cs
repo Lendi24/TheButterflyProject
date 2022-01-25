@@ -1,7 +1,6 @@
-using System.Collections;
 using System.Collections.Generic;
-using UnityEngine.UIElements;
 using UnityEngine;
+using UnityEngine.UIElements;
 
 public class GameManager : MonoBehaviour
 {
@@ -9,7 +8,7 @@ public class GameManager : MonoBehaviour
     GameObject butterfly, butterContainer, deadButterContainer, spriteOverlayMan;
 
     [SerializeField]
-    VisualTreeAsset preHuntSplash, gameOverSplash;
+    VisualTreeAsset preHuntSplash, gameOverSplash, pauseMenu;
 
     [SerializeField]
     Material backgroundPattern, animalMaterial;
@@ -28,11 +27,11 @@ public class GameManager : MonoBehaviour
     int roundAllowedClicks;
 
     [SerializeField]
-    bool resetEverythingOnNextGen, noSafeClick, keepButterAmount;
+    bool resetEverythingOnNextGen, noSafeClick, keepButterAmount, evolveOnAliveAnimals;
 
     private bool isPaused;
     private int butterfliesRemaining, gameState;
-    string keyPrefix = "modelMatch";
+    readonly string keyPrefix = "modelMatch";
     List<GameObject> deadButterflies;
     List<StatSave> statsLogList = new List<StatSave>();
     static int rounds;
@@ -48,6 +47,7 @@ public class GameManager : MonoBehaviour
     // Start is called before the first frame update
     public void Start()
     {
+        Time.timeScale = 1;
         GetComponent<SplashShifter>().ShowSplash(0, preHuntSplash);
         Physics.autoSyncTransforms = true;
         GetVariables();
@@ -126,13 +126,13 @@ public class GameManager : MonoBehaviour
             Debug.LogWarning("No background-texture selected!\nDefaulting to perlin noise...");
         }
 
-        int minAllowed = butterflyStartAmountGene * (butterflyGeneLength+1);
+        int minAllowed = butterflyStartAmountGene * (butterflyGeneLength + 1);
         if (butterflyStartAmountRandom < minAllowed)
         {
-            Debug.LogError("ERROR: Misconfigured!\n"+
-            "ButterflyStartAmountRandom is the total amount of butterflies spawned at start.\n"+
-            "Butterfly start amount gene spawns one butterfly of each gene. (butterGeneStart*(ButterGeneLength+1))\n"+
-            "To fix this, ButterflyStartAmountRandom will be set to: "+minAllowed);
+            Debug.LogError("ERROR: Misconfigured!\n" +
+            "ButterflyStartAmountRandom is the total amount of butterflies spawned at start.\n" +
+            "Butterfly start amount gene spawns one butterfly of each gene. (butterGeneStart*(ButterGeneLength+1))\n" +
+            "To fix this, ButterflyStartAmountRandom will be set to: " + minAllowed);
             butterflyStartAmountRandom = minAllowed;
 
             ResetVariables();
@@ -247,7 +247,7 @@ public class GameManager : MonoBehaviour
         try
         {
             string modelName = _newButterfly.GetComponent<MeshFilter>().sharedMesh.name;
-            if (!PlayerPrefs.HasKey(GetVariable.GetKeyPrefix() + modelName)) TextureMatchManager.reset();
+            if (!PlayerPrefs.HasKey(GetVariable.GetKeyPrefix() + modelName)) TextureMatchManager.Reset();
 
             string[] tempData = PlayerPrefs.GetString(keyPrefix + modelName).Split(':');
 
@@ -290,26 +290,24 @@ public class GameManager : MonoBehaviour
 
     }
 
+    void PauseGame()
+    {
+        if (isPaused)
+        {
+            Time.timeScale = 0f;
+            GetComponent<SplashShifter>().ShowSplash(0, pauseMenu);
+        }
+        else
+        {
+            Time.timeScale = 1;
+            RandomizeAnimalPos();
+            GetComponent<SplashShifter>().HideSplash();
+        }
+    }
+
+
     private void Update()
     {
-        if (Input.GetKeyDown(KeyCode.Escape))
-        {
-            isPaused = !isPaused;
-            PauseGame();
-        }
-
-        void PauseGame()
-        {
-            if (isPaused)
-            {
-                Time.timeScale = 0f;
-            }
-            else
-            {
-                Time.timeScale = 1;
-            }
-        }
-
         switch (gameState)
         {
             case 1:
@@ -325,6 +323,12 @@ public class GameManager : MonoBehaviour
                 break;
 
             case 2:
+                if (Input.GetKeyDown(KeyCode.Escape))
+                {
+                    isPaused = !isPaused;
+                    PauseGame();
+                }
+
                 if (noSafeClick && Input.GetMouseButtonDown(0) && !isPaused)
                 {
                     roundAllowedClicks--;
@@ -335,7 +339,7 @@ public class GameManager : MonoBehaviour
                 { //Checks if Timer is finished. Time is dependant on an exponential value,
                   //y=C*a^x. Time decreases the more rounds have passed.
                   //postGameSplash.GetComponent<Canvas>().enabled = true;
-                    statsLogList.Add(new StatSave() { populationAmount = butterContainer.transform.childCount, GeneData = butterContainer.GetComponent<ButterCollection>().GetAnimalGenes() });
+
                     if ((butterflyStartAmountRandom - butterfliesRemaining) < minimumKills)
                     {
                         healthAmount--;
@@ -362,13 +366,15 @@ public class GameManager : MonoBehaviour
                     {
                         gameState = 3;
                     }
+
+                    statsLogList.Add(new StatSave() { populationAmount = butterContainer.transform.childCount, GeneData = butterContainer.GetComponent<ButterCollection>().GetAnimalGenes() });
                 }
 
                 break;
 
             case 3:
                 rounds++;
-                for(int i = 0; i < deadButterflies.Count; i++)
+                for (int i = 0; i < deadButterflies.Count; i++)
                 {
                     Destroy(deadButterflies[i].gameObject);
                 }
@@ -376,32 +382,55 @@ public class GameManager : MonoBehaviour
 
                 Debug.Log("continu");
 
-                foreach (Transform animal in butterContainer.transform)
-                {
-                    animal.transform.position = new Vector3(0, 0, 5);
-                }
-
-                for (int i = 0; i < butterContainer.transform.childCount; i++)
-                {
-                    Quaternion newRot = Quaternion.Euler(0, 0, Random.Range(1, 360));
-                    Vector3 newPos = RandomButterPos(newRot);
-
-                    butterContainer.transform.GetChild(i).transform.position = newPos;
-                    butterContainer.transform.GetChild(i).rotation = newRot;
-                }
+                RandomizeAnimalPos();
 
                 if (keepButterAmount)
                 {
                     butterflyRoundSpawnAmount = deadButterContainer.transform.childCount;
                 }
+                //InvertGenes
 
-                for (int i = 0; i < butterflyRoundSpawnAmount; i++) SpawnButterfly(GeneticManager.EvolveNewAnimal(butterContainer.GetComponent<ButterCollection>().GetAnimalGenes(), butterflyGeneLength));
+                bool[][] genes;
+                if (evolveOnAliveAnimals)
+                {
+                    genes = butterContainer.GetComponent<ButterCollection>().GetAnimalGenes();
+                }
+                else
+                {
+                    genes = GeneticManager.InvertGenes(deadButterContainer.GetComponent<ButterCollection>().GetAnimalGenes());
+                }
+
+                for (int i = 0; i < butterflyRoundSpawnAmount; i++)
+                {
+                    SpawnButterfly(GeneticManager.EvolveNewAnimal(genes, butterflyGeneLength));
+                }
+
                 ResetVariables();
                 break;
 
             default:
                 break;
         }
+    }
+
+    void RandomizeAnimalPos()
+    {
+        //Move outside box. This will keep auto-col detect from triggering
+        foreach (Transform animal in butterContainer.transform)
+        {
+            animal.transform.position = new Vector3(0, 0, 5);
+        }
+
+        //Randomize pos and rot
+        for (int i = 0; i < butterContainer.transform.childCount; i++)
+        {
+            Quaternion newRot = Quaternion.Euler(0, 0, Random.Range(1, 360));
+            Vector3 newPos = RandomButterPos(newRot);
+
+            butterContainer.transform.GetChild(i).transform.position = newPos;
+            butterContainer.transform.GetChild(i).rotation = newRot;
+        }
+
     }
 
     void ClearBoard()
@@ -425,7 +454,7 @@ public class GameManager : MonoBehaviour
 
     public float GetHuntTime()
     {
-        if(huntTime * Mathf.Pow(huntTimeReducePercent, rounds) > huntTimeMin)
+        if (huntTime * Mathf.Pow(huntTimeReducePercent, rounds) > huntTimeMin)
         {
             return huntTime * Mathf.Pow(huntTimeReducePercent, rounds);
         }
@@ -458,6 +487,7 @@ public class GameManager : MonoBehaviour
             SetScore();
             butterfliesRemaining--;
             butterfly.transform.parent = deadButterContainer.transform;
+            butterfly.GetComponent<MeshCollider>().enabled = false;
             butterfly.GetComponent<MeshFilter>().mesh = destroyedButterfly;
             deadButterflies.Add(butterfly);
             if (!noSafeClick) { spriteOverlayMan.GetComponent<SpriteOverlay>().RemoveKlick(); roundAllowedClicks--; }

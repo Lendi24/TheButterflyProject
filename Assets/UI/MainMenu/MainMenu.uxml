@@ -9,8 +9,8 @@
             <ui:VisualElement name="MenuButtonContainer">
                 <ui:Button text="Start" display-tooltip-when-elided="true" name="menu-button-start" style="position: relative; top: 0;" />
                 <ui:Button text="Load Custom" display-tooltip-when-elided="true" name="menu-button-load" tabindex="1" />
-                <ui:Button text="Settings" display-tooltip-when-elided="true" name="menu-button-settings" tabindex="2" />
                 <ui:Button text="Credits" display-tooltip-when-elided="true" name="menu-button-credits" tabindex="3" />
+                <ui:Button text="Exit" display-tooltip-when-elided="true" name="menu-button-exit" tabindex="2" />
             </ui:VisualElement>
         </ui:VisualElement>
     </ui:VisualElement>
