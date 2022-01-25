@@ -367,7 +367,6 @@ public class GameManager : MonoBehaviour
                         gameState = 3;
                     }
 
-                    statsLogList.Add(new StatSave() { populationAmount = butterContainer.transform.childCount, GeneData = butterContainer.GetComponent<ButterCollection>().GetAnimalGenes() });
                 }
 
                 break;
@@ -404,6 +403,8 @@ public class GameManager : MonoBehaviour
                 {
                     SpawnButterfly(GeneticManager.EvolveNewAnimal(genes, butterflyGeneLength));
                 }
+
+                statsLogList.Add(new StatSave() { populationAmount = butterContainer.transform.childCount, GeneData = butterContainer.GetComponent<ButterCollection>().GetAnimalGenes() });
 
                 ResetVariables();
                 break;
