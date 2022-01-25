@@ -1,7 +1,6 @@
-using System.Collections;
 using System.Collections.Generic;
-using UnityEngine.UIElements;
 using UnityEngine;
+using UnityEngine.UIElements;
 
 public class GameManager : MonoBehaviour
 {
@@ -28,11 +27,11 @@ public class GameManager : MonoBehaviour
     int roundAllowedClicks;
 
     [SerializeField]
-    bool resetEverythingOnNextGen, noSafeClick, keepButterAmount;
+    bool resetEverythingOnNextGen, noSafeClick, keepButterAmount, evolveOnAliveAnimals;
 
     private bool isPaused;
     private int butterfliesRemaining, gameState;
-    string keyPrefix = "modelMatch";
+    readonly string keyPrefix = "modelMatch";
     List<GameObject> deadButterflies;
     List<StatSave> statsLogList = new List<StatSave>();
 
@@ -126,13 +125,13 @@ public class GameManager : MonoBehaviour
             Debug.LogWarning("No background-texture selected!\nDefaulting to perlin noise...");
         }
 
-        int minAllowed = butterflyStartAmountGene * (butterflyGeneLength+1);
+        int minAllowed = butterflyStartAmountGene * (butterflyGeneLength + 1);
         if (butterflyStartAmountRandom < minAllowed)
         {
-            Debug.LogError("ERROR: Misconfigured!\n"+
-            "ButterflyStartAmountRandom is the total amount of butterflies spawned at start.\n"+
-            "Butterfly start amount gene spawns one butterfly of each gene. (butterGeneStart*(ButterGeneLength+1))\n"+
-            "To fix this, ButterflyStartAmountRandom will be set to: "+minAllowed);
+            Debug.LogError("ERROR: Misconfigured!\n" +
+            "ButterflyStartAmountRandom is the total amount of butterflies spawned at start.\n" +
+            "Butterfly start amount gene spawns one butterfly of each gene. (butterGeneStart*(ButterGeneLength+1))\n" +
+            "To fix this, ButterflyStartAmountRandom will be set to: " + minAllowed);
             butterflyStartAmountRandom = minAllowed;
 
             ResetVariables();
@@ -247,7 +246,7 @@ public class GameManager : MonoBehaviour
         try
         {
             string modelName = _newButterfly.GetComponent<MeshFilter>().sharedMesh.name;
-            if (!PlayerPrefs.HasKey(GetVariable.GetKeyPrefix() + modelName)) TextureMatchManager.reset();
+            if (!PlayerPrefs.HasKey(GetVariable.GetKeyPrefix() + modelName)) TextureMatchManager.Reset();
 
             string[] tempData = PlayerPrefs.GetString(keyPrefix + modelName).Split(':');
 
@@ -371,7 +370,7 @@ public class GameManager : MonoBehaviour
 
             case 3:
                 rounds++;
-                for(int i = 0; i < deadButterflies.Count; i++)
+                for (int i = 0; i < deadButterflies.Count; i++)
                 {
                     Destroy(deadButterflies[i].gameObject);
                 }
@@ -385,8 +384,23 @@ public class GameManager : MonoBehaviour
                 {
                     butterflyRoundSpawnAmount = deadButterContainer.transform.childCount;
                 }
+                //InvertGenes
 
-                for (int i = 0; i < butterflyRoundSpawnAmount; i++) SpawnButterfly(GeneticManager.EvolveNewAnimal(butterContainer.GetComponent<ButterCollection>().GetAnimalGenes(), butterflyGeneLength));
+                bool[][] genes;
+                if (evolveOnAliveAnimals)
+                {
+                    genes = butterContainer.GetComponent<ButterCollection>().GetAnimalGenes();
+                }
+                else
+                {
+                    genes = GeneticManager.InvertGenes(deadButterContainer.GetComponent<ButterCollection>().GetAnimalGenes());
+                }
+
+                for (int i = 0; i < butterflyRoundSpawnAmount; i++)
+                {
+                    SpawnButterfly(GeneticManager.EvolveNewAnimal(genes, butterflyGeneLength));
+                }
+
                 ResetVariables();
                 break;
 
@@ -436,7 +450,7 @@ public class GameManager : MonoBehaviour
 
     public float GetHuntTime()
     {
-        if(huntTime * Mathf.Pow(huntTimeReducePercent, rounds) > huntTimeMin)
+        if (huntTime * Mathf.Pow(huntTimeReducePercent, rounds) > huntTimeMin)
         {
             return huntTime * Mathf.Pow(huntTimeReducePercent, rounds);
         }

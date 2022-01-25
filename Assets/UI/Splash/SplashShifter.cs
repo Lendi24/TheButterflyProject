@@ -26,7 +26,7 @@ public class SplashShifter : MonoBehaviour
             restart.clicked += GetComponent<LoadSceneFunctions>().StartLastGameMode;
         }
 
-        catch (System.Exception e)
+        catch (System.Exception)
         {
             //Debug.LogError(e);
         }
@@ -38,7 +38,7 @@ public class SplashShifter : MonoBehaviour
             main.clicked += GetComponent<LoadSceneFunctions>().BackToMain;
         }
 
-        catch (System.Exception e)
+        catch (System.Exception)
         {
             //Debug.LogError(e);
         }
@@ -50,7 +50,7 @@ public class SplashShifter : MonoBehaviour
             graph.clicked += GetComponent<LoadSceneFunctions>().ToGraph;
         }
 
-        catch (System.Exception e)
+        catch (System.Exception)
         {
             //Debug.LogError(e);
         }
@@ -61,7 +61,7 @@ public class SplashShifter : MonoBehaviour
             score.text = GetComponent<GameManager>().GetScore().ToString();
         }
 
-        catch (System.Exception e)
+        catch (System.Exception)
         {
             //Debug.LogError(e);
         }

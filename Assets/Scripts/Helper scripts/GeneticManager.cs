@@ -84,12 +84,36 @@ public class GeneticManager : MonoBehaviour
 
         return geneTrueLength / genetics.Length;
     }
-    
-    public static bool[] EvolveNewAnimal(bool[][] animalsInPlay, int butterflyGeneLength)
+
+    public static bool[] InvertGenes(bool[] genes)
+    {
+        for (int i = 0; i < genes.Length; i++)
+        {
+            genes[i] = !genes[i];
+        }
+
+        return genes;
+    }
+
+    public static bool[][] InvertGenes(bool[][] genes)
+    {
+        for (int i = 0; i < genes.Length; i++)
+        {
+            for (int j = 0; j < genes[i].Length; j++)
+            {
+                genes[i][j] = !genes[i][j];
+            }
+        }
+
+        return genes;
+    }
+
+
+    public static bool[] EvolveNewAnimal(bool[][] animalsAsRef, int butterflyGeneLength)
     {
         int newTrueGeneLength;
 
-        if (animalsInPlay.Length <= 0)
+        if (animalsAsRef.Length <= 0)
         {
             newTrueGeneLength = lastSpawnedTrueGeneLen;
         }
@@ -97,15 +121,15 @@ public class GeneticManager : MonoBehaviour
         else
         {
             int geneTrueLength = 0;
-            for (int i = 0; i < animalsInPlay.Length; i++)
+            for (int i = 0; i < animalsAsRef.Length; i++)
             {
-                for (int j = 0; j < animalsInPlay[i].Length && animalsInPlay[i][j]; j++)
+                for (int j = 0; j < animalsAsRef[i].Length && animalsAsRef[i][j]; j++)
                 {
                     geneTrueLength++;
                 }
             }
 
-            newTrueGeneLength = geneTrueLength / animalsInPlay.Length;
+            newTrueGeneLength = geneTrueLength / animalsAsRef.Length;
             if (lastSpawnedTrueGeneLen == newTrueGeneLength) newTrueGeneLength += Mutation(-1, 1);
             lastSpawnedTrueGeneLen = newTrueGeneLength;
         }

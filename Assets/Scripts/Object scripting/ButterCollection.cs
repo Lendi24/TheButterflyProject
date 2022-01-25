@@ -14,6 +14,6 @@ public class ButterCollection : MonoBehaviour
             animalGenes[i] = transform.GetChild(i).GetComponent<ButterflyBehaviour>().genes;
         }
 
-        return animalGenes;
+        return new List<bool[]>(animalGenes).ToArray();
     }
 }
