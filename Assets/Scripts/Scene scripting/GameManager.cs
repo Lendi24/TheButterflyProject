@@ -20,14 +20,14 @@ public class GameManager : MonoBehaviour
     Mesh destroyedButterfly;
 
     [SerializeField]
-    float preHuntTime, huntTime, tilesPerUnit, huntTimeReducePercent, huntTimeMin;
+    float preHuntTime, huntTime, tilesPerUnit, huntTimeReducePercent, huntTimeMin, renderLerp, renderPerlin;
 
     [SerializeField]
-    int butterflyGeneLength, butterflyStartAmountRandom, butterflyStartAmountGene, maximumKills, minimumKills, butterflyRenderMode, butterflyRoundSpawnAmount, healthAmount, score;
+    int butterflyGeneLength, butterflyStartAmountRandom, butterflyStartAmountGene, maximumKills, minimumKills, butterflyRoundSpawnAmount, healthAmount, score;
     int roundAllowedClicks;
 
     [SerializeField]
-    bool resetEverythingOnNextGen, noSafeClick, keepButterAmount, evolveOnAliveAnimals;
+    bool resetEverythingOnNextGen, noSafeClick, keepButterAmount, evolveOnAliveAnimals, renderButterBackground;
 
     private bool isPaused;
     private int butterfliesRemaining, gameState;
@@ -62,11 +62,23 @@ public class GameManager : MonoBehaviour
     {
         gameObject.transform.localScale = GameBoardResizer.GetGameBoardSize();
 
+        //Making size correct
         GetComponent<Renderer>().material = backgroundPattern;
         GetComponent<Renderer>().material.SetTexture("_MainTex", backgroundTexture);
         GetComponent<Renderer>().material.SetTextureScale("_MainTex", new Vector2(
             GetComponent<Renderer>().bounds.size.x * tilesPerUnit,
             GetComponent<Renderer>().bounds.size.y * tilesPerUnit));
+
+        //Shader render mode
+        GetComponent<Renderer>().material.SetFloat("_LerpValue", renderLerp);
+        GetComponent<Renderer>().material.SetFloat("_enablePerlin", renderPerlin);
+
+        GetComponent<Renderer>().material.SetTexture("_MainTex", null);
+        GetComponent<Renderer>().material.SetTexture("_SecondaryTex", backgroundTexture);
+
+        // 1,0: esy
+        // 1,1: mid
+        // 0,1: hrd
 
         /*foreach(Transform selectedButterfly in butterContainer.GetComponentInChildren<Transform>())
         {
@@ -91,13 +103,17 @@ public class GameManager : MonoBehaviour
         butterflyStartAmountGene = ButterHuntVariables.butterflyStartAmountGene;
         maximumKills = ButterHuntVariables.maximumKills;
         minimumKills = ButterHuntVariables.minimumKills;
-        butterflyRenderMode = ButterHuntVariables.butterflyRenderMode;
         butterflyRoundSpawnAmount = ButterHuntVariables.butterflyRoundSpawnAmount;
         healthAmount = ButterHuntVariables.healthAmount;
 
         resetEverythingOnNextGen = ButterHuntVariables.resetEverythingOnNextGen;
         noSafeClick = ButterHuntVariables.noSafeClick;
         keepButterAmount = ButterHuntVariables.keepButterAmount;
+
+        renderLerp = ButterHuntVariables.renderLerp;
+        renderPerlin = ButterHuntVariables.renderPerlin;
+        renderButterBackground = ButterHuntVariables.renderButterBackground;
+
     }
 
     void ResetVariables()
@@ -198,46 +214,19 @@ public class GameManager : MonoBehaviour
         float blendIn = GeneticManager.BlendInCalc(genetics);
 
         Renderer butterRender = newButterfly.GetComponent<Renderer>();
-        Renderer boardRender = GetComponent<Renderer>();
 
-        switch (butterflyRenderMode)
+        TextureMatchedRender(newButterfly);
+
+        if (renderButterBackground)
         {
-            case 0://alpha mode !THIS IS OLD! Use camo shader for this effect with transparant material if possible!
-                Color newColor = Color.white;
-                Material newMat = new Material(Shader.Find("Transparent/Diffuse"));
-                newColor.a = blendIn;
-                butterRender.material = newMat;
-                butterRender.material.color = newColor;
-                boardRender.material.SetFloat("_enablePerlin", 0);
-                break;
+            butterRender.material.SetFloat("_LerpValue", blendIn);
+            butterRender.material.SetFloat("_enablePerlin", renderPerlin);
+        }
 
-            case 1://texture-matched mode
-                TextureMatchedRender(newButterfly);
-                butterRender.material.SetFloat("_LerpValue", blendIn);
-                butterRender.material.SetFloat("_enablePerlin", 0);
-                boardRender.material.SetFloat("_enablePerlin", 0);
-                break;
-
-            case 2://Hybride
-                TextureMatchedRender(newButterfly);
-                butterRender.material.SetFloat("_LerpValue", blendIn);
-                butterRender.material.SetFloat("_enablePerlin", blendIn);
-                boardRender.material.SetFloat("_enablePerlin", 1);
-                break;
-
-            case 3://texture-matched perlin mode
-                TextureMatchedRender(newButterfly);
-                butterRender.material.SetFloat("_LerpValue", blendIn);
-                butterRender.material.SetFloat("_enablePerlin", blendIn);
-                boardRender.material.SetFloat("_enablePerlin", 1);
-
-                butterRender.material.SetTexture("_SecondaryTex", null);
-                boardRender.material.SetTexture("_SecondaryTex", null);
-                break;
-
-
-            default:
-                break;
+        else
+        {
+            butterRender.material.SetTexture("_SecondaryTex", null);
+            butterRender.material.SetFloat("_enablePerlin", blendIn);
         }
     }
 
@@ -396,7 +385,7 @@ public class GameManager : MonoBehaviour
                 }
                 else
                 {
-                    genes = GeneticManager.InvertGenes(deadButterContainer.GetComponent<ButterCollection>().GetAnimalGenes());
+                   genes = GeneticManager.InvertGenes(deadButterContainer.GetComponent<ButterCollection>().GetAnimalGenes());
                 }
 
                 for (int i = 0; i < butterflyRoundSpawnAmount; i++)
