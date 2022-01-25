@@ -98,12 +98,12 @@ public class CustomButterMatch : MonoBehaviour
 
     public void delete()
     {
-        TextureMatchManager.delete(modelName);
+        TextureMatchManager.Delete(modelName);
     }
 
     public void reset()
     {
-        TextureMatchManager.reset();
+        TextureMatchManager.Reset();
         Load();
     }
 }

@@ -59,7 +59,8 @@ public class LoadSceneFunctions : MonoBehaviour
     }
 
     //Shared
-    public void RestarGametPress()
+    
+    public void RestartGamePress()
     {
         SoundScript.PlayAudio(audioClip);
         GetComponent<GameManager>().Start();

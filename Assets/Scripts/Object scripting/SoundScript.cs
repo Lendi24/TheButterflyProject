@@ -17,12 +17,6 @@ public class SoundScript : MonoBehaviour
         get { return instance; }
     }
 
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
-
     public static void PlayAudio(AudioClip audioClip)
     {
         instance.gameObject.GetComponent<AudioSource>().clip = audioClip;

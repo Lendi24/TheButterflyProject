@@ -30,7 +30,7 @@ public class TextureMatchManager : MonoBehaviour
 
     public static void Save(string modelName, float butterMatchX, float butterMatchY, bool squareMatch)
     {
-        if (canSave(modelName, butterMatchX, butterMatchY))
+        if (CanSave(modelName, butterMatchX, butterMatchY))
         {
             PlayerPrefs.SetString(GetVariable.GetKeyPrefix() + modelName, butterMatchX + ":" + butterMatchY + ":" + squareMatch);
             Debug.Log("Saving model '" + modelName + "', with MatchX:" + butterMatchX + ", MatchY:" + butterMatchY + " and squareMatch set to " + squareMatch);
@@ -49,7 +49,10 @@ public class TextureMatchManager : MonoBehaviour
             float butterMatchX = float.Parse(tempData[0]);
             float butterMatchY = float.Parse(tempData[1]);
 
-            ModelTextureMap loadedObject = new ModelTextureMap(modelName, squareMatch, butterMatchX, butterMatchY);
+            ModelTextureMap loadedObject = new ModelTextureMap(_modelName: modelName,
+                                                               _squareMatch: squareMatch,
+                                                               _butterMatchX: butterMatchX,
+                                                               _butterMatchY: butterMatchY);
 
             Debug.Log("Loading model '" + modelName + "', with MatchX:" + butterMatchX + ", MatchY:" + butterMatchY + " and squareMatch set to " + squareMatch);
             return loadedObject;
@@ -59,7 +62,7 @@ public class TextureMatchManager : MonoBehaviour
         return null;
     }
 
-    public static bool canSave(string modelName, float butterMatchX, float butterMatchY)
+    public static bool CanSave(string modelName, float butterMatchX, float butterMatchY)
     {
         bool canSave = true;
         //Can not save if:
@@ -70,7 +73,7 @@ public class TextureMatchManager : MonoBehaviour
         return canSave;
     }
 
-    public static void delete(string modelName)
+    public static void Delete(string modelName)
     {
         if (PlayerPrefs.HasKey(GetVariable.GetKeyPrefix() + modelName))
         {
@@ -81,7 +84,7 @@ public class TextureMatchManager : MonoBehaviour
         else { Debug.LogError("Model '" + modelName + "' does not exist!"); }
     }
 
-    public static void reset()
+    public static void Reset()
     {
         PlayerPrefs.SetString(GetVariable.GetKeyPrefix() + "Classic Butterfly", 117 + ":" + 117 + ":" + true);
         PlayerPrefs.SetString(GetVariable.GetKeyPrefix() + "ClassicButterfly", 117 + ":" + 117 + ":" + true);

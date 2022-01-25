@@ -12,12 +12,6 @@ public class Countdown : MonoBehaviour
     public float refillTime = 10;
     static float k;
 
-    private void Start()
-    {
-        //Set the max value to the refill time
-        
-    }
-
     public static void SetK(float time)
     {
         //Debug.Log("Look! Time! " + 1 /time);

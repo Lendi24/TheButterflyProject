@@ -12,45 +12,78 @@ public class SplashShifter : MonoBehaviour
 
     private void Start()
     {
-        GetComponent<LoadSceneFunctions>().RestarGametPress();
+        GetComponent<LoadSceneFunctions>().RestartGamePress();
     }
      
     private void AssignBittons()
     {
         var root = GetComponent<UIDocument>().rootVisualElement;
 
-        restart = root.Q<Button>("restart-game");
-        main = root.Q<Button>("main-menu");
-        graph = root.Q<Button>("graph-stats");
-        score = root.Q<Label>("score");
+
+        try
+        {
+            restart = root.Q<Button>("restart-game");
+            restart.clicked += GetComponent<LoadSceneFunctions>().StartLastGameMode;
+        }
+
+        catch (System.Exception)
+        {
+            //Debug.LogError(e);
+        }
+
+
+        try
+        {
+            main = root.Q<Button>("main-menu");
+            main.clicked += GetComponent<LoadSceneFunctions>().BackToMain;
+        }
+
+        catch (System.Exception)
+        {
+            //Debug.LogError(e);
+        }
+
+
+        try
+        {
+            graph = root.Q<Button>("graph-stats");
+            graph.clicked += GetComponent<LoadSceneFunctions>().ToGraph;
+        }
+
+        catch (System.Exception)
+        {
+            //Debug.LogError(e);
+        }
+
+        try
+        {
+            score = root.Q<Label>("score");
+            score.text = GetComponent<GameManager>().GetScore().ToString();
+        }
+
+        catch (System.Exception)
+        {
+            //Debug.LogError(e);
+        }
+
         //exit = root.Q<Button>("exit-game");
 
-        score.text = GetComponent<GameManager>().GetScore().ToString();
-        restart.clicked += GetComponent<LoadSceneFunctions>().RestarGametPress;
-        main.clicked += GetComponent<LoadSceneFunctions>().BackToMain;
-        graph.clicked += GetComponent<LoadSceneFunctions>().ToGraph;
         //exit.clicked += GetComponent<LoadSceneFunctions>().ExitGamePress;
     }
 
     public void ShowSplash(float time, VisualTreeAsset splash)
     {
         GetComponent<UIDocument>().visualTreeAsset = splash; 
-        GetComponent<UIDocument>().enabled = true;
+        GetComponent<UIDocument>().enabled = true; 
 
         if (time > 0)
         {
             //yield return new WaitForSeconds(time);
         }
 
-        try
-        {
-            AssignBittons();
-        }
+        AssignBittons();
 
-        catch (System.Exception e)
-        {
-            //Debug.LogError(e);
-        }
+
     }
 
     public void HideSplash()

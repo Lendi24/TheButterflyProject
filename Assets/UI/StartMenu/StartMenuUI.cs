@@ -26,4 +26,12 @@ public class StartMenuUI : MonoBehaviour
         backBtn.clicked += GetComponent<LoadSceneFunctions>().BackToMain;
 
     }
-}
+
+    private void Update()
+    {
+        if (Input.GetKeyDown(KeyCode.Escape))
+        {
+            GetComponent<LoadSceneFunctions>().BackToMain();
+        }
+    }
+ }
