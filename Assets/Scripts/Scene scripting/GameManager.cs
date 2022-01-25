@@ -338,7 +338,7 @@ public class GameManager : MonoBehaviour
                 { //Checks if Timer is finished. Time is dependant on an exponential value,
                   //y=C*a^x. Time decreases the more rounds have passed.
                   //postGameSplash.GetComponent<Canvas>().enabled = true;
-                    statsLogList.Add(new StatSave() { populationAmount = butterContainer.transform.childCount, GeneData = butterContainer.GetComponent<ButterCollection>().GetAnimalGenes() });
+
                     if ((butterflyStartAmountRandom - butterfliesRemaining) < minimumKills)
                     {
                         healthAmount--;
@@ -364,6 +364,8 @@ public class GameManager : MonoBehaviour
                     {
                         gameState = 3;
                     }
+
+                    statsLogList.Add(new StatSave() { populationAmount = butterContainer.transform.childCount, GeneData = butterContainer.GetComponent<ButterCollection>().GetAnimalGenes() });
                 }
 
                 break;
