@@ -47,6 +47,7 @@ public class GameManager : MonoBehaviour
     // Start is called before the first frame update
     public void Start()
     {
+        Time.timeScale = 1;
         GetComponent<SplashShifter>().ShowSplash(0, preHuntSplash);
         Physics.autoSyncTransforms = true;
         GetVariables();

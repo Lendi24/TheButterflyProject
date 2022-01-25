@@ -1,6 +1,9 @@
 <ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" xsi="http://www.w3.org/2001/XMLSchema-instance" engine="UnityEngine.UIElements" editor="UnityEditor.UIElements" noNamespaceSchemaLocation="../../../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
     <ui:VisualElement style="align-items: center; justify-content: center; position: relative; width: 100%; height: 100%;">
         <ui:Label text="~~Paused~~" display-tooltip-when-elided="true" name="paused" style="-unity-font-style: bold; font-size: 24px; color: rgb(255, 255, 255);" />
-        <ui:Label text="Press [ESC] to un-pause" display-tooltip-when-elided="true" name="PressEsc" style="color: rgb(255, 255, 255);" />
+        <ui:Label text="Press [ESC] to resume" display-tooltip-when-elided="true" name="PressEsc" style="color: rgb(255, 255, 255);" />
+        <ui:IMGUIContainer style="height: 20px;" />
+        <ui:Button text="Try again" display-tooltip-when-elided="true" name="restart-game" />
+        <ui:Button text="Main Menu" display-tooltip-when-elided="true" name="main-menu" />
     </ui:VisualElement>
 </ui:UXML>
