@@ -14,7 +14,7 @@ public class SplashShifter : MonoBehaviour
     {
         GetComponent<LoadSceneFunctions>().RestartGamePress();
     }
-     
+
     private void AssignBittons()
     {
         var root = GetComponent<UIDocument>().rootVisualElement;
@@ -91,5 +91,5 @@ public class SplashShifter : MonoBehaviour
         GetComponent<UIDocument>().enabled = false;
     }
 
-    
+
 }

@@ -23,7 +23,7 @@ public class GameManager : MonoBehaviour
     float preHuntTime, huntTime, tilesPerUnit, huntTimeReducePercent, huntTimeMin;
 
     [SerializeField]
-    int butterflyGeneLength, butterflyStartAmountRandom, butterflyStartAmountGene, maximumKills, minimumKills, butterflyRenderMode, butterflyRoundSpawnAmount, healthAmount, score, rounds;
+    int butterflyGeneLength, butterflyStartAmountRandom, butterflyStartAmountGene, maximumKills, minimumKills, butterflyRenderMode, butterflyRoundSpawnAmount, healthAmount, score;
     int roundAllowedClicks;
 
     [SerializeField]
@@ -34,6 +34,7 @@ public class GameManager : MonoBehaviour
     readonly string keyPrefix = "modelMatch";
     List<GameObject> deadButterflies;
     List<StatSave> statsLogList = new List<StatSave>();
+    static int rounds;
 
     /* Game States
     0-PreGame
@@ -349,6 +350,7 @@ public class GameManager : MonoBehaviour
                             case 0:
                                 GetComponent<SplashShifter>().ShowSplash(0, gameOverSplash);
                                 Debug.Log("U loose");
+                                SoundScript.SetVariables(rounds, butterflyGeneLength + 1, statsLogList);
                                 gameState = 4;//Failed! Health will be lost, energy will be lost or game will be lost here.
                                 break;
 
@@ -460,6 +462,11 @@ public class GameManager : MonoBehaviour
         {
             return huntTimeMin;
         }
+    }
+
+    void StoreValues(bool[] genetics)
+    {
+
     }
 
 
