@@ -20,7 +20,7 @@ public class SwitcherUSS : MonoBehaviour
     {
         uiMode = "none";
         targetResolutionWith = Screen.width;
-        targetResolutionHeight = Screen.height;
+        targetResolutionHeight = Screen.height; 
         expectedDpi = GetComponent<UIDocument>().panelSettings.referenceDpi;
         root = GetComponent<UIDocument>().rootVisualElement;
         changeUIMode();

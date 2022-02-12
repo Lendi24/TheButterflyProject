@@ -53,7 +53,7 @@ public class GameManager : MonoBehaviour
         GetVariables();
         ResetVariables();
         ClearBoard();
-        spriteOverlayMan.GetComponent<SpriteOverlay>().MakeHealthSpriteUI(healthAmount);
+        spriteOverlayMan.GetComponent<SpriteOverlay>().MakeHealthSpriteUI(healthAmount); 
         SetScreenSize();
         PrepareGame();
     }
@@ -132,6 +132,7 @@ public class GameManager : MonoBehaviour
 
     void PrepareGame()
     {
+        /*
         if (blendTexture == null)
         {
             Debug.LogWarning("No blend-texture selected!\nDefaulting to colour blending...");
@@ -141,7 +142,7 @@ public class GameManager : MonoBehaviour
         {
             Debug.LogWarning("No background-texture selected!\nDefaulting to perlin noise...");
         }
-
+        */
         int minAllowed = butterflyStartAmountGene * (butterflyGeneLength + 1);
         if (butterflyStartAmountRandom < minAllowed)
         {
