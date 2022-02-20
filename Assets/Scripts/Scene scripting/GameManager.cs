@@ -27,7 +27,7 @@ public class GameManager : MonoBehaviour
     int roundAllowedClicks;
 
     [SerializeField]
-    bool resetEverythingOnNextGen, noSafeClick, keepButterAmount, evolveOnAliveAnimals, renderButterBackground;
+    bool resetEverythingOnNextGen, noSafeClick, keepButterAmount, renderButterBackground;
 
     private bool isPaused;
     private int butterfliesRemaining, gameState;
@@ -82,7 +82,8 @@ public class GameManager : MonoBehaviour
 
         /*foreach(Transform selectedButterfly in butterContainer.GetComponentInChildren<Transform>())
         {
-            Debug.Log(butterContainer.transform.childCount);
+            Debug.Log(butte    void TextureMatchedRender(GameObject _newButterfly)
+rContainer.transform.childCount);
             selectedButterfly.localScale = new Vector3(100 * transform.localScale.x * 0.5f, 100 * transform.localScale.x * 0.5f, 100 * transform.localScale.x * 0.5f);
             TextureMatchedRender(selectedButterfly.gameObject);
         }*/
@@ -162,7 +163,10 @@ public class GameManager : MonoBehaviour
             {
                 for (int j = 0; j <= butterflyGeneLength; j++)
                 {
-                    SpawnButterfly(GeneticManager.GiveSpecificGenetics(butterflyGeneLength, j));
+                    GameObject animal = SpawnButterfly();
+                    GeneticManager.UpdateAnimalGene(animal.GetComponent<ButterflyBehaviour>().gene, butterflyGeneLength, j);
+                    ApplyButterflyBlendin(animal, GeneticManager.BlendInCalc(animal.GetComponent<ButterflyBehaviour>().gene));
+
                 }
             }
         }
@@ -170,7 +174,10 @@ public class GameManager : MonoBehaviour
         //Spawns rest of population (or all of population, if butterflyStartAmountGene was set to 0) with random genes.
         for (int i = 0; i < butterflyStartAmountRandom - (minAllowed); i++)
         {
-            SpawnButterfly(GeneticManager.GiveRandomGenetics(butterflyGeneLength));
+            GameObject animal = SpawnButterfly();
+            GeneticManager.UpdateAnimalGene(animal.GetComponent<ButterflyBehaviour>().gene, butterflyGeneLength);
+            ApplyButterflyBlendin(animal, GeneticManager.BlendInCalc(animal.GetComponent<ButterflyBehaviour>().gene));
+
         }
         gameState = 1;
     }
@@ -199,7 +206,7 @@ public class GameManager : MonoBehaviour
         return new Vector3(newButterX, newButterY, newButterZ);
     }
 
-    void SpawnButterfly(bool[] genetics)
+    GameObject SpawnButterfly()
     {
         Quaternion randomRotation = Quaternion.Euler(0, 0, Random.Range(1, 360));
         GameObject newButterfly = Instantiate(butterfly,                //Prefab
@@ -210,13 +217,16 @@ public class GameManager : MonoBehaviour
         newButterfly.transform.parent = butterContainer.transform;
         newButterfly.transform.localScale = new Vector3(100 * transform.localScale.x * 0.5f, 100 * transform.localScale.x * 0.5f, 100 * transform.localScale.x * 0.5f);
         newButterfly.GetComponent<ButterflyBehaviour>().gameBoard = this.gameObject;
+        newButterfly.GetComponent<ButterflyBehaviour>().gene = new Gene();
 
-        newButterfly.GetComponent<ButterflyBehaviour>().genes = genetics;
-        float blendIn = GeneticManager.BlendInCalc(genetics);
+        return newButterfly;
+    }
 
-        Renderer butterRender = newButterfly.GetComponent<Renderer>();
+    void ApplyButterflyBlendin(GameObject butterfly, float blendIn)
+    {
+        Renderer butterRender = butterfly.GetComponent<Renderer>();
 
-        TextureMatchedRender(newButterfly);
+        TextureMatchedRender(butterfly);
 
         if (renderButterBackground)
         {
@@ -377,24 +387,18 @@ public class GameManager : MonoBehaviour
                 {
                     butterflyRoundSpawnAmount = deadButterContainer.transform.childCount;
                 }
-                //InvertGenes
-
-                bool[][] genes;
-                if (evolveOnAliveAnimals)
-                {
-                    genes = butterContainer.GetComponent<ButterCollection>().GetAnimalGenes();
-                }
-                else
-                {
-                   genes = GeneticManager.InvertGenes(deadButterContainer.GetComponent<ButterCollection>().GetAnimalGenes());
-                }
-
+                
                 for (int i = 0; i < butterflyRoundSpawnAmount; i++)
                 {
-                    SpawnButterfly(GeneticManager.EvolveNewAnimal(genes, butterflyGeneLength));
+                    GameObject animal = SpawnButterfly();
+                    GeneticManager.UpdateAnimalGene(animal.GetComponent<ButterflyBehaviour>().gene,
+                                                    butterContainer.GetComponent<ButterCollection>().GetAnimalGenes()
+                                                    );
+
+                    ApplyButterflyBlendin(animal, GeneticManager.BlendInCalc(animal.GetComponent<ButterflyBehaviour>().gene));
                 }
 
-                statsLogList.Add(new StatSave() { populationAmount = butterContainer.transform.childCount, GeneData = butterContainer.GetComponent<ButterCollection>().GetAnimalGenes() });
+                statsLogList.Add(new StatSave() { populationAmount = butterContainer.transform.childCount, GeneData = butterContainer.GetComponent<ButterCollection>().GetAnimalAlleles() });
 
                 ResetVariables();
                 break;
@@ -454,12 +458,6 @@ public class GameManager : MonoBehaviour
             return huntTimeMin;
         }
     }
-
-    void StoreValues(bool[] genetics)
-    {
-
-    }
-
 
     /*
     |=============================|

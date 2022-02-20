@@ -9,7 +9,7 @@ public class ButterflyBehaviour : MonoBehaviour
     public GameObject gameBoard;
     public AudioClip audioClip;
 
-    public bool[] genes;
+    public Gene gene;
 
     // Start is called before the first frame update
     void Start()
