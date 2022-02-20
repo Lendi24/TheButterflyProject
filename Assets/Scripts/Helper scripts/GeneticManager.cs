@@ -23,7 +23,7 @@ public class GeneticManager : MonoBehaviour
     }
 
     public static void UpdateAnimalGene(Gene animalGene, Gene[] allgenes)
-    {
+    { 
         Gene firstGeneRef = PickRandomGene(allgenes);
         Gene SecondGeneRef = PickRandomGene(allgenes);
         Gene NewGene = CombineAlleles(firstGeneRef, SecondGeneRef);
@@ -43,13 +43,14 @@ public class GeneticManager : MonoBehaviour
         return trueLen / animalGene.alleles.Length;
     }
 
-    public static Gene PickRandomGene (Gene[] allGenes)
+    public static Gene PickRandomGene(Gene[] allGenes)
     {
-        Gene gene = allGenes[Random.Range(0, allGenes.Length)];
+        int randIndex = Random.Range(0, allGenes.Length - 1); //Last one will be just created, and will have null as value
+        Gene gene = allGenes[randIndex];
         return gene;
     }
 
-    public static Gene CombineAlleles (Gene firstAllelsRef, Gene SecondAllelsRef) //Can be redone to take lists and handle data with for-loops for more dynamic code
+    public static Gene CombineAlleles(Gene firstAllelsRef, Gene SecondAllelsRef) //Can be redone to take lists and handle data with for-loops for more dynamic code
     {
         if (firstAllelsRef.alleles.Length != SecondAllelsRef.alleles.Length)
         {
@@ -89,7 +90,7 @@ public class GeneticManager : MonoBehaviour
             SecondAllel = false;
         }
 
-        Gene newGene = new Gene();
+        Gene newGene = new Gene { alleles = new bool[2] };
         newGene.alleles[0] = firstAllel;
         newGene.alleles[1] = SecondAllel;
 
@@ -99,7 +100,7 @@ public class GeneticManager : MonoBehaviour
     public static int GetTrueLen(bool[] alleles)
     {
         int i = 0;
-        while (alleles[i] && i < alleles.Length)
+        while (i < alleles.Length && alleles[i])
         {
             i++;
         }
