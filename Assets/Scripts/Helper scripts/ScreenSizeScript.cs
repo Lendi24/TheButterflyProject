@@ -16,11 +16,5 @@ public class ScreenSizeScript : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if(screenWidth != Screen.width || screenHeight != Screen.height)
-        {
-            screenWidth = Screen.width;
-            screenHeight = Screen.height;
-            GetComponent<GameManager>().SetScreenSize();
-        }
     }
 }

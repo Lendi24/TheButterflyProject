@@ -215,7 +215,7 @@ rContainer.transform.childCount);
 
         newButterfly.transform.name = "Butterfly";
         newButterfly.transform.parent = butterContainer.transform;
-        newButterfly.transform.localScale = new Vector3(100 * transform.localScale.x * 0.5f, 100 * transform.localScale.x * 0.5f, 100 * transform.localScale.x * 0.5f);
+        newButterfly.transform.localScale = new Vector3(100 * transform.localScale.x * 0.5f, 100 * transform.localScale.x * 0.5f, 100 * transform.localScale.x * 0.5f); //OBS! is undead
         newButterfly.GetComponent<ButterflyBehaviour>().gameBoard = this.gameObject;
         newButterfly.GetComponent<ButterflyBehaviour>().gene = new Gene();
 
