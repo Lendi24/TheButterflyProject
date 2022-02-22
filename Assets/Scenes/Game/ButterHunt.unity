@@ -809,6 +809,10 @@ PrefabInstance:
       value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 7178107181814647026, guid: 0c22a8247677de44d96d99da8ef437be, type: 3}
+      propertyPath: butterflySize
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 7178107181814647026, guid: 0c22a8247677de44d96d99da8ef437be, type: 3}
       propertyPath: preGameSplash
       value: 
       objectReference: {fileID: 0}

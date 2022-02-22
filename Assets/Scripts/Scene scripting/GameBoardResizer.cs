@@ -10,5 +10,4 @@ public static class GameBoardResizer
         Vector3 mainCameraBottomRight = Camera.main.ScreenToWorldPoint(new Vector3(Screen.width, Screen.height, 10));
         return new Vector3((mainCameraBottomRight.x - mainCameraTopLeft.x) / 10, 1, (mainCameraBottomRight.y - mainCameraTopLeft.y) / 10);
     }
-
 }

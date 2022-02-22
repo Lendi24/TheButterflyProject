@@ -15,16 +15,13 @@ public class ResizeToWindow : MonoBehaviour
     [SerializeField]
     GameObject gm;
 
-    void Awake()
-    {
-        CameraResize();
-    }
-
     void Start()
     {
         targetScreenSizeX = Screen.width;
         targetScreenSizeY = Screen.height;
         camSize = float.Parse(GetComponent<Camera>().orthographicSize.ToString()); //workaround to copy value
+        CameraResize();
+        gm.GetComponent<GameManager>().SetScreenSize();
     }
 
     void Update()

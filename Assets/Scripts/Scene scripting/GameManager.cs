@@ -56,6 +56,9 @@ public class GameManager : MonoBehaviour
         spriteOverlayMan.GetComponent<SpriteOverlay>().MakeHealthSpriteUI(healthAmount); 
         SetScreenSize();
         PrepareGame();
+
+        //resize animals
+        butterContainer.GetComponent<ButterCollection>().ResizeAnimals();
     }
 
     public void SetScreenSize()
@@ -75,6 +78,7 @@ public class GameManager : MonoBehaviour
 
         GetComponent<Renderer>().material.SetTexture("_MainTex", null);
         GetComponent<Renderer>().material.SetTexture("_SecondaryTex", backgroundTexture);
+
 
         // 1,0: esy
         // 1,1: mid
@@ -215,7 +219,7 @@ rContainer.transform.childCount);
 
         newButterfly.transform.name = "Butterfly";
         newButterfly.transform.parent = butterContainer.transform;
-        newButterfly.transform.localScale = new Vector3(100 * transform.localScale.x * 0.5f, 100 * transform.localScale.x * 0.5f, 100 * transform.localScale.x * 0.5f); //OBS! is undead
+        //newButterfly.transform.localScale = new Vector3(100 * transform.localScale.x * 0.5f, 100 * transform.localScale.x * 0.5f, 100 * transform.localScale.x * 0.5f); //OBS! is undead
         newButterfly.GetComponent<ButterflyBehaviour>().gameBoard = this.gameObject;
         newButterfly.GetComponent<ButterflyBehaviour>().gene = new Gene();
 
@@ -334,6 +338,9 @@ rContainer.transform.childCount);
                     roundAllowedClicks--;
                     spriteOverlayMan.GetComponent<SpriteOverlay>().RemoveKlick();
                 }
+
+                //butterContainer.GetComponent<ButterCollection>().ResizeAnimals(butterflySize);
+
 
                 if (TimmerManagment.Timmer(GetHuntTime()))
                 { //Checks if Timer is finished. Time is dependant on an exponential value,
