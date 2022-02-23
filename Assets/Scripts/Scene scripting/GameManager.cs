@@ -57,13 +57,11 @@ public class GameManager : MonoBehaviour
         SetScreenSize();
         PrepareGame();
 
-        //resize animals
-        butterContainer.GetComponent<ButterCollection>().ResizeAnimals();
     }
 
     public void SetScreenSize()
     {
-        gameObject.transform.localScale = GameBoardResizer.GetGameBoardSize();
+        transform.localScale = GameBoardResizer.GetGameBoardSize();
 
         //Making size correct
         GetComponent<Renderer>().material = backgroundPattern;
@@ -188,7 +186,12 @@ rContainer.transform.childCount);
 
     Vector3 RandomButterPos(Quaternion newButterRotate)
     {
-        Vector2 boardSize = GetComponent<Renderer>().bounds.size;
+        Vector2 boardSize = new Vector2 (
+            x: GetComponent<Renderer>().bounds.size.x,
+            y: GetComponent<Renderer>().bounds.size.y
+            );
+
+
         float newButterX;
         float newButterY;
         float newButterZ = ((butterfly.GetComponent<Renderer>().bounds.size.z) / -2);
@@ -204,7 +207,7 @@ rContainer.transform.childCount);
             noOverlap = !Physics.CheckBox(new Vector3(newButterX, newButterY, newButterZ),
                      butterfly.GetComponent<Renderer>().bounds.size / 2, newButterRotate);
 
-        } while (!(nrOfLoops > 500000 || noOverlap)); //Break for infinite loop
+        } while (!(nrOfLoops > 500 || noOverlap)); //Break for infinite loop
         if (!noOverlap) Debug.LogError("Could not find space for butterfly, or code is broken.");
 
         return new Vector3(newButterX, newButterY, newButterZ);
@@ -219,7 +222,10 @@ rContainer.transform.childCount);
 
         newButterfly.transform.name = "Butterfly";
         newButterfly.transform.parent = butterContainer.transform;
-        //newButterfly.transform.localScale = new Vector3(100 * transform.localScale.x * 0.5f, 100 * transform.localScale.x * 0.5f, 100 * transform.localScale.x * 0.5f); //OBS! is undead
+        //newButterfly.transform.localScale = new Vector3(100 * transform.localScale.y * 0.5f, 100 * transform.localScale.y * 0.5f, 100 * transform.localScale.y * 0.5f); //OBS! is undead
+        //butterContainer.GetComponent<ButterCollection>().ResizeAnimals(); //New resize code that also doesnt work
+
+        //resize animals
         newButterfly.GetComponent<ButterflyBehaviour>().gameBoard = this.gameObject;
         newButterfly.GetComponent<ButterflyBehaviour>().gene = new Gene();
 
@@ -415,7 +421,7 @@ rContainer.transform.childCount);
         }
     }
 
-    void RandomizeAnimalPos()
+    public void RandomizeAnimalPos()
     {
         //Move outside box. This will keep auto-col detect from triggering
         foreach (Transform animal in butterContainer.transform)

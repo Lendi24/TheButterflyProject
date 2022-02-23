@@ -13,9 +13,9 @@ public class ResizeToWindow : MonoBehaviour
     private float screenHeight;
 
     [SerializeField]
-    GameObject gm;
+    GameObject gm, countdown;
 
-    void Start()
+    void Awake()
     {
         targetScreenSizeX = Screen.width;
         targetScreenSizeY = Screen.height;
@@ -55,6 +55,9 @@ public class ResizeToWindow : MonoBehaviour
             //Stuff to do when screen resize 
             CameraResize();
             gm.GetComponent<GameManager>().SetScreenSize();
+            gm.GetComponent<GameManager>().RandomizeAnimalPos();
+
+            countdown.GetComponent<Countdown>().MoveAfterResize();
         }
     }
 }

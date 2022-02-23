@@ -19,11 +19,21 @@ public class Countdown : MonoBehaviour
         countDown = true;
     }
 
+    private void Start()
+    {
+        MoveAfterResize();
+    }
+
+    public void MoveAfterResize()
+    {
+        transform.position = Camera.main.ScreenToWorldPoint(new Vector3(0, 1f, 9.5f));
+    }
+
     private void Update()
     {
         /*if (countdownBar.transform.localScale.x != Camera.main.ScreenToWorldPoint(new Vector3(Screen.width, Screen.height, 0)).x * 2)
             countdownBar.transform.localScale = new Vector3(Camera.main.ScreenToWorldPoint(new Vector3(Screen.width, Screen.height, 0)).x * 2, countdownBar.transform.localScale.y, countdownBar.transform.localScale.z);*/
-        transform.position = new Vector3(Camera.main.ScreenToWorldPoint(new Vector3(0, 0, 0)).x, transform.position.y, transform.position.z);
+
         if (countDown)
         {            
             transform.localScale = new Vector3(Camera.main.ScreenToWorldPoint(new Vector3(Screen.width, Screen.height, 0)).x * 2 * (k * TimmerManagment.GetTimeLeft()), transform.localScale.y, transform.localScale.z);
@@ -32,6 +42,5 @@ public class Countdown : MonoBehaviour
                 countDown = false;
             }
         }
-        
     }
 }
