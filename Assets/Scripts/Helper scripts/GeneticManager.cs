@@ -39,8 +39,21 @@ public class GeneticManager : MonoBehaviour
         {
             trueLen++;
         }
-        
-        return trueLen / animalGene.alleles.Length;
+
+        if (animalGene.domin == null) //No Dominance
+        {
+            return trueLen / animalGene.alleles.Length;
+        }
+
+        else if (animalGene.domin == true) //Dark Dominant
+        {
+            return (trueLen >= 1) ? 1f : 0.5f;
+        }
+
+        else //Light Dominant 
+        {
+            return (trueLen < 1) ? 1f : 0.5f;
+        }
     }
 
     public static Gene PickRandomGene(Gene[] allGenes)
