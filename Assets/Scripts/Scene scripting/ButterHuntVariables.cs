@@ -82,7 +82,22 @@ public static class ButterHuntVariables
         }
     }
 
-    static public void SetCustom(float _preHuntTime, float _huntTime, int _butterflyGeneLength, int _butterflyStartAmountRandom, int _butterflyStartAmountGene, int _maximumKills, int _minimumKills, int _butterflyRoundSpawnAmount, int _healthAmount, bool _resetEverythingOnNextGen, bool _noSafeClick, bool _keepButterAmount, float _renderLerp, float _renderPerlin, bool _renderButterBackground)
+    static public void SetCustom(
+        float _preHuntTime, 
+        float _huntTime, 
+        int _butterflyGeneLength, 
+        int _butterflyStartAmountRandom, 
+        int _butterflyStartAmountGene, 
+        int _maximumKills, 
+        int _minimumKills,
+        int _butterflyRoundSpawnAmount,
+        int _healthAmount,
+        bool _resetEverythingOnNextGen, 
+        bool _noSafeClick, 
+        bool _keepButterAmount, 
+        float _renderLerp, 
+        float _renderPerlin, 
+        bool _renderButterBackground)
     {
         preHuntTime = _preHuntTime;
         huntTime = _huntTime;

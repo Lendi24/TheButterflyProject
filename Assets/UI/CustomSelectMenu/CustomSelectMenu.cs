@@ -7,12 +7,13 @@ using UnityEngine.SceneManagement;
 
 public class CustomSelectMenu : MonoBehaviour
 {
+    public Button playButton, backButton, timeSettingsButton, gameSettingsButton, butterflySettingsButton;
+    public VisualElement timeSettingsPage, gameSettingsPage, butterflySettingsPage;
     public Slider preHuntTime, huntTime;
     public SliderInt geneLength, startAmountRandom, startAmountGene, renderMode, roundSpawnAmount, healthAmount;
     public MinMaxSlider kills;
     public Toggle resetOnNextGen, keepButterflyAmount, noSafeClick;
-    public Button playButton;
-    public Button backButton;
+    public RadioButtonGroup geneModeRadio;
     VisualElement root;
 
     // Start is called before the first frame update
@@ -36,11 +37,81 @@ public class CustomSelectMenu : MonoBehaviour
         
         playButton.clicked += CreateCustomGame;
         backButton.clicked += GetComponent<LoadSceneFunctions>().BackToMain;
+
+        geneModeRadio = root.Q<RadioButtonGroup>("gene-mode");
+
+        //Tab-pages
+        timeSettingsPage = root.Q<VisualElement>("time-settings-page");
+        gameSettingsPage = root.Q<VisualElement>("game-settings-page");
+        butterflySettingsPage = root.Q<VisualElement>("butterfly-settings-page");
+
+        //Tab-buttons
+        timeSettingsButton = root.Q<Button>("time-settings-button");
+        gameSettingsButton = root.Q<Button>("game-settings-button");
+        butterflySettingsButton = root.Q<Button>("butterfly-settings-button");
+
+
+        //Tab-buttons logic-binding 
+        timeSettingsButton.clicked += ResetSettingsMenu;
+        gameSettingsButton.clicked += ResetSettingsMenu;
+        butterflySettingsButton.clicked += ResetSettingsMenu;
+
+        timeSettingsButton.clicked += SwitchToTimeSettings;
+        gameSettingsButton.clicked += SwitchToGameSettings;
+        butterflySettingsButton.clicked += SwitchToButterflySettings;
+
+    }
+
+    void SwitchToTimeSettings()
+    {
+        timeSettingsPage.style.display = DisplayStyle.Flex;
+        timeSettingsButton.style.backgroundColor = new StyleColor { value = Color.red };
+    }
+
+    void SwitchToGameSettings()
+    {
+        gameSettingsPage.style.display = DisplayStyle.Flex;
+        gameSettingsButton.style.backgroundColor = new StyleColor { value = Color.red };
+    }
+
+    void SwitchToButterflySettings()
+    {
+        butterflySettingsPage.style.display = DisplayStyle.Flex;
+        butterflySettingsButton.style.backgroundColor = new StyleColor { value = Color.red };
+    }
+
+    void ResetSettingsMenu()
+    {
+        timeSettingsPage.style.display = DisplayStyle.None;
+        gameSettingsPage.style.display = DisplayStyle.None;
+        butterflySettingsPage.style.display = DisplayStyle.None;
+
+        timeSettingsButton.style.backgroundColor = new StyleColor { value = Color.white };
+        gameSettingsButton.style.backgroundColor = new StyleColor { value = Color.white };
+        butterflySettingsButton.style.backgroundColor = new StyleColor { value = Color.white };
     }
 
     void CreateCustomGame()
     {
-        GetComponent<LoadSceneFunctions>().StartCustomGame(preHuntTime.value, huntTime.value, geneLength.value, startAmountRandom.value, startAmountGene.value, Mathf.RoundToInt(kills.maxValue), Mathf.RoundToInt(kills.minValue), renderMode.value, roundSpawnAmount.value, healthAmount.value, resetOnNextGen.value, noSafeClick.value, keepButterflyAmount.value);
+        bool? geneMode;
+
+        if (geneModeRadio.Q<RadioButton>("light").value)
+        {
+            geneMode = true;
+        }
+
+        else if (geneModeRadio.Q<RadioButton>("dark").value)
+        {
+            geneMode = false;
+        }
+
+        else
+        {
+            geneMode = null;
+        }
+
+        int i = geneModeRadio.value;
+        GetComponent<LoadSceneFunctions>().StartCustomGame(preHuntTime.value, huntTime.value, geneLength.value, startAmountRandom.value, startAmountGene.value, Mathf.RoundToInt(kills.maxValue), Mathf.RoundToInt(kills.minValue), renderMode.value, roundSpawnAmount.value, healthAmount.value, resetOnNextGen.value, noSafeClick.value, keepButterflyAmount.value, geneMode);
     }
 
 }
