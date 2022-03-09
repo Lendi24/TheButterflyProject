@@ -42,7 +42,7 @@ public class ButterflyInMainManu : MonoBehaviour
             butterContainer.transform.Rotate(new Vector3(0, 0, 180 - rot), Space.Self);
         }
         else
-        {
+        {   
             if (TimmerManagment.Timmer(0.5f))
             {
                 for (int i = 0; i < Mathf.CeilToInt(size / 3); i++)
@@ -87,14 +87,14 @@ public class ButterflyInMainManu : MonoBehaviour
             GameObject endMarker = GameObject.CreatePrimitive(PrimitiveType.Cube);
             endMarker.transform.parent = startMarker.transform;
             endMarker.transform.name = "End" + i;
-            endMarker.transform.position = new Vector3(i * 3 - (size / 2) + 1, startMarker.transform.position.y + (size + 0.8f), 0);
+            endMarker.transform.position = new Vector3(i * 3 - (size / 2) + 1, startMarker.transform.position.y + size + 0.5f, 0);
             endMarker.GetComponent<MeshRenderer>().enabled = false;
         }
     }
 
     void SpawnButterflies()
     {
-        float buttersPerColumn = Mathf.Floor((size + 1) / 1.5f) - 1;
+        float buttersPerColumn = Mathf.Floor((size+1) / 1.5f);
         float remainingSpace = size - buttersPerColumn;
         float distance = 1 + (remainingSpace / buttersPerColumn);
 
@@ -102,7 +102,8 @@ public class ButterflyInMainManu : MonoBehaviour
         {
             for(int j = 0; j < buttersPerColumn; j++)
             {
-                CreateButterfly(i * 3 - (size / 2) + 1, butterContainer.transform.GetChild(i).position.y + j * distance, -0.5f);
+                Debug.Log(butterContainer.transform.GetChild(0).position.y);
+                CreateButterfly(i * 3 - (size / 2) + 1, butterContainer.transform.GetChild(0).position.y + (j * distance), -0.5f);
             }
         }
     }
