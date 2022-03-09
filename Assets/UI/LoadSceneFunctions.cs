@@ -98,9 +98,9 @@ public class LoadSceneFunctions : MonoBehaviour
             _noSafeClick: true,
             _keepButterAmount: false,
 
-            _renderLerp: 1,
-            _renderPerlin: 0,
-            _renderButterBackground: true,
+            _renderLerp: 0,
+            _renderPerlin: 1,
+            _renderButterBackground: false,
 
             _geneMode: 1);
 
