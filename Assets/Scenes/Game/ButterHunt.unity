@@ -226,6 +226,7 @@ GameObject:
   - component: {fileID: 717350998}
   - component: {fileID: 717350997}
   - component: {fileID: 717350996}
+  - component: {fileID: 717350999}
   m_Layer: 0
   m_Name: Main Camera
   m_TagString: MainCamera
@@ -299,6 +300,21 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &717350999
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 717350995}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 133b9b036868df047876afe9effe0a7f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  screenWidthLimi: 1000
+  gm: {fileID: 1203072261}
+  countdown: {fileID: 18725643}
 --- !u!1 &772370047
 GameObject:
   m_ObjectHideFlags: 0
@@ -402,18 +418,6 @@ GameObject:
   m_CorrespondingSourceObject: {fileID: 6427596877661526487, guid: 0c22a8247677de44d96d99da8ef437be, type: 3}
   m_PrefabInstance: {fileID: 6427596877182487114}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &1203072262
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1203072261}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d4ac1fa0063fbc64682aa72ef55a0f30, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!114 &1203072263
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -792,6 +796,10 @@ PrefabInstance:
     - target: {fileID: 7178107181814647026, guid: 0c22a8247677de44d96d99da8ef437be, type: 3}
       propertyPath: noSafeClick
       value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7178107181814647026, guid: 0c22a8247677de44d96d99da8ef437be, type: 3}
+      propertyPath: butterflySize
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 7178107181814647026, guid: 0c22a8247677de44d96d99da8ef437be, type: 3}
       propertyPath: preGameSplash

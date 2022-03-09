@@ -14,19 +14,17 @@ public class SwitcherUSS : MonoBehaviour
     int targetResolutionWith, targetResolutionHeight;
     VisualElement root;
 
-
     // Start is called before the first frame update
     void Start()
     {
         uiMode = "none";
         targetResolutionWith = Screen.width;
-        targetResolutionHeight = Screen.height; 
+        targetResolutionHeight = Screen.height;
         expectedDpi = GetComponent<UIDocument>().panelSettings.referenceDpi;
         root = GetComponent<UIDocument>().rootVisualElement;
         changeUIMode();
     }
 
-    // Update is called once per frame
     private void Update()
     {
         if (targetResolutionHeight != Screen.height || targetResolutionWith != Screen.width)
