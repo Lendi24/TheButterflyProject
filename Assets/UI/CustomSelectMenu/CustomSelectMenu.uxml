@@ -1,6 +1,6 @@
 <ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" xsi="http://www.w3.org/2001/XMLSchema-instance" engine="UnityEngine.UIElements" editor="UnityEditor.UIElements" noNamespaceSchemaLocation="../../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
     <ui:Label text=" Custom Mode" display-tooltip-when-elided="true" style="-unity-text-align: upper-center; font-size: 20px; -unity-font-style: bold;" />
-    <ui:VisualElement name="window" style="background-color: rgba(79, 79, 79, 0.64);">
+    <ui:VisualElement name="window" style="background-color: rgba(79, 79, 79, 0.64); flex-shrink: 0; flex-grow: 1; margin-left: 10px; margin-right: 10px; margin-top: 10px; margin-bottom: 10px; padding-left: 2px; padding-right: 2px; padding-top: 2px; padding-bottom: 2px;">
         <ui:VisualElement name="Tabs" style="flex-direction: row; justify-content: flex-start;">
             <ui:Button text="Time" display-tooltip-when-elided="true" name="time-settings-button" />
             <ui:Button text="Game" display-tooltip-when-elided="true" name="game-settings-button" />
@@ -32,10 +32,11 @@
             </ui:VisualElement>
         </ui:ScrollView>
     </ui:VisualElement>
-    <ui:VisualElement name="BottomUI" style="flex-direction: row; justify-content: space-around; align-items: center; position: relative; visibility: visible; overflow: visible;">
+    <ui:VisualElement name="BottomUI" style="flex-direction: row; justify-content: space-around; align-items: flex-end; position: relative; visibility: visible; overflow: visible; min-width: 100%; min-height: auto;">
         <ui:Button text="Start" display-tooltip-when-elided="true" name="menu-button-play" />
         <ui:Button text="Back" display-tooltip-when-elided="true" name="menu-button-back" />
         <ui:Button text="Load config" display-tooltip-when-elided="true" name="menu-button-load" />
         <ui:Button text="Save config" display-tooltip-when-elided="true" name="menu-button-save" />
+        <ui:TextField picking-mode="Ignore" label="ConfigName" value="conf" text="conf" readonly="false" />
     </ui:VisualElement>
 </ui:UXML>

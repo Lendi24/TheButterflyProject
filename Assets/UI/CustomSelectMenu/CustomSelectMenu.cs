@@ -33,7 +33,6 @@ public class CustomSelectMenu : MonoBehaviour
         keepButterflyAmount = root.Q<Toggle>("menu-toggle-keepbutterflyamount");
         noSafeClick = root.Q<Toggle>("menu-toggle-nosafeclick");
         
-
         geneModeRadio = root.Q<RadioButtonGroup>("gene-mode");
 
         //BottomButtons
@@ -52,15 +51,10 @@ public class CustomSelectMenu : MonoBehaviour
         gameSettingsButton = root.Q<Button>("game-settings-button");
         butterflySettingsButton = root.Q<Button>("butterfly-settings-button");
 
-
         //Tab-buttons logic-binding 
-        timeSettingsButton.clicked += ResetSettingsMenu;
-        gameSettingsButton.clicked += ResetSettingsMenu;
-        butterflySettingsButton.clicked += ResetSettingsMenu;
-
-        timeSettingsButton.clicked += SwitchToTimeSettings;
-        gameSettingsButton.clicked += SwitchToGameSettings;
-        butterflySettingsButton.clicked += SwitchToButterflySettings;
+        timeSettingsButton.clicked += () => { SwitchTab(timeSettingsPage, timeSettingsButton); };
+        gameSettingsButton.clicked += () => { SwitchTab(gameSettingsPage, gameSettingsButton); };
+        butterflySettingsButton.clicked += () => { SwitchTab(butterflySettingsPage, butterflySettingsButton); };
 
     }
 
@@ -73,29 +67,20 @@ public class CustomSelectMenu : MonoBehaviour
 
     void LoadCustomConfig()
     {
+        SceneManager.LoadScene("ConfigExplorer");
     }
 
     void SaveCustomConfig()
     {
-        ConfigurationFunctions.SaveToFile(MakeConfObject(), "GÖRAN");
+        string name = root.Q<TextField>("config-name").value;
+        ConfigurationFunctions.SaveToFile(MakeConfObject(), name);
     }
 
-    void SwitchToTimeSettings()
+    void SwitchTab(VisualElement page, Button button)
     {
-        timeSettingsPage.style.display = DisplayStyle.Flex;
-        timeSettingsButton.style.backgroundColor = new StyleColor { value = Color.red };
-    }
-
-    void SwitchToGameSettings()
-    {
-        gameSettingsPage.style.display = DisplayStyle.Flex;
-        gameSettingsButton.style.backgroundColor = new StyleColor { value = Color.red };
-    }
-
-    void SwitchToButterflySettings()
-    {
-        butterflySettingsPage.style.display = DisplayStyle.Flex;
-        butterflySettingsButton.style.backgroundColor = new StyleColor { value = Color.red };
+        ResetSettingsMenu();
+        page.style.display = DisplayStyle.Flex;
+        button.style.backgroundColor = new StyleColor { value = Color.red };
     }
 
     void ResetSettingsMenu()

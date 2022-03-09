@@ -7,11 +7,8 @@ public static class CurrentConfig
 {
     public static ConfigurationSettings conf;
 
-    public static string SAVE_FOLDER = Application.dataPath + "/ConfigFiles/";
-    public static string SAVE_PREFIX = "config-";
+    public static string SAVE_PATH = Application.dataPath + "/ConfigFiles/";
     public static string SAVE_EXT = "BtrConf";
-
-    public static string FILE_PATH = SAVE_FOLDER + SAVE_PREFIX + "{0}" + "." + SAVE_EXT;
 }
 
 public class ConfigurationSettings
@@ -89,8 +86,8 @@ public static class ConfigurationFunctions
 
     public static void SaveToFile(ConfigurationSettings conf, string FILE_NAME)
     {
-        string filePath = CurrentConfig.SAVE_FOLDER;
-        string fileName = CurrentConfig.SAVE_PREFIX + FILE_NAME + "." + CurrentConfig.SAVE_EXT;
+        string filePath = CurrentConfig.SAVE_PATH;
+        string fileName = FILE_NAME + "." + CurrentConfig.SAVE_EXT;
 
         if (!Directory.Exists(filePath))
         {
@@ -98,17 +95,39 @@ public static class ConfigurationFunctions
         }
 
         File.WriteAllText(filePath + fileName, JsonUtility.ToJson(conf));
-        Debug.Log(CurrentConfig.SAVE_FOLDER + CurrentConfig.SAVE_PREFIX + FILE_NAME + "." + CurrentConfig.SAVE_EXT);
     }
 
-    public static void LoadFromFile(string FILE_NAME)
+    public static string[] GetConfigFiles()
     {
-        /*
-        DirectoryInfo directoryInfo = new DirectoryInfo(CurrentConfig.SAVE_FOLDER);
-        // Get all save files
-        FileInfo[] saveFiles = directoryInfo.GetFiles("*." + CurrentConfig.SAVE_SULFIX);
-        // Cycle through all save files and identify the most recent one
-        */
-        ConfigurationSettings saveObject = JsonUtility.FromJson<ConfigurationSettings>(CurrentConfig.SAVE_FOLDER + CurrentConfig.SAVE_PREFIX + FILE_NAME + "." + CurrentConfig.SAVE_EXT);
+        string filePath = CurrentConfig.SAVE_PATH;
+        string[] saveFileNames;
+
+        if (!Directory.Exists(filePath))
+        {
+            Directory.CreateDirectory(filePath);
+            saveFileNames = new string[0];
+        }
+
+        else
+        {
+            DirectoryInfo directoryInfo = new DirectoryInfo(filePath);
+            FileInfo[] saveFilesInfo = directoryInfo.GetFiles("*." + CurrentConfig.SAVE_EXT);
+            saveFileNames = new string[saveFilesInfo.Length];
+
+            for (int i = 0; i < saveFilesInfo.Length; i++)
+            {
+                saveFileNames[i] = saveFilesInfo[i].Name.Replace(saveFilesInfo[i].Extension, "");
+            }
+        }
+
+        return saveFileNames;
+    }
+
+    public static ConfigurationSettings LoadFromFile(string FILE_NAME)
+    {
+        string filePath = CurrentConfig.SAVE_PATH;
+        string fileName = FILE_NAME + "." + CurrentConfig.SAVE_EXT;
+        string jsonData = File.ReadAllText(filePath + fileName);
+        return JsonUtility.FromJson<ConfigurationSettings>(jsonData);
     }
 }

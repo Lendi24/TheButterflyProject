@@ -1,0 +1,16 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" xsi="http://www.w3.org/2001/XMLSchema-instance" engine="UnityEngine.UIElements" editor="UnityEditor.UIElements" noNamespaceSchemaLocation="../../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
+    <Style src="project://database/Assets/UI/ConfigExplorer/USS/ConfigExplorer.uss?fileID=7433441132597879392&amp;guid=2c8817d63af7f4c46bd0d5613ac1c30b&amp;type=3#ConfigExplorer" />
+    <ui:ScrollView name="Scroll">
+        <ui:VisualElement name="Cards">
+            <ui:VisualElement name="0" class="Card">
+                <ui:VisualElement name="Text-Container">
+                    <ui:Label text="Label" display-tooltip-when-elided="true" />
+                </ui:VisualElement>
+                <ui:VisualElement name="Button-Container">
+                    <ui:Button text="Button" display-tooltip-when-elided="true" />
+                    <ui:Button text="Button" display-tooltip-when-elided="true" />
+                </ui:VisualElement>
+            </ui:VisualElement>
+        </ui:VisualElement>
+    </ui:ScrollView>
+</ui:UXML>
