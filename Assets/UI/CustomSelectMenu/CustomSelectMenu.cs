@@ -7,7 +7,7 @@ using UnityEngine.SceneManagement;
 
 public class CustomSelectMenu : MonoBehaviour
 {
-    public Button playButton, backButton, timeSettingsButton, gameSettingsButton, butterflySettingsButton;
+    public Button timeSettingsButton, gameSettingsButton, butterflySettingsButton;
     public VisualElement timeSettingsPage, gameSettingsPage, butterflySettingsPage;
     public Slider preHuntTime, huntTime;
     public SliderInt geneLength, startAmountRandom, startAmountGene, renderMode, roundSpawnAmount, healthAmount;
@@ -32,13 +32,15 @@ public class CustomSelectMenu : MonoBehaviour
         resetOnNextGen = root.Q<Toggle>("menu-toggle-resetonnextgen");
         keepButterflyAmount = root.Q<Toggle>("menu-toggle-keepbutterflyamount");
         noSafeClick = root.Q<Toggle>("menu-toggle-nosafeclick");
-        playButton = root.Q<Button>("menu-button-play");
-        backButton = root.Q<Button>("menu-button-back");
         
-        playButton.clicked += CreateCustomGame;
-        backButton.clicked += GetComponent<LoadSceneFunctions>().BackToMain;
 
         geneModeRadio = root.Q<RadioButtonGroup>("gene-mode");
+
+        //BottomButtons
+        root.Q<Button>("menu-button-save").clicked += SaveCustomConfig;
+        root.Q<Button>("menu-button-load").clicked += LoadCustomConfig;
+        root.Q<Button>("menu-button-play").clicked += PlayCustomConfig;
+        root.Q<Button>("menu-button-back").clicked += GetComponent<LoadSceneFunctions>().BackToMain;
 
         //Tab-pages
         timeSettingsPage = root.Q<VisualElement>("time-settings-page");
@@ -60,6 +62,22 @@ public class CustomSelectMenu : MonoBehaviour
         gameSettingsButton.clicked += SwitchToGameSettings;
         butterflySettingsButton.clicked += SwitchToButterflySettings;
 
+    }
+
+    void PlayCustomConfig()
+    {
+        //GetComponent<LoadSceneFunctions>().StartCustomGame(preHuntTime.value, huntTime.value, geneLength.value, startAmountRandom.value, startAmountGene.value, Mathf.RoundToInt(kills.maxValue), Mathf.RoundToInt(kills.minValue), renderMode.value, roundSpawnAmount.value, healthAmount.value, resetOnNextGen.value, noSafeClick.value, keepButterflyAmount.value, geneMode);
+        CurrentConfig.conf = MakeConfObject();
+        SceneManager.LoadScene("ButterHunt");
+    }
+
+    void LoadCustomConfig()
+    {
+    }
+
+    void SaveCustomConfig()
+    {
+        ConfigurationFunctions.SaveToFile(MakeConfObject(), "GÖRAN");
     }
 
     void SwitchToTimeSettings()
@@ -91,27 +109,17 @@ public class CustomSelectMenu : MonoBehaviour
         butterflySettingsButton.style.backgroundColor = new StyleColor { value = Color.white };
     }
 
-    void CreateCustomGame()
-    {
-        int i = geneModeRadio.value;
-        //GetComponent<LoadSceneFunctions>().StartCustomGame(preHuntTime.value, huntTime.value, geneLength.value, startAmountRandom.value, startAmountGene.value, Mathf.RoundToInt(kills.maxValue), Mathf.RoundToInt(kills.minValue), renderMode.value, roundSpawnAmount.value, healthAmount.value, resetOnNextGen.value, noSafeClick.value, keepButterflyAmount.value, geneMode);
-        CurrentConfig.conf = MakeConfObject();
-
-        SceneManager.LoadScene("ButterHunt");
-
-    }
-
     ConfigurationSettings MakeConfObject() {
         bool? geneMode;
 
         if (geneModeRadio.Q<RadioButton>("light").value)
         {
-            geneMode = true;
+            geneMode = false;
         }
 
         else if (geneModeRadio.Q<RadioButton>("dark").value)
         {
-            geneMode = false;
+            geneMode = true;
         }
 
         else
@@ -119,7 +127,7 @@ public class CustomSelectMenu : MonoBehaviour
             geneMode = null;
         }
 
-        return SaveFunctions.MakeConfObject(
+        return ConfigurationFunctions.MakeConfObject(
             _preHuntTime:                   preHuntTime.value,
             _huntTime:                      huntTime.value,
             _butterflyGeneLength:           geneLength.value,

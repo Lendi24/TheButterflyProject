@@ -28,6 +28,7 @@ public class GameManager : MonoBehaviour
 
     [SerializeField]
     bool resetEverythingOnNextGen, noSafeClick, keepButterAmount, renderButterBackground;
+    bool? geneMode;
 
     private bool isPaused;
     private int butterfliesRemaining, gameState;
@@ -137,7 +138,7 @@ rContainer.transform.childCount);
         renderLerp = CurrentConfig.conf.renderLerp;
         renderPerlin = CurrentConfig.conf.renderPerlin;
         renderButterBackground = CurrentConfig.conf.renderButterBackground;
-
+        geneMode = CurrentConfig.conf.geneMode;
     }
 
     void ResetVariables()
@@ -187,7 +188,7 @@ rContainer.transform.childCount);
                 for (int j = 0; j <= butterflyGeneLength; j++)
                 {
                     GameObject animal = SpawnButterfly();
-                    GeneticManager.UpdateAnimalGene(animal.GetComponent<ButterflyBehaviour>().gene, butterflyGeneLength, j);
+                    GeneticManager.UpdateAnimalGene(animal.GetComponent<ButterflyBehaviour>().gene, butterflyGeneLength, j, geneMode);
                     ApplyButterflyBlendin(animal, GeneticManager.BlendInCalc(animal.GetComponent<ButterflyBehaviour>().gene));
 
                 }
@@ -198,7 +199,7 @@ rContainer.transform.childCount);
         for (int i = 0; i < butterflyStartAmountRandom - (minAllowed); i++)
         {
             GameObject animal = SpawnButterfly();
-            GeneticManager.UpdateAnimalGene(animal.GetComponent<ButterflyBehaviour>().gene, butterflyGeneLength);
+            GeneticManager.UpdateAnimalGene(animal.GetComponent<ButterflyBehaviour>().gene, butterflyGeneLength, geneMode);
             ApplyButterflyBlendin(animal, GeneticManager.BlendInCalc(animal.GetComponent<ButterflyBehaviour>().gene));
 
         }
@@ -426,8 +427,8 @@ rContainer.transform.childCount);
                 {
                     GameObject animal = SpawnButterfly();
                     GeneticManager.UpdateAnimalGene(animal.GetComponent<ButterflyBehaviour>().gene,
-                                                    butterContainer.GetComponent<ButterCollection>().GetAnimalGenes()
-                                                    );
+                                                    butterContainer.GetComponent<ButterCollection>().GetAnimalGenes(),
+                                                    geneMode);
 
                     ApplyButterflyBlendin(animal, GeneticManager.BlendInCalc(animal.GetComponent<ButterflyBehaviour>().gene));
                 }

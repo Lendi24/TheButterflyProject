@@ -35,7 +35,7 @@
     <ui:VisualElement name="BottomUI" style="flex-direction: row; justify-content: space-around; align-items: center; position: relative; visibility: visible; overflow: visible;">
         <ui:Button text="Start" display-tooltip-when-elided="true" name="menu-button-play" />
         <ui:Button text="Back" display-tooltip-when-elided="true" name="menu-button-back" />
-        <ui:Button text="Load config" display-tooltip-when-elided="true" name="load" />
-        <ui:Button text="Save config" display-tooltip-when-elided="true" />
+        <ui:Button text="Load config" display-tooltip-when-elided="true" name="menu-button-load" />
+        <ui:Button text="Save config" display-tooltip-when-elided="true" name="menu-button-save" />
     </ui:VisualElement>
 </ui:UXML>

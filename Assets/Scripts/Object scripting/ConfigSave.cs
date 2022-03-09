@@ -1,7 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using Newtonsoft.Json;
 using System.IO;
 
 public static class CurrentConfig
@@ -10,9 +9,9 @@ public static class CurrentConfig
 
     public static string SAVE_FOLDER = Application.dataPath + "/ConfigFiles/";
     public static string SAVE_PREFIX = "config-";
-    public static string SAVE_SULFIX = "ButterConf";
+    public static string SAVE_EXT = "BtrConf";
 
-    public static string FILE_PATH = SAVE_FOLDER + SAVE_PREFIX + "{0}" + "." + SAVE_SULFIX;
+    public static string FILE_PATH = SAVE_FOLDER + SAVE_PREFIX + "{0}" + "." + SAVE_EXT;
 }
 
 public class ConfigurationSettings
@@ -32,9 +31,11 @@ public class ConfigurationSettings
     public float renderLerp;
     public float renderPerlin;
     public bool  renderButterBackground;
+    public bool?  geneMode;
+
 }
 
-public static class SaveFunctions 
+public static class ConfigurationFunctions 
 {
 
     public static void ApplyConfig(ConfigurationSettings _conf)
@@ -80,26 +81,27 @@ public static class SaveFunctions
             renderLerp                  = _renderLerp,
             renderPerlin                = _renderPerlin,
             renderButterBackground      = _renderButterBackground,
+            geneMode                    = _geneMode
         };
 
         return conf;
     }
 
-    public static void Save(ConfigurationSettings conf)
+    public static void SaveToFile(ConfigurationSettings conf, string FILE_NAME)
     {
-        string saveStr = JsonUtility.ToJson(conf);
+        string filePath = CurrentConfig.SAVE_FOLDER;
+        string fileName = CurrentConfig.SAVE_PREFIX + FILE_NAME + "." + CurrentConfig.SAVE_EXT;
 
-        // Make sure the Save Number is unique so it doesnt overwrite a previous save file
-        int saveNumber = 1;
-        while (File.Exists(CurrentConfig.SAVE_FOLDER + CurrentConfig.SAVE_PREFIX + saveNumber + "." + CurrentConfig.SAVE_SULFIX))
+        if (!Directory.Exists(filePath))
         {
-            saveNumber++;
+            Directory.CreateDirectory(filePath);
         }
-        // saveNumber is unique
-        File.WriteAllText(CurrentConfig.SAVE_FOLDER + CurrentConfig.SAVE_PREFIX + saveNumber + "." + CurrentConfig.SAVE_SULFIX, saveStr);
+
+        File.WriteAllText(filePath + fileName, JsonUtility.ToJson(conf));
+        Debug.Log(CurrentConfig.SAVE_FOLDER + CurrentConfig.SAVE_PREFIX + FILE_NAME + "." + CurrentConfig.SAVE_EXT);
     }
 
-    public static void Load()
+    public static void LoadFromFile(string FILE_NAME)
     {
         /*
         DirectoryInfo directoryInfo = new DirectoryInfo(CurrentConfig.SAVE_FOLDER);
@@ -107,8 +109,6 @@ public static class SaveFunctions
         FileInfo[] saveFiles = directoryInfo.GetFiles("*." + CurrentConfig.SAVE_SULFIX);
         // Cycle through all save files and identify the most recent one
         */
-        ConfigurationSettings saveObject = JsonUtility.FromJson<ConfigurationSettings>(CurrentConfig.SAVE_FOLDER + CurrentConfig.SAVE_PREFIX + "{0}" + "." + CurrentConfig.SAVE_SULFIX);
-
-
+        ConfigurationSettings saveObject = JsonUtility.FromJson<ConfigurationSettings>(CurrentConfig.SAVE_FOLDER + CurrentConfig.SAVE_PREFIX + FILE_NAME + "." + CurrentConfig.SAVE_EXT);
     }
 }

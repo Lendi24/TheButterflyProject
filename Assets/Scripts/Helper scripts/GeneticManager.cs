@@ -2,10 +2,9 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-
 public class GeneticManager : MonoBehaviour
 {
-    public static void UpdateAnimalGene (Gene animalGene, int allelLen, int trueLen)
+    public static void UpdateAnimalGene (Gene animalGene, int allelLen, int trueLen, bool? domin)
     {
         bool[] alleles = new bool[allelLen];
 
@@ -15,20 +14,21 @@ public class GeneticManager : MonoBehaviour
         }
 
         animalGene.alleles = alleles;
+        animalGene.domin = domin;
     }
 
-    public static void UpdateAnimalGene(Gene animalGene, int allelLen)
+    public static void UpdateAnimalGene(Gene animalGene, int allelLen, bool? domin)
     {
-        UpdateAnimalGene(animalGene, allelLen, Random.Range(0,allelLen+1));
+        UpdateAnimalGene(animalGene, allelLen, Random.Range(0,allelLen+1), domin);
     }
 
-    public static void UpdateAnimalGene(Gene animalGene, Gene[] allgenes)
+    public static void UpdateAnimalGene(Gene animalGene, Gene[] allgenes, bool? domin)
     { 
         Gene firstGeneRef = PickRandomGene(allgenes);
         Gene SecondGeneRef = PickRandomGene(allgenes);
         Gene NewGene = CombineAlleles(firstGeneRef, SecondGeneRef);
 
-        UpdateAnimalGene(animalGene, allgenes[0].alleles.Length, GetTrueLen(NewGene.alleles));
+        UpdateAnimalGene(animalGene, allgenes[0].alleles.Length, GetTrueLen(NewGene.alleles), domin);
     }
 
     public static float BlendInCalc(Gene animalGene)
@@ -39,7 +39,7 @@ public class GeneticManager : MonoBehaviour
         {
             trueLen++;
         }
-
+ 
         if (animalGene.domin == null) //No Dominance
         {
             return trueLen / animalGene.alleles.Length;
