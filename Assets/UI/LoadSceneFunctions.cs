@@ -23,7 +23,28 @@ public class LoadSceneFunctions : MonoBehaviour
     {
         SoundScript.Instance.gameObject.GetComponent<AudioSource>().clip = audioClip;
         SoundScript.Instance.gameObject.GetComponent<AudioSource>().PlayDelayed(0.1f);
-        ButterHuntVariables.SetMode(1);
+
+        CurrentConfig.conf = ConfigurationFunctions.MakeConfObject(
+            _preHuntTime: 1f,
+            _huntTime: 3f,
+
+            _butterflyStartAmountRandom: 8,
+            _butterflyStartAmountGene: 2,
+            _maximumKills: 3,
+            _minimumKills: 1,
+            _butterflyRoundSpawnAmount: 2,
+            _healthAmount: 3,
+
+            _resetEverythingOnNextGen: true,
+            _noSafeClick: false,
+            _keepButterAmount: false,
+            
+            _renderLerp: 1,
+            _renderPerlin: 0,
+            _renderButterBackground: true,
+
+            _geneMode: 2);
+
         SceneManager.LoadScene("ButterHunt");
     }
 
@@ -31,7 +52,28 @@ public class LoadSceneFunctions : MonoBehaviour
     {
         SoundScript.Instance.gameObject.GetComponent<AudioSource>().clip = audioClip;
         SoundScript.Instance.gameObject.GetComponent<AudioSource>().PlayDelayed(0.1f);
-        ButterHuntVariables.SetMode(2);
+
+        CurrentConfig.conf = ConfigurationFunctions.MakeConfObject(
+            _preHuntTime: 1f,
+            _huntTime: 4f,
+
+            _butterflyStartAmountRandom: 8,
+            _butterflyStartAmountGene: 2,
+            _maximumKills: 3,
+            _minimumKills: 1,
+            _butterflyRoundSpawnAmount: 2,
+            _healthAmount: 2,
+
+            _resetEverythingOnNextGen: true,
+            _noSafeClick: true,
+            _keepButterAmount: false,
+
+            _renderLerp: 1,
+            _renderPerlin: 1,
+            _renderButterBackground: true,
+
+            _geneMode: 0);
+
         SceneManager.LoadScene("ButterHunt");
     }
 
@@ -40,7 +82,28 @@ public class LoadSceneFunctions : MonoBehaviour
     {
         SoundScript.Instance.gameObject.GetComponent<AudioSource>().clip = audioClip;
         SoundScript.Instance.gameObject.GetComponent<AudioSource>().PlayDelayed(0.1f);
-        ButterHuntVariables.SetMode(3);
+
+        CurrentConfig.conf = ConfigurationFunctions.MakeConfObject(
+            _preHuntTime: 1f,
+            _huntTime: 5f,
+
+            _butterflyStartAmountRandom: 8,
+            _butterflyStartAmountGene: 2,
+            _maximumKills: 3,
+            _minimumKills: 1,
+            _butterflyRoundSpawnAmount: 2,
+            _healthAmount: 3,
+
+            _resetEverythingOnNextGen: true,
+            _noSafeClick: true,
+            _keepButterAmount: false,
+
+            _renderLerp: 1,
+            _renderPerlin: 0,
+            _renderButterBackground: true,
+
+            _geneMode: 1);
+
         SceneManager.LoadScene("ButterHunt");
     }
 
@@ -49,44 +112,6 @@ public class LoadSceneFunctions : MonoBehaviour
         SoundScript.Instance.gameObject.GetComponent<AudioSource>().clip = audioClip;
         SoundScript.Instance.gameObject.GetComponent<AudioSource>().PlayDelayed(0.1f);
         SceneManager.LoadScene("ButterHunt");
-    }
-
-    //CustomSelectUI
-
-
-    public void StartCustomGame(
-        float _preHuntTime, 
-        float _huntTime, 
-        int _butterflyGeneLength, 
-        int _butterflyStartAmountRandom, 
-        int _butterflyStartAmountGene, 
-        int _maximumKills, 
-        int _minimumKills, 
-        int _butterflyRenderMode, 
-        int _butterflyRoundSpawnAmount, 
-        int _healthAmount, 
-        bool _resetEverythingOnNextGen, 
-        bool _noSafeClick, 
-        bool _keepButterAmount, 
-        bool? _geneMode)
-    {
-
-        /*
-        ButterHuntVariables.SetCustom(
-            _preHuntTime, 
-            _huntTime, 
-            _butterflyGeneLength, 
-            _butterflyStartAmountRandom, 
-            _butterflyStartAmountGene, 
-            _maximumKills, 
-            _minimumKills, 
-            _butterflyRenderMode, 
-            _butterflyRoundSpawnAmount, 
-            _healthAmount, 
-            _resetEverythingOnNextGen, 
-            _noSafeClick, 
-            _keepButterAmount);
-        SceneManager.LoadScene("ButterHunt");*/
     }
 
     //Shared
@@ -108,7 +133,6 @@ public class LoadSceneFunctions : MonoBehaviour
         SoundScript.PlayAudio(audioClip);
         SceneManager.LoadScene("GraphScene");
     }
-
 
     public void ExitGamePress()
     {
