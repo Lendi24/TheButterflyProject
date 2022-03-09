@@ -15,11 +15,11 @@ public class ConfigurationSettings
 {
     public float preHuntTime;
     public float huntTime;
-    public int   butterflyGeneLength;
+    //public int   butterflyGeneLength;
     public int   butterflyStartAmountRandom;
     public int   butterflyStartAmountGene;
     public int   maximumKills;
-    public int   minimumKills;
+    public int   minimumKills; 
     public int   butterflyRoundSpawnAmount;
     public int   healthAmount;
     public bool  resetEverythingOnNextGen;
@@ -28,7 +28,7 @@ public class ConfigurationSettings
     public float renderLerp;
     public float renderPerlin;
     public bool  renderButterBackground;
-    public bool?  geneMode;
+    public int  geneMode;
 
 }
 
@@ -44,7 +44,7 @@ public static class ConfigurationFunctions
     public static ConfigurationSettings MakeConfObject(
         float   _preHuntTime,
         float   _huntTime,
-        int     _butterflyGeneLength,
+        //int     _butterflyGeneLength,
         int     _butterflyStartAmountRandom,
         int     _butterflyStartAmountGene,
         int     _maximumKills,
@@ -57,7 +57,7 @@ public static class ConfigurationFunctions
         float   _renderLerp,
         float   _renderPerlin,
         bool    _renderButterBackground,
-        bool?   _geneMode
+        int     _geneMode
         )
     {
 
@@ -65,7 +65,7 @@ public static class ConfigurationFunctions
         {
             preHuntTime                 = _preHuntTime,
             huntTime                    = _huntTime,
-            butterflyGeneLength         = _butterflyGeneLength,
+            //butterflyGeneLength         = _butterflyGeneLength,
             butterflyStartAmountRandom  = _butterflyStartAmountRandom,
             butterflyStartAmountGene    = _butterflyStartAmountGene,
             maximumKills                = _maximumKills,

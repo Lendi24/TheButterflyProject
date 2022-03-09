@@ -17,11 +17,6 @@ public class ConfigExplorer : MonoBehaviour
         //cards.RegisterCallback<PointerDownEvent, string>(ButtonInListEditPressed, "te");
     }
 
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
 
     void GetConfigFiles()
     {

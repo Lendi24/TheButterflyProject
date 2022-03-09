@@ -20,4 +20,7 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/UI/Graph/GraphScene.unity
     guid: 954be98a8362988478a51a6ff7b6a921
+  - enabled: 1
+    path: Assets/UI/ConfigExplorer/ConfigExplorer.unity
+    guid: 9b1d0cff86a0832429d53f3e8f5b6560
   m_configObjects: {}

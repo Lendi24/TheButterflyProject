@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class GeneticManager : MonoBehaviour
 {
-    public static void UpdateAnimalGene (Gene animalGene, int allelLen, int trueLen, bool? domin)
+    public static void UpdateAnimalGene (Gene animalGene, int allelLen, int trueLen, int domin)
     {
         bool[] alleles = new bool[allelLen];
 
@@ -17,12 +17,12 @@ public class GeneticManager : MonoBehaviour
         animalGene.domin = domin;
     }
 
-    public static void UpdateAnimalGene(Gene animalGene, int allelLen, bool? domin)
+    public static void UpdateAnimalGene(Gene animalGene, int allelLen, int domin)
     {
         UpdateAnimalGene(animalGene, allelLen, Random.Range(0,allelLen+1), domin);
     }
 
-    public static void UpdateAnimalGene(Gene animalGene, Gene[] allgenes, bool? domin)
+    public static void UpdateAnimalGene(Gene animalGene, Gene[] allgenes, int domin)
     { 
         Gene firstGeneRef = PickRandomGene(allgenes);
         Gene SecondGeneRef = PickRandomGene(allgenes);
@@ -39,20 +39,18 @@ public class GeneticManager : MonoBehaviour
         {
             trueLen++;
         }
- 
-        if (animalGene.domin == null) //No Dominance
-        {
-            return trueLen / animalGene.alleles.Length;
-        }
 
-        else if (animalGene.domin == true) //Dark Dominant
+        switch (animalGene.domin)
         {
-            return (trueLen >= 1) ? 1f : 0.5f;
-        }
+            case 1: //Dark Dominant
+                return (trueLen >= 1) ? 1f : 0.5f;
 
-        else //Light Dominant 
-        {
-            return (trueLen < 1) ? 1f : 0.5f;
+            case 2://Light Dominant 
+                return (trueLen < 1) ? 1f : 0.5f;
+
+            default: //No Dominance
+                return trueLen / animalGene.alleles.Length; 
+
         }
     }
 

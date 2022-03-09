@@ -11,11 +11,6 @@ public class ButterflyBehaviour : MonoBehaviour
 
     public Gene gene;
 
-    // Start is called before the first frame update
-    void Start()
-    {
-    }
-
     private void OnMouseDown()
     {
         ray = Camera.main.ScreenPointToRay(Input.mousePosition);

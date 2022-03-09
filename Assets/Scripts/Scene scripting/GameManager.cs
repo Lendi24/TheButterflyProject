@@ -24,11 +24,10 @@ public class GameManager : MonoBehaviour
 
     [SerializeField]
     int butterflyGeneLength, butterflyStartAmountRandom, butterflyStartAmountGene, maximumKills, minimumKills, butterflyRoundSpawnAmount, healthAmount, score;
-    int roundAllowedClicks;
+    int roundAllowedClicks, geneMode;
 
     [SerializeField]
     bool resetEverythingOnNextGen, noSafeClick, keepButterAmount, renderButterBackground;
-    bool? geneMode;
 
     private bool isPaused;
     private int butterfliesRemaining, gameState;
@@ -123,7 +122,7 @@ rContainer.transform.childCount);
         preHuntTime = CurrentConfig.conf.preHuntTime;
         huntTime = CurrentConfig.conf.huntTime;
 
-        butterflyGeneLength = CurrentConfig.conf.butterflyGeneLength;
+        //butterflyGeneLength = CurrentConfig.conf.butterflyGeneLength;
         butterflyStartAmountRandom = CurrentConfig.conf.butterflyStartAmountRandom;
         butterflyStartAmountGene = CurrentConfig.conf.butterflyStartAmountGene;
         maximumKills = CurrentConfig.conf.maximumKills;
