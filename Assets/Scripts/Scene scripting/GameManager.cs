@@ -98,6 +98,7 @@ rContainer.transform.childCount);
         score = 0;
         gameState = 0;
 
+        /*
         preHuntTime = ButterHuntVariables.preHuntTime;
         huntTime = ButterHuntVariables.huntTime;
 
@@ -116,6 +117,26 @@ rContainer.transform.childCount);
         renderLerp = ButterHuntVariables.renderLerp;
         renderPerlin = ButterHuntVariables.renderPerlin;
         renderButterBackground = ButterHuntVariables.renderButterBackground;
+        */
+
+        preHuntTime = CurrentConfig.conf.preHuntTime;
+        huntTime = CurrentConfig.conf.huntTime;
+
+        butterflyGeneLength = CurrentConfig.conf.butterflyGeneLength;
+        butterflyStartAmountRandom = CurrentConfig.conf.butterflyStartAmountRandom;
+        butterflyStartAmountGene = CurrentConfig.conf.butterflyStartAmountGene;
+        maximumKills = CurrentConfig.conf.maximumKills;
+        minimumKills = CurrentConfig.conf.minimumKills;
+        butterflyRoundSpawnAmount = CurrentConfig.conf.butterflyRoundSpawnAmount;
+        healthAmount = CurrentConfig.conf.healthAmount;
+
+        resetEverythingOnNextGen = CurrentConfig.conf.resetEverythingOnNextGen;
+        noSafeClick = CurrentConfig.conf.noSafeClick;
+        keepButterAmount = CurrentConfig.conf.keepButterAmount;
+
+        renderLerp = CurrentConfig.conf.renderLerp;
+        renderPerlin = CurrentConfig.conf.renderPerlin;
+        renderButterBackground = CurrentConfig.conf.renderButterBackground;
 
     }
 

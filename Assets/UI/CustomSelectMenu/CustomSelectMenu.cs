@@ -93,6 +93,15 @@ public class CustomSelectMenu : MonoBehaviour
 
     void CreateCustomGame()
     {
+        int i = geneModeRadio.value;
+        //GetComponent<LoadSceneFunctions>().StartCustomGame(preHuntTime.value, huntTime.value, geneLength.value, startAmountRandom.value, startAmountGene.value, Mathf.RoundToInt(kills.maxValue), Mathf.RoundToInt(kills.minValue), renderMode.value, roundSpawnAmount.value, healthAmount.value, resetOnNextGen.value, noSafeClick.value, keepButterflyAmount.value, geneMode);
+        CurrentConfig.conf = MakeConfObject();
+
+        SceneManager.LoadScene("ButterHunt");
+
+    }
+
+    ConfigurationSettings MakeConfObject() {
         bool? geneMode;
 
         if (geneModeRadio.Q<RadioButton>("light").value)
@@ -110,8 +119,27 @@ public class CustomSelectMenu : MonoBehaviour
             geneMode = null;
         }
 
-        int i = geneModeRadio.value;
-        GetComponent<LoadSceneFunctions>().StartCustomGame(preHuntTime.value, huntTime.value, geneLength.value, startAmountRandom.value, startAmountGene.value, Mathf.RoundToInt(kills.maxValue), Mathf.RoundToInt(kills.minValue), renderMode.value, roundSpawnAmount.value, healthAmount.value, resetOnNextGen.value, noSafeClick.value, keepButterflyAmount.value, geneMode);
+        return SaveFunctions.MakeConfObject(
+            _preHuntTime:                   preHuntTime.value,
+            _huntTime:                      huntTime.value,
+            _butterflyGeneLength:           geneLength.value,
+            _butterflyStartAmountRandom:    startAmountRandom.value,
+            _butterflyStartAmountGene:      startAmountGene.value,
+            _maximumKills:                  Mathf.RoundToInt(kills.maxValue),
+            _minimumKills:                  Mathf.RoundToInt(kills.minValue),
+            _butterflyRoundSpawnAmount:     roundSpawnAmount.value,
+            _healthAmount:                  healthAmount.value,
+            _resetEverythingOnNextGen:      resetOnNextGen.value,
+            _noSafeClick:                   noSafeClick.value,
+            _keepButterAmount:              keepButterflyAmount.value,
+
+            //PlaceholderRenderVariables
+            _renderLerp: 1.0f,
+            _renderPerlin: 1.0f,
+            _renderButterBackground: true,
+
+            _geneMode:                      geneMode);
+
     }
 
 }

@@ -52,6 +52,8 @@ public class LoadSceneFunctions : MonoBehaviour
     }
 
     //CustomSelectUI
+
+
     public void StartCustomGame(
         float _preHuntTime, 
         float _huntTime, 
@@ -66,8 +68,10 @@ public class LoadSceneFunctions : MonoBehaviour
         bool _resetEverythingOnNextGen, 
         bool _noSafeClick, 
         bool _keepButterAmount, 
-        bool? geneMode)
+        bool? _geneMode)
     {
+
+        /*
         ButterHuntVariables.SetCustom(
             _preHuntTime, 
             _huntTime, 
@@ -82,7 +86,7 @@ public class LoadSceneFunctions : MonoBehaviour
             _resetEverythingOnNextGen, 
             _noSafeClick, 
             _keepButterAmount);
-        SceneManager.LoadScene("ButterHunt");
+        SceneManager.LoadScene("ButterHunt");*/
     }
 
     //Shared
