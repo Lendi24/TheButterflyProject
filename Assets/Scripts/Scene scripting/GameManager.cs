@@ -24,10 +24,10 @@ public class GameManager : MonoBehaviour
 
     [SerializeField]
     int butterflyGeneLength, butterflyStartAmountRandom, butterflyStartAmountGene, maximumKills, minimumKills, butterflyRoundSpawnAmount, healthAmount, score;
-    int roundAllowedClicks;
+    int roundAllowedClicks, geneMode;
 
     [SerializeField]
-    bool resetEverythingOnNextGen, noSafeClick, keepButterAmount, evolveOnAliveAnimals, renderButterBackground;
+    bool resetEverythingOnNextGen, noSafeClick, keepButterAmount, renderButterBackground;
 
     private bool isPaused;
     private int butterfliesRemaining, gameState;
@@ -47,6 +47,8 @@ public class GameManager : MonoBehaviour
     // Start is called before the first frame update
     public void Start()
     {
+        butterflyGeneLength = 2; //remove this todo ree
+
         Time.timeScale = 1;
         GetComponent<SplashShifter>().ShowSplash(0, preHuntSplash);
         Physics.autoSyncTransforms = true;
@@ -56,11 +58,12 @@ public class GameManager : MonoBehaviour
         spriteOverlayMan.GetComponent<SpriteOverlay>().MakeHealthSpriteUI(healthAmount); 
         SetScreenSize();
         PrepareGame();
+
     }
 
     public void SetScreenSize()
     {
-        gameObject.transform.localScale = GameBoardResizer.GetGameBoardSize();
+        transform.localScale = GameBoardResizer.GetGameBoardSize();
 
         //Making size correct
         GetComponent<Renderer>().material = backgroundPattern;
@@ -76,13 +79,15 @@ public class GameManager : MonoBehaviour
         GetComponent<Renderer>().material.SetTexture("_MainTex", null);
         GetComponent<Renderer>().material.SetTexture("_SecondaryTex", backgroundTexture);
 
+
         // 1,0: esy
         // 1,1: mid
         // 0,1: hrd
 
         /*foreach(Transform selectedButterfly in butterContainer.GetComponentInChildren<Transform>())
         {
-            Debug.Log(butterContainer.transform.childCount);
+            Debug.Log(butte    void TextureMatchedRender(GameObject _newButterfly)
+rContainer.transform.childCount);
             selectedButterfly.localScale = new Vector3(100 * transform.localScale.x * 0.5f, 100 * transform.localScale.x * 0.5f, 100 * transform.localScale.x * 0.5f);
             TextureMatchedRender(selectedButterfly.gameObject);
         }*/
@@ -95,6 +100,7 @@ public class GameManager : MonoBehaviour
         score = 0;
         gameState = 0;
 
+        /*
         preHuntTime = ButterHuntVariables.preHuntTime;
         huntTime = ButterHuntVariables.huntTime;
 
@@ -113,7 +119,27 @@ public class GameManager : MonoBehaviour
         renderLerp = ButterHuntVariables.renderLerp;
         renderPerlin = ButterHuntVariables.renderPerlin;
         renderButterBackground = ButterHuntVariables.renderButterBackground;
+        */
 
+        preHuntTime = CurrentConfig.conf.preHuntTime;
+        huntTime = CurrentConfig.conf.huntTime;
+
+        //butterflyGeneLength = CurrentConfig.conf.butterflyGeneLength;
+        butterflyStartAmountRandom = CurrentConfig.conf.butterflyStartAmountRandom;
+        butterflyStartAmountGene = CurrentConfig.conf.butterflyStartAmountGene;
+        maximumKills = CurrentConfig.conf.maximumKills;
+        minimumKills = CurrentConfig.conf.minimumKills;
+        butterflyRoundSpawnAmount = CurrentConfig.conf.butterflyRoundSpawnAmount;
+        healthAmount = CurrentConfig.conf.healthAmount;
+
+        resetEverythingOnNextGen = CurrentConfig.conf.resetEverythingOnNextGen;
+        noSafeClick = CurrentConfig.conf.noSafeClick;
+        keepButterAmount = CurrentConfig.conf.keepButterAmount;
+
+        renderLerp = CurrentConfig.conf.renderLerp;
+        renderPerlin = CurrentConfig.conf.renderPerlin;
+        renderButterBackground = CurrentConfig.conf.renderButterBackground;
+        geneMode = CurrentConfig.conf.geneMode;
     }
 
     void ResetVariables()
@@ -162,7 +188,10 @@ public class GameManager : MonoBehaviour
             {
                 for (int j = 0; j <= butterflyGeneLength; j++)
                 {
-                    SpawnButterfly(GeneticManager.GiveSpecificGenetics(butterflyGeneLength, j));
+                    GameObject animal = SpawnButterfly();
+                    GeneticManager.UpdateAnimalGene(animal.GetComponent<ButterflyBehaviour>().gene, butterflyGeneLength, j, geneMode);
+                    ApplyButterflyBlendin(animal, GeneticManager.BlendInCalc(animal.GetComponent<ButterflyBehaviour>().gene));
+
                 }
             }
         }
@@ -170,7 +199,10 @@ public class GameManager : MonoBehaviour
         //Spawns rest of population (or all of population, if butterflyStartAmountGene was set to 0) with random genes.
         for (int i = 0; i < butterflyStartAmountRandom - (minAllowed); i++)
         {
-            SpawnButterfly(GeneticManager.GiveRandomGenetics(butterflyGeneLength));
+            GameObject animal = SpawnButterfly();
+            GeneticManager.UpdateAnimalGene(animal.GetComponent<ButterflyBehaviour>().gene, butterflyGeneLength, geneMode);
+            ApplyButterflyBlendin(animal, GeneticManager.BlendInCalc(animal.GetComponent<ButterflyBehaviour>().gene));
+
         }
         gameState = 1;
         statsLogList.Add(new StatSave() { populationAmount = butterContainer.transform.childCount, GeneData = butterContainer.GetComponent<ButterCollection>().GetAnimalGenes() });
@@ -178,7 +210,12 @@ public class GameManager : MonoBehaviour
 
     Vector3 RandomButterPos(Quaternion newButterRotate)
     {
-        Vector2 boardSize = GetComponent<Renderer>().bounds.size;
+        Vector2 boardSize = new Vector2 (
+            x: GetComponent<Renderer>().bounds.size.x,
+            y: GetComponent<Renderer>().bounds.size.y
+            );
+
+
         float newButterX;
         float newButterY;
         float newButterZ = ((butterfly.GetComponent<Renderer>().bounds.size.z) / -2);
@@ -194,13 +231,13 @@ public class GameManager : MonoBehaviour
             noOverlap = !Physics.CheckBox(new Vector3(newButterX, newButterY, newButterZ),
                      butterfly.GetComponent<Renderer>().bounds.size / 2, newButterRotate);
 
-        } while (!(nrOfLoops > 500000 || noOverlap)); //Break for infinite loop
+        } while (!(nrOfLoops > 500 || noOverlap)); //Break for infinite loop
         if (!noOverlap) Debug.LogError("Could not find space for butterfly, or code is broken.");
 
         return new Vector3(newButterX, newButterY, newButterZ);
     }
 
-    void SpawnButterfly(bool[] genetics)
+    GameObject SpawnButterfly()
     {
         Quaternion randomRotation = Quaternion.Euler(0, 0, Random.Range(1, 360));
         GameObject newButterfly = Instantiate(butterfly,                //Prefab
@@ -209,15 +246,21 @@ public class GameManager : MonoBehaviour
 
         newButterfly.transform.name = "Butterfly";
         newButterfly.transform.parent = butterContainer.transform;
-        newButterfly.transform.localScale = new Vector3(100 * transform.localScale.x * 0.5f, 100 * transform.localScale.x * 0.5f, 100 * transform.localScale.x * 0.5f);
+        //newButterfly.transform.localScale = new Vector3(100 * transform.localScale.y * 0.5f, 100 * transform.localScale.y * 0.5f, 100 * transform.localScale.y * 0.5f); //OBS! is undead
+        //butterContainer.GetComponent<ButterCollection>().ResizeAnimals(); //New resize code that also doesnt work
+
+        //resize animals
         newButterfly.GetComponent<ButterflyBehaviour>().gameBoard = this.gameObject;
+        newButterfly.GetComponent<ButterflyBehaviour>().gene = new Gene();
 
-        newButterfly.GetComponent<ButterflyBehaviour>().genes = genetics;
-        float blendIn = GeneticManager.BlendInCalc(genetics);
+        return newButterfly;
+    }
 
-        Renderer butterRender = newButterfly.GetComponent<Renderer>();
+    void ApplyButterflyBlendin(GameObject butterfly, float blendIn)
+    {
+        Renderer butterRender = butterfly.GetComponent<Renderer>();
 
-        TextureMatchedRender(newButterfly);
+        TextureMatchedRender(butterfly);
 
         if (renderButterBackground)
         {
@@ -326,6 +369,9 @@ public class GameManager : MonoBehaviour
                     spriteOverlayMan.GetComponent<SpriteOverlay>().RemoveKlick();
                 }
 
+                //butterContainer.GetComponent<ButterCollection>().ResizeAnimals(butterflySize);
+
+
                 if (TimmerManagment.Timmer(GetHuntTime()))
                 { //Checks if Timer is finished. Time is dependant on an exponential value,
                   //y=C*a^x. Time decreases the more rounds have passed.
@@ -378,24 +424,18 @@ public class GameManager : MonoBehaviour
                 {
                     butterflyRoundSpawnAmount = deadButterContainer.transform.childCount;
                 }
-                //InvertGenes
-
-                bool[][] genes;
-                if (evolveOnAliveAnimals)
-                {
-                    genes = butterContainer.GetComponent<ButterCollection>().GetAnimalGenes();
-                }
-                else
-                {
-                   genes = GeneticManager.InvertGenes(deadButterContainer.GetComponent<ButterCollection>().GetAnimalGenes());
-                }
-
+                
                 for (int i = 0; i < butterflyRoundSpawnAmount; i++)
                 {
-                    SpawnButterfly(GeneticManager.EvolveNewAnimal(genes, butterflyGeneLength));
+                    GameObject animal = SpawnButterfly();
+                    GeneticManager.UpdateAnimalGene(animal.GetComponent<ButterflyBehaviour>().gene,
+                                                    butterContainer.GetComponent<ButterCollection>().GetAnimalGenes(),
+                                                    geneMode);
+
+                    ApplyButterflyBlendin(animal, GeneticManager.BlendInCalc(animal.GetComponent<ButterflyBehaviour>().gene));
                 }
 
-                statsLogList.Add(new StatSave() { populationAmount = butterContainer.transform.childCount, GeneData = butterContainer.GetComponent<ButterCollection>().GetAnimalGenes() });
+                statsLogList.Add(new StatSave() { populationAmount = butterContainer.transform.childCount, GeneData = butterContainer.GetComponent<ButterCollection>().GetAnimalAlleles() });
 
                 ResetVariables();
                 break;
@@ -405,7 +445,7 @@ public class GameManager : MonoBehaviour
         }
     }
 
-    void RandomizeAnimalPos()
+    public void RandomizeAnimalPos()
     {
         //Move outside box. This will keep auto-col detect from triggering
         foreach (Transform animal in butterContainer.transform)
@@ -455,12 +495,6 @@ public class GameManager : MonoBehaviour
             return huntTimeMin;
         }
     }
-
-    void StoreValues(bool[] genetics)
-    {
-
-    }
-
 
     /*
     |=============================|

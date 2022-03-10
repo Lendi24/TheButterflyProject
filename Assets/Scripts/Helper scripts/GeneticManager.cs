@@ -2,153 +2,119 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-
 public class GeneticManager : MonoBehaviour
 {
-    static int lastSpawnedTrueGeneLen;
-
-    public static bool[] GiveSpecificGenetics(int geneticLength, int trueGenes)
+    public static void UpdateAnimalGene (Gene animalGene, int allelLen, int trueLen, int domin)
     {
-        bool[] genes = new bool[geneticLength];
+        bool[] alleles = new bool[allelLen];
 
-        for (int i = 0; i < trueGenes; i++)
+        for (int i = 0; i < trueLen; i++)
         {
-            genes[i] = true;
+            alleles[i] = true;
         }
 
-        return genes;
+        animalGene.alleles = alleles;
+        animalGene.domin = domin;
     }
 
-    public static bool[] GiveRandomGenetics(int geneticLength)
+    public static void UpdateAnimalGene(Gene animalGene, int allelLen, int domin)
     {
-        bool[] genetics = new bool[geneticLength];
-        for (int i = 0; i < geneticLength; i++)
+        UpdateAnimalGene(animalGene, allelLen, Random.Range(0,allelLen+1), domin);
+    }
+
+    public static void UpdateAnimalGene(Gene animalGene, Gene[] allgenes, int domin)
+    { 
+        Gene firstGeneRef = PickRandomGene(allgenes);
+        Gene SecondGeneRef = PickRandomGene(allgenes);
+        Gene NewGene = CombineAlleles(firstGeneRef, SecondGeneRef);
+
+        UpdateAnimalGene(animalGene, allgenes[0].alleles.Length, GetTrueLen(NewGene.alleles), domin);
+    }
+
+    public static float BlendInCalc(Gene animalGene)
+    {
+        float trueLen = 0f; //this should be float. Otherwise it breaks when dividing, since an int will be returned. Don't change!
+
+        for (int i = 0; i < animalGene.alleles.Length && animalGene.alleles[i]; i++)
         {
-            genetics[i] = Random.Range(0f, 1f) > 0.5;
+            trueLen++;
         }
 
-        return SortBoolArray(genetics);
-    }
-
-    static bool[] SortBoolArray(bool[]boolArray)
-    {
-        bool swapped = true;
-        bool done = false;
-
-        while (!done)
+        switch (animalGene.domin)
         {
-            done = true;
+            case 1: //Dark Dominant
+                return (trueLen >= 1) ? 1f : 0.5f;
 
-            if (swapped)
-            {
-                for (int i = 0; i < boolArray.Length - 1; i++)
-                {
-                    if (!boolArray[i] && boolArray[i + 1])
-                    {
-                        bool temp = boolArray[i];
-                        boolArray[i] = boolArray[i + 1];
-                        boolArray[i + 1] = temp;
-                        done = false;
-                    }
-                }
-            }
+            case 2://Light Dominant 
+                return (trueLen < 1) ? 1f : 0.5f;
 
-            else
-            {
-                int i = boolArray.Length - 1;
-                for (; i >= 1; i--)
-                {
-                    if (boolArray[i] && !boolArray[i - 1])
-                    {
-                        bool temp = boolArray[i];
-                        boolArray[i] = boolArray[i - 1];
-                        boolArray[i - 1] = temp;
-                        done = false;
-                    }
-                }
-            }
+            default: //No Dominance
+                return trueLen / animalGene.alleles.Length; 
 
         }
-
-        return boolArray;
     }
 
-    public static float BlendInCalc(bool[] genetics)
+    public static Gene PickRandomGene(Gene[] allGenes)
     {
-        float geneTrueLength = 0; //this should be float. Otherwise it breaks when dividing, since an int will be returned. Don't change!
+        int randIndex = Random.Range(0, allGenes.Length - 1); //Last one will be just created, and will have null as value
+        Gene gene = allGenes[randIndex];
+        return gene;
+    }
 
-        for (int i = 0; i < genetics.Length && genetics[i]; i++)
+    public static Gene CombineAlleles(Gene firstAllelsRef, Gene SecondAllelsRef) //Can be redone to take lists and handle data with for-loops for more dynamic code
+    {
+        if (firstAllelsRef.alleles.Length != SecondAllelsRef.alleles.Length)
         {
-            geneTrueLength++;
+            Debug.LogError("Genetics Error! Tried to match two different sized genes");
         }
 
-        return geneTrueLength / genetics.Length;
-    }
+        int firstTrueLen = GetTrueLen(firstAllelsRef.alleles);
+        int SecondTrueLen = GetTrueLen(SecondAllelsRef.alleles);
+        int maxLen = firstAllelsRef.alleles.Length;
 
-    public static bool[] InvertGenes(bool[] genes)
-    {
-        for (int i = 0; i < genes.Length; i++)
+        bool firstAllel;
+        if (firstTrueLen == maxLen || firstTrueLen == 0)
         {
-            genes[i] = !genes[i];
+            firstAllel = firstTrueLen == maxLen;
         }
 
-        return genes;
-    }
-
-    public static bool[][] InvertGenes(bool[][] genes)
-    {
-        for (int i = 0; i < genes.Length; i++)
+        else 
         {
-            for (int j = 0; j < genes[i].Length; j++)
-            {
-                genes[i][j] = !genes[i][j];
-            }
+            firstAllel = Random.value > 0.5;
         }
+        //Yeah.. this is bad code... Change it when we have time
 
-        return genes;
-    }
-
-
-    public static bool[] EvolveNewAnimal(bool[][] animalsAsRef, int butterflyGeneLength)
-    {
-        int newTrueGeneLength;
-
-        if (animalsAsRef.Length <= 0)
+        bool SecondAllel;
+        if (firstTrueLen == maxLen || firstTrueLen == 0)
         {
-            newTrueGeneLength = lastSpawnedTrueGeneLen;
+            SecondAllel = SecondTrueLen == maxLen;
         }
 
         else
         {
-            int geneTrueLength = 0;
-            for (int i = 0; i < animalsAsRef.Length; i++)
-            {
-                for (int j = 0; j < animalsAsRef[i].Length && animalsAsRef[i][j]; j++)
-                {
-                    geneTrueLength++;
-                }
-            }
-
-            newTrueGeneLength = geneTrueLength / animalsAsRef.Length;
-            if (lastSpawnedTrueGeneLen == newTrueGeneLength) newTrueGeneLength += Mutation(-1, 1);
-            lastSpawnedTrueGeneLen = newTrueGeneLength;
+            SecondAllel = Random.value > 0.5;
         }
 
-        bool[] newGenes = new bool[butterflyGeneLength];
-        for (int i = 0; i < newGenes.Length; i++)
+        if (!firstAllel && SecondAllel)
         {
-            newGenes[i] = i < newTrueGeneLength;
+            firstAllel = true;
+            SecondAllel = false;
         }
 
-        return newGenes;
+        Gene newGene = new Gene { alleles = new bool[2] };
+        newGene.alleles[0] = firstAllel;
+        newGene.alleles[1] = SecondAllel;
+
+        return newGene;
     }
 
-    public static int Mutation(int low, int max)
+    public static int GetTrueLen(bool[] alleles)
     {
-        if (Random.Range(0,15) == 0)
+        int i = 0;
+        while (i < alleles.Length && alleles[i])
         {
-            return Random.Range(low, max + 1);
+            i++;
         }
-        return 0;
+        return i;
     }
 }
