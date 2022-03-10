@@ -1,0 +1,7 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" xsi="http://www.w3.org/2001/XMLSchema-instance" engine="UnityEngine.UIElements" editor="UnityEditor.UIElements" noNamespaceSchemaLocation="../../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
+    <Style src="project://database/Assets/UI/SebfucksaroundwithUSS/yees.uss?fileID=7433441132597879392&amp;guid=6cd598bb6124fa24a838f6645848ee3b&amp;type=3#yees" />
+    <ui:VisualElement style="background-color: rgba(183, 70, 70, 255); height: auto; justify-content: space-between; align-items: center; flex-shrink: 1; flex-grow: 0;">
+        <ui:Label text="This is a cool thing, yeees" display-tooltip-when-elided="true" name="Label" style="align-items: flex-start; -unity-text-align: upper-center;" />
+        <ui:Button text="Very Cool Button" display-tooltip-when-elided="true" style="justify-content: flex-start; flex-direction: column; align-items: stretch; width: auto; flex-grow: 1; flex-shrink: 0;" />
+    </ui:VisualElement>
+</ui:UXML>

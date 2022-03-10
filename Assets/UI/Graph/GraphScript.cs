@@ -9,6 +9,7 @@ public class GraphScript : MonoBehaviour
     int timeValue; //
     public int maxValue; //
     int colorAmount; //
+    int graphNum = 1;
     //LineRenderer lineRenderer;
     Vector3[] vertices;
     //Vector2[] uv;
@@ -191,12 +192,12 @@ public class GraphScript : MonoBehaviour
     public void GetVariables()
     {
         timeValue = SoundScript.timeValue;
-        Debug.Log(timeValue);
+        //Debug.Log(timeValue);
         colorAmount = SoundScript.colorValue;
-        Debug.Log(colorAmount);
+        //Debug.Log(colorAmount);
         values = SoundScript.values;
 
-        Debug.Log(values.Count);
+        //Debug.Log(values.Count);
         colorValueArr = new int[colorAmount, timeValue + 1];
         for(int i = 0; i < values.Count; i++)
         {
@@ -224,6 +225,26 @@ public class GraphScript : MonoBehaviour
             {
                 maxValue = values[i].populationAmount;
             }
+        }
+    }
+    void ResetGraph() 
+    {
+        for(int i = 0; i < transform.childCount; i++) 
+        {
+            Destroy(transform.GetChild(i).gameObject);
+        }
+    }
+
+    public void SwitchGraph() 
+    {
+        ResetGraph();
+        if(graphNum == 1) {
+            graphNum = 2;
+        }
+        else if(graphNum == 2) {
+            graphNum = 1;
+            GetVariables();
+            CreateMeshes();
         }
     }
 }

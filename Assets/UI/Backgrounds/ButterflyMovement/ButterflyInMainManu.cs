@@ -102,7 +102,7 @@ public class ButterflyInMainManu : MonoBehaviour
         {
             for(int j = 0; j < buttersPerColumn; j++)
             {
-                Debug.Log(butterContainer.transform.GetChild(0).position.y);
+                //Debug.Log(butterContainer.transform.GetChild(0).position.y);
                 CreateButterfly(i * 3 - (size / 2) + 1, butterContainer.transform.GetChild(0).position.y + (j * distance), -0.5f);
             }
         }

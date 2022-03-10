@@ -191,7 +191,7 @@ rContainer.transform.childCount);
                     GameObject animal = SpawnButterfly();
                     GeneticManager.UpdateAnimalGene(animal.GetComponent<ButterflyBehaviour>().gene, butterflyGeneLength, j, geneMode);
                     ApplyButterflyBlendin(animal, GeneticManager.BlendInCalc(animal.GetComponent<ButterflyBehaviour>().gene));
-
+                    
                 }
             }
         }
