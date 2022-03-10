@@ -12,7 +12,8 @@ public class SplashShifter : MonoBehaviour
 
     private void Start()
     {
-        GetComponent<LoadSceneFunctions>().RestartGamePress();
+        //No touchy!! This code makes GameManager's Start() to run twice!
+        //GetComponent<LoadSceneFunctions>().RestartGamePress();
     }
 
     private void AssignBittons()
