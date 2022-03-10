@@ -205,7 +205,7 @@ rContainer.transform.childCount);
 
         }
         gameState = 1;
-        statsLogList.Add(new StatSave() { populationAmount = butterContainer.transform.childCount, GeneData = butterContainer.GetComponent<ButterCollection>().GetAnimalGenes() });
+        statsLogList.Add(new StatSave() { populationAmount = butterContainer.transform.childCount, GeneData = butterContainer.GetComponent<ButterCollection>().GetAnimalAlleles() });
     }
 
     Vector3 RandomButterPos(Quaternion newButterRotate)
