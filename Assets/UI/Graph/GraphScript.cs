@@ -18,21 +18,32 @@ public class GraphScript : MonoBehaviour
     int[,] colorValueArr;
     int[] triangles;
     Color[] graphColors;
+    Color[] alleleColors;
+    Color[] phenotypeColors;
     // Start is called before the first frame update
     void Start()
     {
-        GetVariables();
+        GetVariables(0);
         
         vertices = new Vector3[(timeValue+1)*2];
         //colorValueArr = new int[colorAmount, timeValue + 1];
         //int[] triangles = new int[timeValue+3];
         SetColors();
+        alleleColors = CreateColors(3);
+        while(true)
+        {
+            phenotypeColors = CreateColors(2);
+            if(phenotypeColors != alleleColors)
+            {
+                break;
+            }
+        }
         //RandomizeValues();
         
         origo = new Vector3(graphBoard.transform.position.x - (graphBoard.transform.localScale.x / 2), graphBoard.transform.position.y - (graphBoard.transform.localScale.y / 2), 0);
         triangles = new int[(timeValue + 1) * 6];
 
-        CreateMeshes();
+        CreateMeshes(0);
 
         /*GameObject line = new GameObject();
         line.name = "Line";
@@ -92,7 +103,7 @@ public class GraphScript : MonoBehaviour
         }
     }*/
 
-    void CreateMeshes()
+    void CreateMeshes(int colorValueMode)
     {
         for (int i = 0; i < colorAmount; i++)
         {
@@ -106,14 +117,7 @@ public class GraphScript : MonoBehaviour
             newMesh.transform.parent = graphBoard.transform;
             newMesh.GetComponent<MeshFilter>().mesh = mesh;
             newMesh.GetComponent<Renderer>().material = Instantiate(mat);
-            if (i > graphColors.Length)
-            {
-                newMesh.GetComponent<Renderer>().material.color = new Color(Random.Range(0.00f, 1.01f), Random.Range(0.00f, 1.01f), Random.Range(0.00f, 1.01f));
-            }
-            else
-            {
-                newMesh.GetComponent<Renderer>().material.color = graphColors[i];
-            }
+            newMesh.GetComponent<Renderer>().material.color = AssignColors(i, colorValueMode);
             AssignVertices(i);
             SetTriangles();
             mesh.vertices = vertices;
@@ -121,6 +125,39 @@ public class GraphScript : MonoBehaviour
             mesh.triangles = triangles;
             //triangles[i] = i;  
         }
+    }
+
+    Color[] CreateColors(int arrLength)
+    {
+        int rand = Random.Range(0, 15);
+        Color[] newColors = new Color[arrLength];
+        for(int i = 0; i < arrLength; i++)
+        {
+            newColors[i] = new Color(graphColors[rand].r - ((float)i / 10), graphColors[rand].g - ((float)i / 10), graphColors[rand].b - ((float)i / 10));
+        }
+
+        return newColors;
+    }
+
+    Color AssignColors(int meshNr,int colorValueMode)
+    {
+        if(colorValueMode == 0)
+        {
+            return alleleColors[meshNr];
+        }
+        else if(colorValueMode == 1)
+        {
+            return phenotypeColors[meshNr];
+            /*if (meshNr > graphColors.Length)
+            {
+                return new Color(Random.Range(0.00f, 1.01f), Random.Range(0.00f, 1.01f), Random.Range(0.00f, 1.01f));
+            }
+            else
+            {
+                return graphColors[meshNr];
+            }*/
+        }
+        return new Color(0, 0, 0);
     }
 
     void AssignVertices(int index)
@@ -189,34 +226,61 @@ public class GraphScript : MonoBehaviour
                                     new Color(0.3f, 0.2f, 0.4f), new Color(0.4f, 0.2f, 0.35f), new Color(0.25f, 0.4f, 0.4f) };
     }
 
-    public void GetVariables()
+    public void GetVariables(int colorValueMode)
     {
         timeValue = SoundScript.timeValue;
         //Debug.Log(timeValue);
-        colorAmount = SoundScript.colorValue;
+        
         //Debug.Log(colorAmount);
         values = SoundScript.values;
 
-        //Debug.Log(values.Count);
-        colorValueArr = new int[colorAmount, timeValue + 1];
-        for(int i = 0; i < values.Count; i++)
+        //Gene[] test = values[0].geneData;
+        //Debug.Log(GeneticManager.BlendInCalc(test[0]));
+        if(colorValueMode == 0) //Gets the color values for alleles
         {
-            bool[][] arrData = values[i].GeneData;
-            for (int j = 0; j < arrData.Length; j++)
+            colorAmount = SoundScript.colorValue;
+            //Debug.Log(values.Count);
+            colorValueArr = new int[colorAmount, timeValue + 1];
+            for (int i = 0; i < values.Count; i++)
             {
-                int gene = 0;
-                for(int k = 0; k < arrData[j].Length; k++)
+                bool[][] arrData = values[i].alleleData;
+                for (int j = 0; j < arrData.Length; j++)
                 {
-                    if(arrData[j][k])
+                    int gene = 0;
+                    for (int k = 0; k < arrData[j].Length; k++)
                     {
-                        gene++;
+                        if (arrData[j][k])
+                        {
+                            gene++;
+                        }
+                        else
+                        {
+                            break;
+                        }
                     }
-                    else
-                    {
-                        break;
-                    }
+                    colorValueArr[gene, i]++;
                 }
-                colorValueArr[gene, i]++;
+            }
+        }
+        else if(colorValueMode == 1) //Gets the color values for phenotypes
+        {
+            colorAmount = 2;
+            colorValueArr = new int[2, timeValue + 1];
+            for (int i = 0; i < values.Count; i++)
+            {
+                for (int j = 0; j < values[i].phenotypeData.Length; j++)
+                {
+                    //Debug.Log(GeneticManager.BlendInCalc(values[i].phenotypeData[j]));
+                    if (values[i].phenotypeData[j] == 1)
+                    {
+                        colorValueArr[0, i]++;
+                    }
+                    else if (values[i].phenotypeData[j] == 0.5f)
+                    {
+                        colorValueArr[1, i]++;
+                    }
+
+                }
             }
         }
         for(int i = 0; i < values.Count; i++)
@@ -240,11 +304,13 @@ public class GraphScript : MonoBehaviour
         ResetGraph();
         if(graphNum == 1) {
             graphNum = 2;
+            GetVariables(1);
+            CreateMeshes(1);
         }
         else if(graphNum == 2) {
             graphNum = 1;
-            GetVariables();
-            CreateMeshes();
+            GetVariables(0);
+            CreateMeshes(0);
         }
     }
 }

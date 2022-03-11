@@ -205,7 +205,7 @@ rContainer.transform.childCount);
 
         }
         gameState = 1;
-        statsLogList.Add(new StatSave() { populationAmount = butterContainer.transform.childCount, GeneData = butterContainer.GetComponent<ButterCollection>().GetAnimalAlleles() });
+        statsLogList.Add(new StatSave() { populationAmount = butterContainer.transform.childCount, alleleData = butterContainer.GetComponent<ButterCollection>().GetAnimalAlleles(), phenotypeData = butterContainer.GetComponent<ButterCollection>().GetAnimalPhenotypes() });
     }
 
     Vector3 RandomButterPos(Quaternion newButterRotate)
@@ -435,7 +435,7 @@ rContainer.transform.childCount);
                     ApplyButterflyBlendin(animal, GeneticManager.BlendInCalc(animal.GetComponent<ButterflyBehaviour>().gene));
                 }
 
-                statsLogList.Add(new StatSave() { populationAmount = butterContainer.transform.childCount, GeneData = butterContainer.GetComponent<ButterCollection>().GetAnimalAlleles() });
+                statsLogList.Add(new StatSave() { populationAmount = butterContainer.transform.childCount, alleleData = butterContainer.GetComponent<ButterCollection>().GetAnimalAlleles(), phenotypeData = butterContainer.GetComponent<ButterCollection>().GetAnimalPhenotypes() });
 
                 ResetVariables();
                 break;

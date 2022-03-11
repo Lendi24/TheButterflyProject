@@ -31,6 +31,19 @@ public class ButterCollection : MonoBehaviour
         return new List<bool[]>(animalGenes).ToArray();
     }
 
+    public float[] GetAnimalPhenotypes()
+    {
+        int nrOfAnimals = transform.childCount;
+        float[] animalPhenotypes = new float[nrOfAnimals];
+        
+        for(int i = 0; i < transform.childCount; i++)
+        {
+            animalPhenotypes[i] = transform.GetChild(i).GetComponent<Renderer>().material.GetFloat("_LerpValue");
+        }
+
+        return new List<float>(animalPhenotypes).ToArray();
+    }
+
     public void ResizeAnimals (float xSize)
     {
         for (int i = 0; i < transform.childCount; i++)

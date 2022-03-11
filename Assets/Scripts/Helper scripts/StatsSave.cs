@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class StatSave 
 {
-    public bool[][] GeneData;
+    public bool[][] alleleData;
+    public float[] phenotypeData;
     public int populationAmount;
 }

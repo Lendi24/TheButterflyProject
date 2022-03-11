@@ -1,6 +1,7 @@
 <ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" xsi="http://www.w3.org/2001/XMLSchema-instance" engine="UnityEngine.UIElements" editor="UnityEditor.UIElements" noNamespaceSchemaLocation="../../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
     <ui:VisualElement style="align-items: center; justify-content: flex-end; height: 100%;">
-        <ui:VisualElement name="Button" style="flex-direction: column; justify-content: space-between; margin-bottom: 2%;">
+        <ui:VisualElement name="Button" style="flex-direction: row; justify-content: space-between; margin-bottom: 2%;">
+            <ui:Button text="Switch Graph" display-tooltip-when-elided="true" name="switch-graph" style="height: 37px; width: 195px; white-space: nowrap; left: auto; top: 0; right: auto; bottom: 0;" />
             <ui:Button text="Restart" display-tooltip-when-elided="true" name="restart-game" style="height: 37px; width: 195px; white-space: nowrap; left: auto; top: 0; right: auto; bottom: 0;" />
             <ui:Button text="Main Menu" display-tooltip-when-elided="true" name="main-menu" style="height: 37px; width: 195px; white-space: nowrap; left: auto; top: 0; right: auto; bottom: 0;" />
         </ui:VisualElement>
