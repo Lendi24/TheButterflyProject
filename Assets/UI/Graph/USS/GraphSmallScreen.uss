@@ -1,0 +1,14 @@
+#Button {
+    flex-direction: column;
+    justify-content: flex-start;
+}
+
+#graph-text {
+	font-size: 30px;
+	-unity-font-style: bold;
+	margin-top: 5px; 
+}
+
+#Button Button {
+	background-color: rgba(196, 196, 196, 0.63);
+}

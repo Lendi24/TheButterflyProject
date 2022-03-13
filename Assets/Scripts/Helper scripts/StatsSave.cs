@@ -7,4 +7,5 @@ public class StatSave
     public bool[][] alleleData;
     public float[] phenotypeData;
     public int populationAmount;
+    public int domMode;
 }

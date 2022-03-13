@@ -1,0 +1,4 @@
+#Button #switch-graph {
+    display: none;
+    background-color: red;
+}

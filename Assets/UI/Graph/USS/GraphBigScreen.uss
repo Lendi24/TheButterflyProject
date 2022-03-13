@@ -1,0 +1,9 @@
+#Button {
+	flex-direction: row;
+}
+
+#graph-text {
+	font-size: 30px;
+	-unity-font-style: bold;
+	margin-top: 5px;
+}

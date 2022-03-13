@@ -1,15 +1,21 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UIElements;
 
 public class GraphScript : MonoBehaviour
 {
     public Material mat;
     public GameObject graphBoard;
+    public UIDocument graphUI;
+    public StyleSheet noGraphSwitch;
     int timeValue; //
     public int maxValue; //
     int colorAmount; //
+    int domMode;
     int graphNum = 1;
+    int screenSizeX = Screen.width;
+    int screenSizeY = Screen.height;
     //LineRenderer lineRenderer;
     Vector3[] vertices;
     //Vector2[] uv;
@@ -23,6 +29,7 @@ public class GraphScript : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        graphBoard.transform.localScale = GameBoardResizer.GetGameBoardSize()*10;
         GetVariables(0);
         
         vertices = new Vector3[(timeValue+1)*2];
@@ -76,7 +83,11 @@ public class GraphScript : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        
+        if(screenSizeX != Screen.width || screenSizeY != Screen.height) {
+            screenSizeX = Screen.width;
+            screenSizeY = Screen.height;
+            graphBoard.transform.localScale = GameBoardResizer.GetGameBoardSize()*10;
+        }
     }
 
     /*void RandomizeValues()
@@ -233,55 +244,84 @@ public class GraphScript : MonoBehaviour
         
         //Debug.Log(colorAmount);
         values = SoundScript.values;
+        domMode = values[0].domMode;
 
         //Gene[] test = values[0].geneData;
         //Debug.Log(GeneticManager.BlendInCalc(test[0]));
-        if(colorValueMode == 0) //Gets the color values for alleles
-        {
-            colorAmount = SoundScript.colorValue;
-            //Debug.Log(values.Count);
-            colorValueArr = new int[colorAmount, timeValue + 1];
-            for (int i = 0; i < values.Count; i++)
+        if(domMode != 0) {
+            if(colorValueMode == 0) //Gets the color values for alleles
             {
-                bool[][] arrData = values[i].alleleData;
-                for (int j = 0; j < arrData.Length; j++)
+                colorAmount = SoundScript.colorValue;
+                //Debug.Log(values.Count);
+                colorValueArr = new int[colorAmount, timeValue + 1];
+                for (int i = 0; i < values.Count; i++)
                 {
-                    int gene = 0;
-                    for (int k = 0; k < arrData[j].Length; k++)
+                    bool[][] arrData = values[i].alleleData;
+                    for (int j = 0; j < arrData.Length; j++)
                     {
-                        if (arrData[j][k])
+                        int gene = 0;
+                        for (int k = 0; k < arrData[j].Length; k++)
                         {
-                            gene++;
+                            if (arrData[j][k])
+                            {
+                                gene++;
+                            }
+                            else
+                            {
+                                break;
+                            }
                         }
-                        else
-                        {
-                            break;
-                        }
+                        colorValueArr[gene, i]++;
                     }
-                    colorValueArr[gene, i]++;
+                }
+            }
+            else if(colorValueMode == 1) //Gets the color values for phenotypes
+            {
+                colorAmount = 2;
+                colorValueArr = new int[2, timeValue + 1];
+                for (int i = 0; i < values.Count; i++)
+                {
+                    for (int j = 0; j < values[i].phenotypeData.Length; j++)
+                    {
+                        //Debug.Log(GeneticManager.BlendInCalc(values[i].phenotypeData[j]));
+                        if (values[i].phenotypeData[j] == 1)
+                        {
+                            colorValueArr[0, i]++;
+                        }
+                        else if (values[i].phenotypeData[j] == 0.5f)
+                        {
+                            colorValueArr[1, i]++;
+                        }
+
+                    }
                 }
             }
         }
-        else if(colorValueMode == 1) //Gets the color values for phenotypes
-        {
-            colorAmount = 2;
-            colorValueArr = new int[2, timeValue + 1];
-            for (int i = 0; i < values.Count; i++)
-            {
-                for (int j = 0; j < values[i].phenotypeData.Length; j++)
+        else {
+            graphUI.rootVisualElement.styleSheets.Add(noGraphSwitch);
+            colorAmount = SoundScript.colorValue;
+                //Debug.Log(values.Count);
+                colorValueArr = new int[colorAmount, timeValue + 1];
+                for (int i = 0; i < values.Count; i++)
                 {
-                    //Debug.Log(GeneticManager.BlendInCalc(values[i].phenotypeData[j]));
-                    if (values[i].phenotypeData[j] == 1)
+                    bool[][] arrData = values[i].alleleData;
+                    for (int j = 0; j < arrData.Length; j++)
                     {
-                        colorValueArr[0, i]++;
+                        int gene = 0;
+                        for (int k = 0; k < arrData[j].Length; k++)
+                        {
+                            if (arrData[j][k])
+                            {
+                                gene++;
+                            }
+                            else
+                            {
+                                break;
+                            }
+                        }
+                        colorValueArr[gene, i]++;
                     }
-                    else if (values[i].phenotypeData[j] == 0.5f)
-                    {
-                        colorValueArr[1, i]++;
-                    }
-
                 }
-            }
         }
         for(int i = 0; i < values.Count; i++)
         {
@@ -306,11 +346,13 @@ public class GraphScript : MonoBehaviour
             graphNum = 2;
             GetVariables(1);
             CreateMeshes(1);
+            graphUI.GetComponent<GraphUI>().ChangeText("Phenotype Graph");
         }
         else if(graphNum == 2) {
             graphNum = 1;
             GetVariables(0);
             CreateMeshes(0);
+            graphUI.GetComponent<GraphUI>().ChangeText("Allele Graph");
         }
     }
 }
