@@ -1,10 +1,9 @@
 <ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" xsi="http://www.w3.org/2001/XMLSchema-instance" engine="UnityEngine.UIElements" editor="UnityEditor.UIElements" noNamespaceSchemaLocation="../../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
     <Style src="project://database/Assets/UI/Graph/USS/GraphSmallScreen.uss?fileID=7433441132597879392&amp;guid=7380df5f5196863418ccb7c1bd391d24&amp;type=3#GraphSmallScreen" />
-    <Style src="project://database/Assets/UI/Graph/USS/NoGraphSwitch.uss?fileID=7433441132597879392&amp;guid=8a5444958c9b7514cbe6270795d358ef&amp;type=3#NoGraphSwitch" />
-    <ui:VisualElement name="Container" style="align-items: center; justify-content: space-between; height: 100%; flex-direction: column;">
+    <ui:VisualElement name="Container">
         <ui:Label text="Allele Graph" display-tooltip-when-elided="true" name="graph-text" style="flex-grow: 0; flex-direction: column; justify-content: flex-start; flex-shrink: 0;" />
-        <ui:VisualElement name="Button" focusable="false" usage-hints="None" style="flex-direction: row; justify-content: space-between; margin-bottom: 2%; align-items: stretch; flex-shrink: 1; flex-grow: 0; flex-basis: auto; position: relative; width: auto; height: auto; visibility: visible; display: flex;">
-            <ui:Button text="Switch Graph" display-tooltip-when-elided="true" name="switch-graph" focusable="true" usage-hints="None" enable-rich-text="true" style="height: 37px; width: 195px; white-space: nowrap; left: auto; top: 0; right: auto; bottom: 0; display: flex;" />
+        <ui:VisualElement name="Button">
+            <ui:Button text="Switch Graoh" display-tooltip-when-elided="true" name="switch-graph" />
             <ui:Button text="Restart" display-tooltip-when-elided="true" name="restart-game" style="height: 37px; width: 195px; white-space: nowrap; left: auto; top: 0; right: auto; bottom: 0;" />
             <ui:Button text="Main Menu" display-tooltip-when-elided="true" name="main-menu" style="height: 37px; width: 195px; white-space: nowrap; left: auto; top: 0; right: auto; bottom: 0;" />
         </ui:VisualElement>

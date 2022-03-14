@@ -1,3 +1,12 @@
+#Container {
+	justify-content: flex-end;
+	flex-grow: 1;
+}
+
+#graph-text {
+	display: none;
+}
+
 #Button #switch-graph {
     display: none;
     background-color: red;

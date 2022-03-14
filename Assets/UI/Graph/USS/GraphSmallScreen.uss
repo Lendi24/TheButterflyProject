@@ -1,12 +1,21 @@
+#Container {
+	justify-content: space-between;
+	align-items: center;
+	flex-grow: 1;
+	flex-shrink: 0;
+}
+
 #Button {
     flex-direction: column;
-    justify-content: flex-start;
+    justify-content: space-between;
+	align-items: stretch;
 }
 
 #graph-text {
 	font-size: 30px;
 	-unity-font-style: bold;
 	margin-top: 5px; 
+	color: white;
 }
 
 #Button Button {
