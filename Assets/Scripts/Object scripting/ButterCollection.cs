@@ -31,14 +31,22 @@ public class ButterCollection : MonoBehaviour
         return new List<bool[]>(animalGenes).ToArray();
     }
 
-    public float[] GetAnimalPhenotypes()
+    public float[] GetAnimalPhenotypes(bool renderButterflyBackground)
     {
         int nrOfAnimals = transform.childCount;
         float[] animalPhenotypes = new float[nrOfAnimals];
         
+
         for(int i = 0; i < transform.childCount; i++)
         {
-            animalPhenotypes[i] = transform.GetChild(i).GetComponent<Renderer>().material.GetFloat("_LerpValue");
+            if(renderButterflyBackground)
+            {
+                animalPhenotypes[i] = transform.GetChild(i).GetComponent<Renderer>().material.GetFloat("_LerpValue");
+            }
+            else
+            {
+                animalPhenotypes[i] = transform.GetChild(i).GetComponent<Renderer>().material.GetFloat("_enablePerlin");
+            }
         }
 
         return new List<float>(animalPhenotypes).ToArray();

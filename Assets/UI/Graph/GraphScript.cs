@@ -52,6 +52,8 @@ public class GraphScript : MonoBehaviour
 
         CreateMeshes(0);
 
+
+
         /*GameObject line = new GameObject();
         line.name = "Line";
         line.AddComponent<LineRenderer>();
@@ -70,14 +72,14 @@ public class GraphScript : MonoBehaviour
         {
             lineRenderer.SetPosition(i, new Vector3(origo.x + i * (graphBoard.transform.localScale.x / timeValue), origo.y + (values[i] * (graphBoard.transform.localScale.y / maxValue)) * 0.75f, 0));
         }*/
-       
+
         //vertices[timeValue+1] = new Vector3(graphBoard.transform.position.x + (graphBoard.transform.localScale.x / 2), graphBoard.transform.position.y + (graphBoard.transform.localScale.y / 2), 0);
         //triangles[timeValue + 1] = timeValue + 1;
         //vertices[timeValue+2] = new Vector3(graphBoard.transform.position.x - (graphBoard.transform.localScale.x / 2), graphBoard.transform.position.y - (graphBoard.transform.localScale.y / 2), 0);
         //triangles[timeValue + 2] = timeValue + 2;
         //lineRenderer.SetPositions(new Vector3[3] { startPos, startPos + new Vector3(1,1,0), startPos + new Vector3(2,0,0) }) ;
         //uv = new Vector2[] {new Vector2(vertices[0].x,vertices[0].y), new Vector2(vertices[1].x, vertices[1].y), new Vector2(vertices[2].x, vertices[2].y) };
-        
+
     }
 
     // Update is called once per frame
@@ -249,7 +251,8 @@ public class GraphScript : MonoBehaviour
         //Gene[] test = values[0].geneData;
         //Debug.Log(GeneticManager.BlendInCalc(test[0]));
         if(domMode != 0) {
-            if(colorValueMode == 0) //Gets the color values for alleles
+            graphUI.GetComponent<GraphUI>().ChangeText("Allele Graph");
+            if (colorValueMode == 0) //Gets the color values for alleles
             {
                 colorAmount = SoundScript.colorValue;
                 //Debug.Log(values.Count);
@@ -298,6 +301,7 @@ public class GraphScript : MonoBehaviour
             }
         }
         else {
+            graphUI.GetComponent<GraphUI>().ChangeText("Allele/Phenotype Graph");
             graphUI.rootVisualElement.styleSheets.Add(noGraphSwitch);
             colorAmount = SoundScript.colorValue;
                 //Debug.Log(values.Count);

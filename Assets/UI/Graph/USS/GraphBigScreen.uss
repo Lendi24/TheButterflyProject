@@ -21,3 +21,7 @@
 #Button Button {
 	background-color: rgba(196, 196, 196, 0.63);
 }
+
+#Button Button:hover {
+	background-color: rgba(143, 143, 143, 0.63);
+}

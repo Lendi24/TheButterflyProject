@@ -461,6 +461,10 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 6427596877661526487, guid: 0c22a8247677de44d96d99da8ef437be, type: 3}
     - target: {fileID: 2685223900220870895, guid: 144cf3a294f6a4344a8733cddc79eac7, type: 3}
+      propertyPath: m_Enabled
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2685223900220870895, guid: 144cf3a294f6a4344a8733cddc79eac7, type: 3}
       propertyPath: noGraphSwitch
       value: 
       objectReference: {fileID: 7433441132597879392, guid: 8a5444958c9b7514cbe6270795d358ef, type: 3}
