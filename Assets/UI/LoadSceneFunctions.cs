@@ -10,7 +10,7 @@ public class LoadSceneFunctions : MonoBehaviour
     {
         SoundScript.PlayAudio(audioClip);
         //SceneManager.LoadScene("StartMenu");ree
-        SceneManager.LoadScene("Example");
+        SceneManager.LoadScene("Networking");
 
     }
 
