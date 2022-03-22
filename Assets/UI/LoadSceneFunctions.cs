@@ -9,7 +9,9 @@ public class LoadSceneFunctions : MonoBehaviour
     public void StartButtonPressed()
     {
         SoundScript.PlayAudio(audioClip);
-        SceneManager.LoadScene("StartMenu");
+        //SceneManager.LoadScene("StartMenu");ree
+        SceneManager.LoadScene("Example");
+
     }
 
     public void LoadButtonPressed()
