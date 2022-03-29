@@ -1,12 +1,28 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.EventSystems;
 using UnityEngine.SceneManagement;
 using UnityEngine.UIElements;
 
 public class ConfigExplorer : MonoBehaviour
 {
-    VisualElement cards;
+    VisualElement cards, selectedCard;
+
+    void ChangeSelectedCard(Button newSelectedCard)
+    {
+        int borderWidth = 5;
+        Color borderColour = Color.white;
+
+        if (selectedCard != null)
+        {
+            selectedCard.style.borderLeftWidth = 0;
+        }
+
+        selectedCard = newSelectedCard;
+        selectedCard.style.borderLeftColor = borderColour;
+        selectedCard.style.borderLeftWidth = borderWidth;
+    }
 
     // Start is called before the first frame update
     void Start()
@@ -16,7 +32,6 @@ public class ConfigExplorer : MonoBehaviour
         GetConfigFiles();
         //cards.RegisterCallback<PointerDownEvent, string>(ButtonInListEditPressed, "te");
     }
-
 
     void GetConfigFiles()
     {
@@ -30,22 +45,32 @@ public class ConfigExplorer : MonoBehaviour
 
     void CreateCard(string cardName)
     {
-        cards.Add(new VisualElement { name = cardName });
-        
-        VisualElement card = cards.Q<VisualElement>(cardName); //Making card elem
+        cards.Add(new Button { name = cardName });
+
+        Button card = cards.Q<Button>(cardName); //Making card elem
         card.AddToClassList("Card");
         card.Add(new VisualElement { name = "Text-Container" });
-        card.Add(new VisualElement { name = "Button-Container" });
+        //card.Add(new VisualElement { name = "Button-Container" });
+        card.clicked += () => { ChangeSelectedCard(card); };
 
         VisualElement textContainer = card.Q<VisualElement>("Text-Container"); //Making text contain
         textContainer.Add(new Label { text = cardName });
 
+        if (selectedCard == null) //Making first card spawned the selected one
+        {
+            ChangeSelectedCard(card);
+        }
+
+
+        /*
         VisualElement buttonContainer = card.Q<VisualElement>("Button-Container"); //Making button contain
         buttonContainer.Add(new Button { text = "Start", name = "Start" });
         buttonContainer.Add(new Button { text = "Edit", name = "Edit" });
 
         buttonContainer.Q<Button>("Start").clicked += () => { ButtonInListPressed(cardName, 1); };
-        buttonContainer.Q<Button>("Edit").clicked += () => { ButtonInListPressed(cardName, 0); };
+        buttonContainer.Q<Button>("Edit").clicked += () => { ButtonInListPressed(cardName, 0); };*/
+
+        
     }
 
     void ButtonInListPressed(string configName, int mode)

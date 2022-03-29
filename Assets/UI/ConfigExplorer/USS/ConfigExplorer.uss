@@ -9,6 +9,10 @@
 	margin-bottom: 2px;
 }
 
+.Card:hover {
+	background-color: lightgray;
+}
+
 .Card #Text-Container {
 	align-items: center; 
 	justify-content: flex-start; 
