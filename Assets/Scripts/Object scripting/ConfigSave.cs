@@ -84,6 +84,79 @@ public static class ConfigurationFunctions
         return conf;
     }
 
+    public static void InitFolder()
+    {
+        DirectoryInfo dir = new DirectoryInfo(CurrentConfig.SAVE_PATH);
+
+        foreach (FileInfo file in dir.GetFiles())
+        {
+            file.Delete();
+        }
+
+        SaveToFile(ConfigurationFunctions.MakeConfObject(
+            _preHuntTime: 1f,
+            _huntTime: 3f,
+
+            _butterflyStartAmountRandom: 8,
+            _butterflyStartAmountGene: 2,
+            _maximumKills: 3,
+            _minimumKills: 1,
+            _butterflyRoundSpawnAmount: 2,
+            _healthAmount: 3,
+
+            _resetEverythingOnNextGen: true,
+            _noSafeClick: false,
+            _keepButterAmount: false,
+
+            _renderLerp: 1,
+            _renderPerlin: 0,
+            _renderButterBackground: true,
+
+            _geneMode: 2), "ClassicE");
+
+        SaveToFile(ConfigurationFunctions.MakeConfObject(
+            _preHuntTime: 1f,
+            _huntTime: 4f,
+
+            _butterflyStartAmountRandom: 8,
+            _butterflyStartAmountGene: 2,
+            _maximumKills: 3,
+            _minimumKills: 1,
+            _butterflyRoundSpawnAmount: 2,
+            _healthAmount: 2,
+
+            _resetEverythingOnNextGen: true,
+            _noSafeClick: true,
+            _keepButterAmount: false,
+
+            _renderLerp: 1,
+            _renderPerlin: 1,
+            _renderButterBackground: true,
+
+            _geneMode: 0), "ClassicM");
+
+        SaveToFile(ConfigurationFunctions.MakeConfObject(
+            _preHuntTime: 1f,
+            _huntTime: 5f,
+
+            _butterflyStartAmountRandom: 8,
+            _butterflyStartAmountGene: 2,
+            _maximumKills: 3,
+            _minimumKills: 1,
+            _butterflyRoundSpawnAmount: 2,
+            _healthAmount: 3,
+
+            _resetEverythingOnNextGen: true,
+            _noSafeClick: true,
+            _keepButterAmount: false,
+
+            _renderLerp: 0,
+            _renderPerlin: 1,
+            _renderButterBackground: false,
+
+            _geneMode: 1), "ClassicH");
+    }
+
     public static void SaveToFile(ConfigurationSettings conf, string FILE_NAME)
     {
         string filePath = CurrentConfig.SAVE_PATH;

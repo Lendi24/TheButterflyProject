@@ -64,7 +64,14 @@ public class CustomSelectMenu : MonoBehaviour
         butterflySettingsButton.clicked += () => { SwitchTab(butterflySettingsPage, butterflySettingsButton); };
         
         SwitchTab(butterflySettingsPage, butterflySettingsButton);
-        loadInitValues();
+        try
+        {
+            loadInitValues();
+        }
+        catch (System.Exception)
+        {
+            Debug.LogWarning("NoLoadedConfig!");
+        }
     }
 
 

@@ -14,6 +14,11 @@ public class ConfigExplorer : MonoBehaviour
         int borderWidth = 5;
         Color borderColour = Color.white;
 
+        if (selectedCard == newSelectedCard)
+        {
+            ButtonInListPressed(selectedCard.name, 1);
+        }
+
         if (selectedCard != null)
         {
             selectedCard.style.borderLeftWidth = 0;
@@ -24,22 +29,57 @@ public class ConfigExplorer : MonoBehaviour
         selectedCard.style.borderLeftWidth = borderWidth;
     }
 
+
     // Start is called before the first frame update
     void Start()
     {
+        //GetButtons: Needs selected
+        GetComponent<UIDocument>().rootVisualElement.Q<Button>("start").clicked += () => { ButtonInListPressed(selectedCard.name, 1); };
+        GetComponent<UIDocument>().rootVisualElement.Q<Button>("export").clicked += () => { };
+        GetComponent<UIDocument>().rootVisualElement.Q<Button>("edit").clicked += () => { ButtonInListPressed(selectedCard.name, 0); };
+
+        //GetButtons: Does not need selected
+        GetComponent<UIDocument>().rootVisualElement.Q<Button>("new").clicked += () => { SceneManager.LoadScene("CustomSelectMenu");  };
+        GetComponent<UIDocument>().rootVisualElement.Q<Button>("import").clicked += () => { };
+        GetComponent<UIDocument>().rootVisualElement.Q<Button>("reset").clicked += () => 
+        {
+            //delete contents
+            GetConfigFiles(false);
+        };
+
+
         cards = GetComponent<UIDocument>().rootVisualElement.Q<VisualElement>("Cards");
         //CreateCard("Råger");
-        GetConfigFiles();
+        GetConfigFiles(false);
         //cards.RegisterCallback<PointerDownEvent, string>(ButtonInListEditPressed, "te");
     }
 
-    void GetConfigFiles()
+    void GetConfigFiles(bool hasFailed)
     {
         string[] files = ConfigurationFunctions.GetConfigFiles();
+        cards.Clear();
 
-        for (int i = 0; i < files.Length; i++)
+        if (files.Length == 0)
         {
-            CreateCard(files[i]);
+            if (hasFailed)
+            {
+                Debug.LogError("Error! No config files detected and Init of folder failed.");
+                SceneManager.LoadScene("CustomSelectMenu");
+            }
+
+            else
+            {
+                ConfigurationFunctions.InitFolder(); //Function calling itself! 
+                GetConfigFiles(true);  //If this happens more then once, infinite loop will happen
+            }
+        }
+
+        else
+        {
+            for (int i = 0; i < files.Length; i++)
+            {
+                CreateCard(files[i]);
+            }
         }
     }
 

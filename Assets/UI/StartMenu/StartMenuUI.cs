@@ -19,9 +19,11 @@ public class StartMenuUI : MonoBehaviour
         hardModeBtn = root.Q<Button>("menu-button-hard");
         backBtn = root.Q<Button>("menu-button-back");
 
+        /* Old scene
         easyModeBtn.clicked += GetComponent<LoadSceneFunctions>().StartEasyGame;
         mediumModeBtn.clicked += GetComponent<LoadSceneFunctions>().StartMediumGame;
         hardModeBtn.clicked += GetComponent<LoadSceneFunctions>().StartHardGame;
+        */
 
         backBtn.clicked += GetComponent<LoadSceneFunctions>().BackToMain;
 

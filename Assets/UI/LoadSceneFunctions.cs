@@ -10,7 +10,7 @@ public class LoadSceneFunctions : MonoBehaviour
     {
         SoundScript.PlayAudio(audioClip);
         //SceneManager.LoadScene("StartMenu");ree
-        SceneManager.LoadScene("Networking");
+        SceneManager.LoadScene("ConfigExplorer");
 
     }
 
@@ -21,6 +21,8 @@ public class LoadSceneFunctions : MonoBehaviour
     }
 
     //StartUI
+
+    /*
     public void StartEasyGame()
     {
         SoundScript.Instance.gameObject.GetComponent<AudioSource>().clip = audioClip;
@@ -108,7 +110,7 @@ public class LoadSceneFunctions : MonoBehaviour
 
         SceneManager.LoadScene("ButterHunt");
     }
-
+    */
     public void StartLastGameMode()
     {
         SoundScript.Instance.gameObject.GetComponent<AudioSource>().clip = audioClip;

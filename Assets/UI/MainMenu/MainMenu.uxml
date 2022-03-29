@@ -1,5 +1,5 @@
 <ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" xsi="http://www.w3.org/2001/XMLSchema-instance" engine="UnityEngine.UIElements" editor="UnityEditor.UIElements" noNamespaceSchemaLocation="../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
-    <Style src="/Assets/UI/StartMenu/USS/SmallScreens.uss" />
+    <Style src="project://database/Assets/UI/StartMenu/USS/SmallScreens.uss?fileID=7433441132597879392&amp;guid=c3660a924ba52e0458e086c61c3532d5&amp;type=3#SmallScreens" />
     <ui:VisualElement name="Container">
         <ui:IMGUIContainer name="TextContainer">
             <ui:Label text="The Butterfly Project" display-tooltip-when-elided="true" enable-rich-text="true" class="title" />
@@ -8,7 +8,7 @@
         <ui:VisualElement name="CenterBar">
             <ui:VisualElement name="MenuButtonContainer">
                 <ui:Button text="Start" display-tooltip-when-elided="true" name="menu-button-start" style="position: relative; top: 0;" />
-                <ui:Button text="Load Custom" display-tooltip-when-elided="true" name="menu-button-load" tabindex="1" />
+                <ui:Button text="Load Custom" display-tooltip-when-elided="true" name="menu-button-load" tabindex="1" style="display: none;" />
                 <ui:Button text="Credits" display-tooltip-when-elided="true" name="menu-button-credits" tabindex="3" />
                 <ui:Button text="Exit" display-tooltip-when-elided="true" name="menu-button-exit" tabindex="2" />
             </ui:VisualElement>
