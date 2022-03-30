@@ -1,0 +1,13 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" xsi="http://www.w3.org/2001/XMLSchema-instance" engine="UnityEngine.UIElements" editor="UnityEditor.UIElements" noNamespaceSchemaLocation="../../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
+    <Style src="project://database/Assets/UI/Graph/USS/InfoBox.uss?fileID=7433441132597879392&amp;guid=a3f5d5441d64ff94f8903a2427172afc&amp;type=3#InfoBox" />
+    <ui:VisualElement style="align-items: flex-start; position: absolute; bottom: 1px;">
+        <ui:VisualElement name="Infobox" style="flex-shrink: 1; align-items: center; background-color: rgba(161, 161, 161, 0.53); min-width: 100px; min-height: auto; max-width: none; width: auto;">
+            <ui:Label text="Statistics" display-tooltip-when-elided="true" name="title-text" style="-unity-text-align: upper-center; flex-shrink: 1; align-items: center;" />
+            <ui:VisualElement name="value-container" style="flex-direction: row; flex-shrink: 0; align-items: center; justify-content: space-between; flex-grow: 0;">
+                <ui:Label text="Round:" display-tooltip-when-elided="true" name="value-name" style="flex-grow: 0; flex-shrink: 1;" />
+                <ui:Label text="0" display-tooltip-when-elided="true" name="value-count" style="flex-grow: 0; -unity-text-align: upper-right; flex-shrink: 1;" />
+            </ui:VisualElement>
+            <ui:VisualElement name="color-stat-container" style="position: relative; bottom: auto;" />
+        </ui:VisualElement>
+    </ui:VisualElement>
+</ui:UXML>

@@ -1,0 +1,10 @@
+#title-text {
+	font-size: 20px;
+	-unity-font-style: bold;
+}
+
+#color-value-container {
+	aling-items: center;
+	justify-content: space-between;
+	flex-direction: row;
+}
