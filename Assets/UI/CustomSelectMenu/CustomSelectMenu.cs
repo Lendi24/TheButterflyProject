@@ -130,6 +130,7 @@ public class CustomSelectMenu : MonoBehaviour
         }
 
         return ConfigurationFunctions.MakeConfObject(
+            _confName:                      root.Q<TextField>("config-name").value,
             _preHuntTime:                   preHuntTime.value,
             _huntTime:                      huntTime.value, 
             //_butterflyGeneLength:           geneLength.value,

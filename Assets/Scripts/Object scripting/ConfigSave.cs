@@ -13,6 +13,7 @@ public static class CurrentConfig
 
 public class ConfigurationSettings
 {
+    public string confName;
     public float preHuntTime;
     public float huntTime;
     //public int   butterflyGeneLength;
@@ -42,6 +43,7 @@ public static class ConfigurationFunctions
 
 
     public static ConfigurationSettings MakeConfObject(
+        string  _confName,
         float   _preHuntTime,
         float   _huntTime,
         //int     _butterflyGeneLength,
@@ -63,6 +65,7 @@ public static class ConfigurationFunctions
 
         ConfigurationSettings conf = new()
         {
+            confName                    = _confName,
             preHuntTime                 = _preHuntTime,
             huntTime                    = _huntTime,
             //butterflyGeneLength         = _butterflyGeneLength,
@@ -94,6 +97,7 @@ public static class ConfigurationFunctions
         }
 
         SaveToFile(ConfigurationFunctions.MakeConfObject(
+            _confName: "ClassicE",
             _preHuntTime: 1f,
             _huntTime: 3f,
 
@@ -115,6 +119,7 @@ public static class ConfigurationFunctions
             _geneMode: 2), "ClassicE");
 
         SaveToFile(ConfigurationFunctions.MakeConfObject(
+            _confName: "ClassicM",
             _preHuntTime: 1f,
             _huntTime: 4f,
 
@@ -136,6 +141,7 @@ public static class ConfigurationFunctions
             _geneMode: 0), "ClassicM");
 
         SaveToFile(ConfigurationFunctions.MakeConfObject(
+            _confName: "ClassicH",
             _preHuntTime: 1f,
             _huntTime: 5f,
 

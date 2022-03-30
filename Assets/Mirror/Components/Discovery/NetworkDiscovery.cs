@@ -15,6 +15,7 @@ namespace Mirror.Discovery
         #region Server
 
         public long ServerId { get; private set; }
+        public string ConfName { get; private set; }
 
         [Tooltip("Transport to be advertised during discovery")]
         public Transport transport;
@@ -25,6 +26,7 @@ namespace Mirror.Discovery
         public override void Start()
         {
             ServerId = RandomLong();
+            ConfName = CurrentConfig.
 
             // active transport gets initialized in awake
             // so make sure we set it here in Start()  (after awakes)
@@ -59,6 +61,7 @@ namespace Mirror.Discovery
                 return new ServerResponse
                 {
                     serverId = ServerId,
+                    confName = ConfName,
                     uri = transport.ServerUri()
                 };
             }

@@ -5,6 +5,17 @@ using UnityEngine.EventSystems;
 using UnityEngine.SceneManagement;
 using UnityEngine.UIElements;
 
+namespace Mirror.Discovery
+{
+    public class NetworkingDisc : MonoBehaviour
+    {
+        public static void ServerFound()
+        {
+
+        }
+    }
+}
+
 public class ConfigExplorer : MonoBehaviour
 {
     VisualElement cards, selectedCard;
@@ -32,23 +43,29 @@ public class ConfigExplorer : MonoBehaviour
 
     void SetButtonMode(bool enable)
     {
-        GetComponent<UIDocument>().rootVisualElement.Q<Button>("start").SetEnabled(enable);
-        GetComponent<UIDocument>().rootVisualElement.Q<Button>("export").SetEnabled(enable);
-        GetComponent<UIDocument>().rootVisualElement.Q<Button>("editor").SetEnabled(enable);
-
+        GetComponent<UIDocument>().rootVisualElement.Q<VisualElement>("local-row1").Q<Button>("start").SetEnabled(enable);
+        GetComponent<UIDocument>().rootVisualElement.Q<VisualElement>("local-row1").Q<Button>("export").SetEnabled(enable);
+        GetComponent<UIDocument>().rootVisualElement.Q<VisualElement>("local-row1").Q<Button>("delete").SetEnabled(enable);
     }
 
     // Start is called before the first frame update
     void Start()
     {
+        GetComponent<UIDocument>().rootVisualElement.Q<VisualElement>("local-row1").visible = true;
+        GetComponent<UIDocument>().rootVisualElement.Q<VisualElement>("remote-row1").visible = false;
+
         //GetButtons: Needs selected
-        GetComponent<UIDocument>().rootVisualElement.Q<Button>("start").clicked += () => { ButtonInListPressed(selectedCard.name, 1); };
-        GetComponent<UIDocument>().rootVisualElement.Q<Button>("export").clicked += () => { ButtonInListPressed(selectedCard.name, 2);  };
-        GetComponent<UIDocument>().rootVisualElement.Q<Button>("editor").clicked += () => { ButtonInListPressed(selectedCard.name, 0); };
+        GetComponent<UIDocument>().rootVisualElement.Q<VisualElement>("local-row1").Q<Button>("start").clicked += () => { ButtonInListPressed(selectedCard.name, 1); };
+        GetComponent<UIDocument>().rootVisualElement.Q<VisualElement>("local-row1").Q<Button>("export").clicked += () => { ButtonInListPressed(selectedCard.name, 2);  };
+        GetComponent<UIDocument>().rootVisualElement.Q<VisualElement>("local-row1").Q<Button>("delete").clicked += () => {  };
 
         //GetButtons: Does not need selected
+        GetComponent<UIDocument>().rootVisualElement.Q<Button>("editor").clicked += () => { 
+            if (selectedCard == null) { SceneManager.LoadScene("CustomSelectMenu"); }
+            else { ButtonInListPressed(selectedCard.name, 0); }
+        };
         GetComponent<UIDocument>().rootVisualElement.Q<Button>("back").clicked += () => { SceneManager.LoadScene("MainMenu");  };
-        GetComponent<UIDocument>().rootVisualElement.Q<Button>("import").clicked += () => { NetVar.netModeServer = false; SceneManager.LoadScene("Networking"); };
+        //GetComponent<UIDocument>().rootVisualElement.Q<Button>("import").clicked += () => { NetVar.netModeServer = false; SceneManager.LoadScene("Networking"); };
         GetComponent<UIDocument>().rootVisualElement.Q<Button>("reset").clicked += () => 
         {
             selectedCard = null;

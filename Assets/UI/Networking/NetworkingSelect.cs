@@ -9,7 +9,6 @@ public static class NetVar
 
 namespace Mirror.Discovery
 {
-
     public class NetworkingSelect : MonoBehaviour
     {
 
@@ -52,6 +51,11 @@ namespace Mirror.Discovery
         {
             // Note that you can check the versioning to decide if you can connect to the server or not using this method
             discoveredServers[info.serverId] = info;
+
+            Debug.LogError(info.serverId);
+            Debug.LogError(info.uri);
+            Debug.LogError(info.confName);
+
         }
 
     }

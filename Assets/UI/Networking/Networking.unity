@@ -132,10 +132,10 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 96113342}
+  - component: {fileID: 96113347}
   - component: {fileID: 96113344}
   - component: {fileID: 96113343}
   - component: {fileID: 96113345}
-  - component: {fileID: 96113347}
   - component: {fileID: 96113348}
   - component: {fileID: 96113349}
   m_Layer: 0
@@ -230,9 +230,9 @@ MonoBehaviour:
   MaximizeSendReceiveBuffersToOSLimit: 1
   ReliableMaxMessageSize: 298449
   UnreliableMaxMessageSize: 1199
-  debugLog: 1
-  statisticsGUI: 1
-  statisticsLog: 1
+  debugLog: 0
+  statisticsGUI: 0
+  statisticsLog: 0
 --- !u!114 &96113345
 MonoBehaviour:
   m_ObjectHideFlags: 0
