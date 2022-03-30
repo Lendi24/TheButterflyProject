@@ -136,6 +136,8 @@ GameObject:
   - component: {fileID: 96113343}
   - component: {fileID: 96113345}
   - component: {fileID: 96113347}
+  - component: {fileID: 96113348}
+  - component: {fileID: 96113349}
   m_Layer: 0
   m_Name: NetMan
   m_TagString: Untagged
@@ -180,6 +182,18 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 96113345}
         m_TargetAssemblyTypeName: Mirror.Discovery.NetworkDiscoveryHUD, Mirror.Components
+        m_MethodName: OnDiscoveredServer
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: 
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+      - m_Target: {fileID: 96113348}
+        m_TargetAssemblyTypeName: Mirror.Discovery.NetworkingSelect, Assembly-CSharp
         m_MethodName: OnDiscoveredServer
         m_Mode: 0
         m_Arguments:
@@ -244,7 +258,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8aab4c8111b7c411b9b92cf3dbc5bd4e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  dontDestroyOnLoad: 1
+  dontDestroyOnLoad: 0
   runInBackground: 1
   autoStartServerBuild: 1
   serverTickRate: 30
@@ -258,6 +272,35 @@ MonoBehaviour:
   autoCreatePlayer: 1
   playerSpawnMethod: 0
   spawnPrefabs: []
+--- !u!114 &96113348
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 96113341}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f85175f3c763c64449d6d4c16eb514e4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  networkDiscovery: {fileID: 96113343}
+--- !u!114 &96113349
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 96113341}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 19102, guid: 0000000000000000e000000000000000, type: 0}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_PanelSettings: {fileID: 11400000, guid: 8feaad3e4d3b85345b9148d8f2f011df, type: 2}
+  m_ParentUI: {fileID: 0}
+  sourceAsset: {fileID: 9197481963319205126, guid: 84a5ebc3632ab6944968d3ceeddc5a47, type: 3}
+  m_SortingOrder: 0
 --- !u!1 &176158497
 GameObject:
   m_ObjectHideFlags: 0

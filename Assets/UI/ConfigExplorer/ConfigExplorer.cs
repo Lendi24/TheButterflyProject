@@ -11,6 +11,7 @@ public class ConfigExplorer : MonoBehaviour
 
     void ChangeSelectedCard(Button newSelectedCard)
     {
+        SetButtonMode(true);
         int borderWidth = 5;
         Color borderColour = Color.white;
 
@@ -29,24 +30,31 @@ public class ConfigExplorer : MonoBehaviour
         selectedCard.style.borderLeftWidth = borderWidth;
     }
 
+    void SetButtonMode(bool enable)
+    {
+        GetComponent<UIDocument>().rootVisualElement.Q<Button>("start").SetEnabled(enable);
+        GetComponent<UIDocument>().rootVisualElement.Q<Button>("export").SetEnabled(enable);
+        GetComponent<UIDocument>().rootVisualElement.Q<Button>("editor").SetEnabled(enable);
+
+    }
 
     // Start is called before the first frame update
     void Start()
     {
         //GetButtons: Needs selected
         GetComponent<UIDocument>().rootVisualElement.Q<Button>("start").clicked += () => { ButtonInListPressed(selectedCard.name, 1); };
-        GetComponent<UIDocument>().rootVisualElement.Q<Button>("export").clicked += () => { };
-        GetComponent<UIDocument>().rootVisualElement.Q<Button>("edit").clicked += () => { ButtonInListPressed(selectedCard.name, 0); };
+        GetComponent<UIDocument>().rootVisualElement.Q<Button>("export").clicked += () => { ButtonInListPressed(selectedCard.name, 2);  };
+        GetComponent<UIDocument>().rootVisualElement.Q<Button>("editor").clicked += () => { ButtonInListPressed(selectedCard.name, 0); };
 
         //GetButtons: Does not need selected
-        GetComponent<UIDocument>().rootVisualElement.Q<Button>("new").clicked += () => { SceneManager.LoadScene("CustomSelectMenu");  };
-        GetComponent<UIDocument>().rootVisualElement.Q<Button>("import").clicked += () => { };
+        GetComponent<UIDocument>().rootVisualElement.Q<Button>("back").clicked += () => { SceneManager.LoadScene("MainMenu");  };
+        GetComponent<UIDocument>().rootVisualElement.Q<Button>("import").clicked += () => { NetVar.netModeServer = false; SceneManager.LoadScene("Networking"); };
         GetComponent<UIDocument>().rootVisualElement.Q<Button>("reset").clicked += () => 
         {
-            //delete contents
+            selectedCard = null;
+            ConfigurationFunctions.InitFolder();
             GetConfigFiles(false);
         };
-
 
         cards = GetComponent<UIDocument>().rootVisualElement.Q<VisualElement>("Cards");
         //CreateCard("Råger");
@@ -56,8 +64,8 @@ public class ConfigExplorer : MonoBehaviour
 
     void GetConfigFiles(bool hasFailed)
     {
-        string[] files = ConfigurationFunctions.GetConfigFiles();
         cards.Clear();
+        string[] files = ConfigurationFunctions.GetConfigFiles();
 
         if (files.Length == 0)
         {
@@ -81,6 +89,7 @@ public class ConfigExplorer : MonoBehaviour
                 CreateCard(files[i]);
             }
         }
+        SetButtonMode(false);
     }
 
     void CreateCard(string cardName)
@@ -95,12 +104,6 @@ public class ConfigExplorer : MonoBehaviour
 
         VisualElement textContainer = card.Q<VisualElement>("Text-Container"); //Making text contain
         textContainer.Add(new Label { text = cardName });
-
-        if (selectedCard == null) //Making first card spawned the selected one
-        {
-            ChangeSelectedCard(card);
-        }
-
 
         /*
         VisualElement buttonContainer = card.Q<VisualElement>("Button-Container"); //Making button contain
@@ -119,7 +122,7 @@ public class ConfigExplorer : MonoBehaviour
          * Mode
          * 0 - Edit
          * 1 - Play
-         * 2 - Delete
+         * 2 - Share
          */
 
         ConfigurationFunctions.ApplyConfig(ConfigurationFunctions.LoadFromFile(configName));
@@ -134,6 +137,12 @@ public class ConfigExplorer : MonoBehaviour
             case 1:
                 Debug.Log("Trying to play " + configName);
                 SceneManager.LoadScene("ButterHunt");
+                break;
+
+            case 2:
+                Debug.Log("Trying to share " + configName);
+                NetVar.netModeServer = true; 
+                SceneManager.LoadScene("Networking"); 
                 break;
 
             default:

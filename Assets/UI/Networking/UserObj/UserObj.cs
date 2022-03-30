@@ -20,6 +20,8 @@ namespace Mirror
         {
             base.OnStartClient();
             CurrentConfig.conf = configObj;
+            SceneManager.LoadScene("ButterHunt");
+             
         }
     }
 }
