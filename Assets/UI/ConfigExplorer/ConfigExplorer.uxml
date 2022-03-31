@@ -6,7 +6,18 @@
             <ui:Label text="Select a configuration-file in the list below" display-tooltip-when-elided="true" name="subtitle" />
         </ui:VisualElement>
         <ui:ScrollView name="Scroll" style="flex-grow: 0;">
-            <ui:VisualElement name="Cards" style="display: flex;">
+            <ui:VisualElement name="LocalCards" style="display: flex;">
+                <ui:VisualElement name="0" class="Card" style="display: none;">
+                    <ui:VisualElement name="Text-Container">
+                        <ui:Label text="Label" display-tooltip-when-elided="true" />
+                    </ui:VisualElement>
+                    <ui:VisualElement name="Button-Container">
+                        <ui:Button text="Button" display-tooltip-when-elided="true" />
+                        <ui:Button text="Button" display-tooltip-when-elided="true" />
+                    </ui:VisualElement>
+                </ui:VisualElement>
+            </ui:VisualElement>
+            <ui:VisualElement name="RemoteCards" style="display: flex;">
                 <ui:VisualElement name="0" class="Card" style="display: none;">
                     <ui:VisualElement name="Text-Container">
                         <ui:Label text="Label" display-tooltip-when-elided="true" />

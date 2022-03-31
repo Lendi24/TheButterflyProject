@@ -5,6 +5,11 @@ using UnityEngine.Events;
 
 namespace Mirror.Discovery
 {
+    public static class ButterDiscoveryInfo
+    {
+        public static string serverName;
+    }
+
     [Serializable]
     public class ServerFoundUnityEvent : UnityEvent<ServerResponse> {};
 
@@ -15,7 +20,6 @@ namespace Mirror.Discovery
         #region Server
 
         public long ServerId { get; private set; }
-        public string ConfName { get; private set; }
 
         [Tooltip("Transport to be advertised during discovery")]
         public Transport transport;
@@ -26,7 +30,6 @@ namespace Mirror.Discovery
         public override void Start()
         {
             ServerId = RandomLong();
-            ConfName = CurrentConfig.
 
             // active transport gets initialized in awake
             // so make sure we set it here in Start()  (after awakes)
@@ -53,15 +56,16 @@ namespace Mirror.Discovery
             // but other discovery implementations might want to use the data
             // in there,  This way the client can ask for
             // specific game mode or something
+            Debug.Log(ButterDiscoveryInfo.serverName);
 
             try
             {
                 // this is an example reply message,  return your own
                 // to include whatever is relevant for your game
                 return new ServerResponse
-                {
+                {   
                     serverId = ServerId,
-                    confName = ConfName,
+                    confName = ButterDiscoveryInfo.serverName,
                     uri = transport.ServerUri()
                 };
             }

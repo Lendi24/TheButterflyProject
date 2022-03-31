@@ -1,63 +1,103 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
+using Mirror;
+using Mirror.Discovery;
 
-public static class NetVar
+public class NetworkingSelect : MonoBehaviour
 {
-    public static bool netModeServer;
-}
 
-namespace Mirror.Discovery
-{
-    public class NetworkingSelect : MonoBehaviour
+    Dictionary<long, ServerResponse> newDiscoveredServers = new Dictionary<long, ServerResponse>();
+    Dictionary<long, ServerResponse> oldDiscoveredServers = new Dictionary<long, ServerResponse>();
+    Vector2 scrollViewPos = Vector2.zero;
+    public NetworkDiscovery networkDiscovery;
+    float waitTime, timeLeft;
+
+    [SerializeField]
+    public ConfigExplorer explorer;
+
+    void OnValidate()
     {
-
-        readonly Dictionary<long, ServerResponse> discoveredServers = new Dictionary<long, ServerResponse>();
-        Vector2 scrollViewPos = Vector2.zero;
-        public NetworkDiscovery networkDiscovery;
-
-        void OnValidate()
+        if (networkDiscovery == null)
         {
-            if (networkDiscovery == null)
+            networkDiscovery = GetComponent<NetworkDiscovery>();
+        }
+    }
+
+    public void ShareConfig()
+    {
+        NetworkManager.singleton.StartServer();
+        networkDiscovery.AdvertiseServer();
+    }
+
+    // Start is called before the first frame update
+    void Start()
+    {
+        networkDiscovery.StartDiscovery();
+        waitTime = 2.2f;
+        timeLeft = 0.5f;
+        /*
+        if (NetVar.netModeServer)
+        {
+            newDiscoveredServers.Clear();
+            NetworkManager.singleton.StartServer();
+            networkDiscovery.AdvertiseServer();
+        }
+
+        else
+        {
+            newDiscoveredServers.Clear();
+            networkDiscovery.StartDiscovery();
+        }*/
+    }
+
+    public void Connect(ServerResponse info)
+    {
+        NetworkManager.singleton.StartClient(info.uri);
+    }
+
+    
+
+
+    private void Update()
+    {
+        if (timeLeft < 0)
+        {
+
+            if (oldDiscoveredServers.Count != newDiscoveredServers.Count) //This is a bad workaround! Fix a way to compare values, so that some fast dude cannot trick the client
             {
-                networkDiscovery = GetComponent<NetworkDiscovery>();
-            }
-        }
-
-        // Start is called before the first frame update
-        void Start()
-        {
-            if (NetVar.netModeServer)
-            {
-                discoveredServers.Clear();
-                NetworkManager.singleton.StartServer();
-                networkDiscovery.AdvertiseServer();
+                UpdateList();
             }
 
-            else
-            {
-                discoveredServers.Clear();
-                networkDiscovery.StartDiscovery();
-            }
+            oldDiscoveredServers = new Dictionary<long, ServerResponse>(newDiscoveredServers);
+            newDiscoveredServers.Clear();
+            timeLeft = waitTime;
         }
 
-        void Connect(ServerResponse info)
+        else
         {
-            networkDiscovery.StopDiscovery();
-            NetworkManager.singleton.StartClient(info.uri);
+            timeLeft = timeLeft - Time.deltaTime;
         }
+    }
 
-        public void OnDiscoveredServer(ServerResponse info)
+    private void UpdateList()
+    {
+        List<ConfigCard> cardsList = new List<ConfigCard>();
+
+        foreach (ServerResponse info in newDiscoveredServers.Values)
         {
-            // Note that you can check the versioning to decide if you can connect to the server or not using this method
-            discoveredServers[info.serverId] = info;
-
-            Debug.LogError(info.serverId);
-            Debug.LogError(info.uri);
-            Debug.LogError(info.confName);
-
+            cardsList.Add(new ConfigCard { isLocal=false, name=info.confName, origin=info.uri.ToString(), uri=info.uri});
         }
 
+        explorer.GetRemoteCards(cardsList.ToArray());
+    }
+
+    public void OnDiscoveredServer(ServerResponse info)
+    {
+        // Note that you can check the versioning to decide if you can connect to the server or not using this method
+        newDiscoveredServers[info.serverId] = info;
     }
 }
+
 

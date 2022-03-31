@@ -1,1 +1,0 @@
-{"confName":"conf","preHuntTime":2.0,"huntTime":4.0,"butterflyGeneLength":10,"butterflyStartAmountRandom":5,"butterflyStartAmountGene":1,"maximumKills":3,"minimumKills":1,"butterflyRoundSpawnAmount":2,"healthAmount":3,"resetEverythingOnNextGen":true,"noSafeClick":true,"keepButterAmount":true,"renderLerp":1.0,"renderPerlin":1.0,"renderButterBackground":true}

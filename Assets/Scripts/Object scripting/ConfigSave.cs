@@ -7,7 +7,7 @@ public static class CurrentConfig
 {
     public static ConfigurationSettings conf;
 
-    public static string SAVE_PATH = Application.dataPath + "/ConfigFiles/";
+    public static string SAVE_PATH = Application.persistentDataPath + "/ConfigFiles/";
     public static string SAVE_EXT = "BtrConf";
 }
 

@@ -1,0 +1,1 @@
+{"confName":"ClassicH","preHuntTime":1.0,"huntTime":5.0,"butterflyStartAmountRandom":8,"butterflyStartAmountGene":2,"maximumKills":3,"minimumKills":1,"butterflyRoundSpawnAmount":2,"healthAmount":3,"resetEverythingOnNextGen":true,"noSafeClick":true,"keepButterAmount":false,"renderLerp":0.0,"renderPerlin":1.0,"renderButterBackground":false,"geneMode":1}

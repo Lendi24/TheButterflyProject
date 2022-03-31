@@ -1,44 +1,65 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Android;
 using UnityEngine.EventSystems;
 using UnityEngine.SceneManagement;
 using UnityEngine.UIElements;
 
-namespace Mirror.Discovery
+public class ConfigCard
 {
-    public class NetworkingDisc : MonoBehaviour
-    {
-        public static void ServerFound()
-        {
-
-        }
-    }
+    public bool isLocal;
+    public string name;
+    public string origin;
+    public string version;
+    public Button visualObj;
+    public System.Uri uri;
 }
 
 public class ConfigExplorer : MonoBehaviour
 {
-    VisualElement cards, selectedCard;
+    VisualElement localCards, remoteCards;
+    ConfigCard selectedCard;
 
-    void ChangeSelectedCard(Button newSelectedCard)
+    [SerializeField]
+    NetworkingSelect netscript;
+
+    void ChangeSelectedCard(ConfigCard newSelectedCard)
     {
         SetButtonMode(true);
         int borderWidth = 5;
         Color borderColour = Color.white;
-
-        if (selectedCard == newSelectedCard)
-        {
-            ButtonInListPressed(selectedCard.name, 1);
-        }
-
+        
         if (selectedCard != null)
         {
-            selectedCard.style.borderLeftWidth = 0;
+            /*
+            if (selectedCard.origin == newSelectedCard.origin)
+            {
+                ButtonInListPressed(selectedCard.origin, 1);
+            }
+
+            else
+            {*/
+            selectedCard.visualObj.style.borderLeftWidth = 0;
+
+
+            //}
+        }
+        selectedCard = newSelectedCard;
+        selectedCard.visualObj.style.borderLeftColor = borderColour;
+        selectedCard.visualObj.style.borderLeftWidth = borderWidth;
+
+        if (selectedCard.isLocal)
+        {
+            GetComponent<UIDocument>().rootVisualElement.Q<VisualElement>("local-row1").visible = true;
+            GetComponent<UIDocument>().rootVisualElement.Q<VisualElement>("remote-row1").visible = false;
         }
 
-        selectedCard = newSelectedCard;
-        selectedCard.style.borderLeftColor = borderColour;
-        selectedCard.style.borderLeftWidth = borderWidth;
+        else
+        {
+            GetComponent<UIDocument>().rootVisualElement.Q<VisualElement>("local-row1").visible = false;
+            GetComponent<UIDocument>().rootVisualElement.Q<VisualElement>("remote-row1").visible = true;
+        }
     }
 
     void SetButtonMode(bool enable)
@@ -51,10 +72,11 @@ public class ConfigExplorer : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        GetComponent<UIDocument>().rootVisualElement.Q<VisualElement>("local-row1").visible = true;
-        GetComponent<UIDocument>().rootVisualElement.Q<VisualElement>("remote-row1").visible = false;
+        //GetButtons: Needs selected, remote
+        GetComponent<UIDocument>().rootVisualElement.Q<VisualElement>("remote-row1").Q<Button>("start").clicked += () => { ButtonInListPressed(selectedCard.uri, 3); };
+        GetComponent<UIDocument>().rootVisualElement.Q<VisualElement>("remote-row1").Q<Button>("import").clicked += () => { ButtonInListPressed(selectedCard.uri, 4); };
 
-        //GetButtons: Needs selected
+        //GetButtons: Needs selected, local
         GetComponent<UIDocument>().rootVisualElement.Q<VisualElement>("local-row1").Q<Button>("start").clicked += () => { ButtonInListPressed(selectedCard.name, 1); };
         GetComponent<UIDocument>().rootVisualElement.Q<VisualElement>("local-row1").Q<Button>("export").clicked += () => { ButtonInListPressed(selectedCard.name, 2);  };
         GetComponent<UIDocument>().rootVisualElement.Q<VisualElement>("local-row1").Q<Button>("delete").clicked += () => {  };
@@ -73,7 +95,12 @@ public class ConfigExplorer : MonoBehaviour
             GetConfigFiles(false);
         };
 
-        cards = GetComponent<UIDocument>().rootVisualElement.Q<VisualElement>("Cards");
+        GetComponent<UIDocument>().rootVisualElement.Q<VisualElement>("local-row1").visible = true;
+        GetComponent<UIDocument>().rootVisualElement.Q<VisualElement>("remote-row1").visible = false;
+
+        localCards = GetComponent<UIDocument>().rootVisualElement.Q<VisualElement>("LocalCards");
+        remoteCards = GetComponent<UIDocument>().rootVisualElement.Q<VisualElement>("RemoteCards");
+
         //CreateCard("Råger");
         GetConfigFiles(false);
         //cards.RegisterCallback<PointerDownEvent, string>(ButtonInListEditPressed, "te");
@@ -81,7 +108,7 @@ public class ConfigExplorer : MonoBehaviour
 
     void GetConfigFiles(bool hasFailed)
     {
-        cards.Clear();
+        localCards.Clear();
         string[] files = ConfigurationFunctions.GetConfigFiles();
 
         if (files.Length == 0)
@@ -103,24 +130,45 @@ public class ConfigExplorer : MonoBehaviour
         {
             for (int i = 0; i < files.Length; i++)
             {
-                CreateCard(files[i]);
+                CreateCard(new ConfigCard { 
+                    name = ConfigurationFunctions.LoadFromFile(files[i]).confName,
+                    origin = files[i],
+                    isLocal = true},
+                    localCards);
             }
         }
         SetButtonMode(false);
     }
 
-    void CreateCard(string cardName)
+    public void GetRemoteCards(ConfigCard[] newRemoteCards)
     {
-        cards.Add(new Button { name = cardName });
+        remoteCards = GetComponent<UIDocument>().rootVisualElement.Q<VisualElement>("RemoteCards");
+        remoteCards.Clear();
 
-        Button card = cards.Q<Button>(cardName); //Making card elem
-        card.AddToClassList("Card");
-        card.Add(new VisualElement { name = "Text-Container" });
+        for (int i = 0; i < newRemoteCards.Length; i++)
+        {
+            CreateCard(newRemoteCards[i], remoteCards);
+        }
+    }
+    /*
+    public void RemoveCard(ConfigCard oldCard, VisualElement board) Not used! Should be, tho. FIX!
+    {
+        board.Remove(oldCard.visualObj);
+    }*/
+
+    public void CreateCard(ConfigCard newCard, VisualElement board)
+    {
+        board.Add(new Button { name = newCard.origin });
+        newCard.visualObj = board.Q<Button>(newCard.origin); //Making card elem
+        newCard.visualObj.AddToClassList("Card");
+        newCard.visualObj.Add(new VisualElement { name = "Text-Container" });
         //card.Add(new VisualElement { name = "Button-Container" });
-        card.clicked += () => { ChangeSelectedCard(card); };
+        newCard.visualObj.clicked += () => {
+            ChangeSelectedCard(newCard); ;};
 
-        VisualElement textContainer = card.Q<VisualElement>("Text-Container"); //Making text contain
-        textContainer.Add(new Label { text = cardName });
+        VisualElement textContainer = newCard.visualObj.Q<VisualElement>("Text-Container"); //Making text contain
+        textContainer.Add(new Label { text = newCard.name });
+        textContainer.Add(new Label { text = newCard.origin });
 
         /*
         VisualElement buttonContainer = card.Q<VisualElement>("Button-Container"); //Making button contain
@@ -130,10 +178,10 @@ public class ConfigExplorer : MonoBehaviour
         buttonContainer.Q<Button>("Start").clicked += () => { ButtonInListPressed(cardName, 1); };
         buttonContainer.Q<Button>("Edit").clicked += () => { ButtonInListPressed(cardName, 0); };*/
 
-        
+
     }
 
-    void ButtonInListPressed(string configName, int mode)
+    void ButtonInListPressed(string configName, int mode) //Local
     {
         /*
          * Mode
@@ -141,7 +189,7 @@ public class ConfigExplorer : MonoBehaviour
          * 1 - Play
          * 2 - Share
          */
-
+        
         ConfigurationFunctions.ApplyConfig(ConfigurationFunctions.LoadFromFile(configName));
 
         switch (mode)
@@ -158,12 +206,44 @@ public class ConfigExplorer : MonoBehaviour
 
             case 2:
                 Debug.Log("Trying to share " + configName);
-                NetVar.netModeServer = true; 
-                SceneManager.LoadScene("Networking"); 
+                netscript.ShareConfig();
                 break;
 
             default:
                 break;
         }
     }
+
+    void ButtonInListPressed(System.Uri configName, int mode) //Remote
+    {
+        /*
+         * Mode
+         * 3 - Play
+         * 4 - Download
+         */
+
+        CurrentConfig.conf = null;
+        netscript.Connect(new Mirror.Discovery.ServerResponse { uri = configName });
+
+        switch (mode)
+        {
+            case 3:
+                Debug.Log("Trying to play remote config " + configName.ToString());
+                //SceneManager.LoadScene("ButterHunt");
+                break;
+
+            case 4:
+                Debug.Log("Trying to download remote config " + configName.ToString());
+                ConfigurationFunctions.SaveToFile(CurrentConfig.conf, "NetSave");
+                break;
+
+            default:
+                break;
+        }
+    }
+
+    /*            case 3:
+                Debug.Log("Trying to play remote config " + configName);
+                GetComponent<NetworkingSelect>().Connect(new Mirror.Discovery.ServerResponse { uri = new System.Uri { AbsolutePath = configName });
+*/
 }
