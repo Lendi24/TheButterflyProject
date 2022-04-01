@@ -5,6 +5,7 @@ using UnityEngine.UIElements;
 
 public class InfoUI : MonoBehaviour
 {
+    public VisualElement infoBox;
     public VisualElement roundsCont;
     public VisualElement graphStatCont;
     public VisualElement[] graphStats;
@@ -13,6 +14,7 @@ public class InfoUI : MonoBehaviour
     void Start()
     {
         root = GetComponent<UIDocument>().rootVisualElement;
+        infoBox = root.Q<VisualElement>("Infobox");
         roundsCont = root.Q<VisualElement>("value-container");
         graphStatCont = root.Q<VisualElement>("color-stat-container");
     }
@@ -54,6 +56,33 @@ public class InfoUI : MonoBehaviour
 
     public void UpdatePosition()
     {
-        root.transform.position = new Vector3(Input.mousePosition.x, -Input.mousePosition.y, 0);
+        float newX = 0;
+        if(Input.mousePosition.x+infoBox.resolvedStyle.width > Screen.width)
+        {
+            newX = Screen.width - infoBox.resolvedStyle.width;
+        }
+        else if(Input.mousePosition.x < 0)
+        {
+            newX = 0;
+        }
+        else
+        {
+            newX = Input.mousePosition.x;
+        }
+
+        float newY = 0;
+        if (Input.mousePosition.y + infoBox.resolvedStyle.height > Screen.height)
+        {
+            newY = Screen.height - infoBox.resolvedStyle.height;
+        }
+        else if (Input.mousePosition.y < 0)
+        {
+            newY = 0;
+        }
+        else
+        {
+            newY = Input.mousePosition.y;
+        }
+        root.transform.position = new Vector3(newX, -newY, 0);
     }
 }

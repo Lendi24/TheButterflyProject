@@ -37,7 +37,7 @@ public class GraphBoardScript : MonoBehaviour
         while (true)
         {
             phenotypeColors = graphBoard.GetComponent<GraphScript>().CreateColors(2);
-            if (phenotypeColors != alleleColors)
+            if (phenotypeColors[0] != alleleColors[0])
             {
                 break;
             }
@@ -178,6 +178,10 @@ public class GraphBoardScript : MonoBehaviour
             graphBoard.GetComponent<GraphScript>().CreateMeshes(0, colorAmount, timeValue, maxValue, colorValueArr, graphBoard, alleleColors, phenotypeColors, values);
             graphUI.GetComponent<GraphUI>().ChangeText("Allele Graph");
         }
+        infoUI.GetComponent<InfoUI>().UpdatePosition();
+        graphPoint.GetComponent<GraphPointScript>().GetRoundInfo();
+        infoUI.GetComponent<InfoUI>().DestroyStats();
+        AssignStats();
     }
 
     public void AssignStats()

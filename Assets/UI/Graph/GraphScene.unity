@@ -667,6 +667,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: GraphPoint
       objectReference: {fileID: 0}
+    - target: {fileID: 5970572536024681693, guid: df39fac188934484db5b953408380e12, type: 3}
+      propertyPath: m_Enabled
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 5970572536024681695, guid: df39fac188934484db5b953408380e12, type: 3}
       propertyPath: infoUI
       value: 

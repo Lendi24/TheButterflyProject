@@ -38,7 +38,7 @@ public class GraphPointScript : MonoBehaviour
         }
     }
 
-    void GetRoundInfo()
+    public void GetRoundInfo()
     {
         graphPointRange = graphBoard.transform.localScale.x / graphBoard.GetComponent<GraphBoardScript>().timeValue;
         for (int i = 0; i < graphBoard.GetComponent<GraphBoardScript>().timeValue+1; i++)
