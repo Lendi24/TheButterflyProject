@@ -22,5 +22,20 @@ public class UserObj : NetworkBehaviour
         base.OnStartClient();
         CurrentConfig.conf = configObj;
         NetworkManager.singleton.StopClient();
+
+        switch (NetMode.mode)
+        {
+            case 3:
+                SceneManager.LoadScene("ButterHunt");
+                break;
+
+            case 4:
+                ConfigurationFunctions.SaveToFile(CurrentConfig.conf, "NetSave");
+                break;
+
+            default:
+                break;
+        }
+
     }
 }

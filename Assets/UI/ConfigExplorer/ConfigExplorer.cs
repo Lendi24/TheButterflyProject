@@ -16,6 +16,11 @@ public class ConfigCard
     public System.Uri uri;
 }
 
+public static class NetMode
+{
+    public static int mode;
+}
+
 public class ConfigExplorer : MonoBehaviour
 {
     VisualElement localCards, remoteCards;
@@ -224,7 +229,9 @@ public class ConfigExplorer : MonoBehaviour
 
         CurrentConfig.conf = null;
         netscript.Connect(new Mirror.Discovery.ServerResponse { uri = configName });
+        NetMode.mode = mode;
 
+        /*
         switch (mode)
         {
             case 3:
@@ -240,6 +247,7 @@ public class ConfigExplorer : MonoBehaviour
             default:
                 break;
         }
+        */
     }
 
     /*            case 3:
