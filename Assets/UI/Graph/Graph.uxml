@@ -3,7 +3,7 @@
     <ui:VisualElement name="Container">
         <ui:Label text="Allele Graph" display-tooltip-when-elided="true" name="graph-text" style="flex-grow: 0; flex-direction: column; justify-content: flex-start; flex-shrink: 0;" />
         <ui:VisualElement name="Button">
-            <ui:Button text="Switch Graoh" display-tooltip-when-elided="true" name="switch-graph" />
+            <ui:Button text="Switch Graph" display-tooltip-when-elided="true" name="switch-graph" />
             <ui:Button text="Restart" display-tooltip-when-elided="true" name="restart-game" style="height: 37px; width: 195px; white-space: nowrap; left: auto; top: 0; right: auto; bottom: 0;" />
             <ui:Button text="Main Menu" display-tooltip-when-elided="true" name="main-menu" style="height: 37px; width: 195px; white-space: nowrap; left: auto; top: 0; right: auto; bottom: 0;" />
         </ui:VisualElement>
