@@ -6,54 +6,16 @@ using UnityEngine.UIElements;
 public class GraphScript : MonoBehaviour
 {
     public Material mat;
-    public GameObject graphBoard;
-    public UIDocument graphUI;
-    public StyleSheet noGraphSwitch;
-    int timeValue; //
-    public int maxValue; //
-    int colorAmount; //
-    int domMode;
-    int graphNum = 1;
-    int screenSizeX = Screen.width;
-    int screenSizeY = Screen.height;
     //LineRenderer lineRenderer;
-    Vector3[] vertices;
     //Vector2[] uv;
-    Vector3 origo;
-    List<StatSave> values; //
-    int[,] colorValueArr;
-    int[] triangles;
     Color[] graphColors;
-    Color[] alleleColors;
-    Color[] phenotypeColors;
+    Vector3[] vertices;
+    Vector3 origo;
+    int[] triangles;
+    public float[] timeValueRangeX;
     // Start is called before the first frame update
     void Start()
     {
-        graphBoard.transform.localScale = GameBoardResizer.GetGameBoardSize()*10;
-        GetVariables(0);
-        
-        vertices = new Vector3[(timeValue+1)*2];
-        //colorValueArr = new int[colorAmount, timeValue + 1];
-        //int[] triangles = new int[timeValue+3];
-        SetColors();
-        alleleColors = CreateColors(3);
-        while(true)
-        {
-            phenotypeColors = CreateColors(2);
-            if(phenotypeColors != alleleColors)
-            {
-                break;
-            }
-        }
-        //RandomizeValues();
-        
-        origo = new Vector3(graphBoard.transform.position.x - (graphBoard.transform.localScale.x / 2), graphBoard.transform.position.y - (graphBoard.transform.localScale.y / 2), 0);
-        triangles = new int[(timeValue + 1) * 6];
-
-        CreateMeshes(0);
-
-
-
         /*GameObject line = new GameObject();
         line.name = "Line";
         line.AddComponent<LineRenderer>();
@@ -85,11 +47,7 @@ public class GraphScript : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if(screenSizeX != Screen.width || screenSizeY != Screen.height) {
-            screenSizeX = Screen.width;
-            screenSizeY = Screen.height;
-            graphBoard.transform.localScale = GameBoardResizer.GetGameBoardSize()*10;
-        }
+        
     }
 
     /*void RandomizeValues()
@@ -116,12 +74,15 @@ public class GraphScript : MonoBehaviour
         }
     }*/
 
-    void CreateMeshes(int colorValueMode)
+    //GraphScript
+    public void CreateMeshes(int colorValueMode, int colorAmount, int timeValue, int maxValue, int[,] colorValueArr, GameObject graphBoard, Color[] alleleColors, Color[] phenotypeColors, List<StatSave> values)
     {
         for (int i = 0; i < colorAmount; i++)
         {
+            timeValueRangeX = new float[timeValue + 1];
             vertices = new Vector3[(timeValue + 1) * 2];
             triangles = new int[(timeValue + 1) * 6];
+            origo = new Vector3(graphBoard.transform.position.x - (graphBoard.transform.localScale.x / 2), graphBoard.transform.position.y - (graphBoard.transform.localScale.y / 2), 0);
             Mesh mesh = new Mesh();
             GameObject newMesh = new GameObject();
             newMesh.AddComponent<MeshRenderer>();
@@ -130,9 +91,9 @@ public class GraphScript : MonoBehaviour
             newMesh.transform.parent = graphBoard.transform;
             newMesh.GetComponent<MeshFilter>().mesh = mesh;
             newMesh.GetComponent<Renderer>().material = Instantiate(mat);
-            newMesh.GetComponent<Renderer>().material.color = AssignColors(i, colorValueMode);
-            AssignVertices(i);
-            SetTriangles();
+            newMesh.GetComponent<Renderer>().material.color = AssignColors(i, colorValueMode, alleleColors, phenotypeColors);
+            AssignVertices(i, timeValue, colorAmount, graphBoard, values, maxValue, colorValueArr);
+            SetTriangles(triangles, timeValue);
             mesh.vertices = vertices;
             mesh.SetUVs(0, vertices);
             mesh.triangles = triangles;
@@ -140,7 +101,8 @@ public class GraphScript : MonoBehaviour
         }
     }
 
-    Color[] CreateColors(int arrLength)
+    //GraphScript
+    public Color[] CreateColors(int arrLength)
     {
         int rand = Random.Range(0, 15);
         Color[] newColors = new Color[arrLength];
@@ -152,7 +114,8 @@ public class GraphScript : MonoBehaviour
         return newColors;
     }
 
-    Color AssignColors(int meshNr,int colorValueMode)
+    //GraphScript
+    Color AssignColors(int meshNr,int colorValueMode, Color[] alleleColors, Color[] phenotypeColors)
     {
         if(colorValueMode == 0)
         {
@@ -173,7 +136,8 @@ public class GraphScript : MonoBehaviour
         return new Color(0, 0, 0);
     }
 
-    void AssignVertices(int index)
+    //GraphScript
+    void AssignVertices(int index, int timeValue, int colorAmount, GameObject graphBoard, List<StatSave> values, int maxValue, int[,] colorValueArr)
     {
         int valuesIndex = 0;
         for (int j = 0; j < (timeValue+1) * 2; j += 2)
@@ -185,7 +149,7 @@ public class GraphScript : MonoBehaviour
             }
             else
             {
-                vertices[j] = new Vector3(origo.x + (valuesIndex * (graphBoard.transform.localScale.x / timeValue)), origo.y + ((values[valuesIndex].populationAmount * (graphBoard.transform.localScale.y / maxValue) * 0.75f) * (((float)colorValueArr[index , valuesIndex] + (float)GetOffset(index, valuesIndex)) / (float)values[valuesIndex].populationAmount)), graphBoard.transform.position.z - 1);
+                vertices[j] = new Vector3(origo.x + (valuesIndex * (graphBoard.transform.localScale.x / timeValue)), origo.y + ((values[valuesIndex].populationAmount * (graphBoard.transform.localScale.y / maxValue) * 0.75f) * (((float)colorValueArr[index , valuesIndex] + (float)GetOffset(index, valuesIndex,colorValueArr)) / (float)values[valuesIndex].populationAmount)), graphBoard.transform.position.z - 1);
             }
 
             if (index == 0)
@@ -194,16 +158,18 @@ public class GraphScript : MonoBehaviour
             }
             else
             {
-                vertices[j + 1] = new Vector3(origo.x + (valuesIndex * (graphBoard.transform.localScale.x / timeValue)), origo.y + ((values[valuesIndex].populationAmount * (graphBoard.transform.localScale.y / maxValue) * 0.75f) * (((float)colorValueArr[index - 1, valuesIndex] + +(float)GetOffset(index-1, valuesIndex)) / (float)values[valuesIndex].populationAmount)), graphBoard.transform.position.z - 1);
+                vertices[j + 1] = new Vector3(origo.x + (valuesIndex * (graphBoard.transform.localScale.x / timeValue)), origo.y + ((values[valuesIndex].populationAmount * (graphBoard.transform.localScale.y / maxValue) * 0.75f) * (((float)colorValueArr[index - 1, valuesIndex] + +(float)GetOffset(index-1, valuesIndex,colorValueArr)) / (float)values[valuesIndex].populationAmount)), graphBoard.transform.position.z - 1);
             }
 
             //Debug.Log("Success!")
             valuesIndex++;
+            timeValueRangeX[j / 2] = vertices[j].x;
             //triangles[i] = i;
         }
     }
 
-    void SetTriangles()
+    //GraphScript
+    void SetTriangles(int[] triangles, int timeValue)
     {
         int verticeNum = 0;
         for (int i = 0; i < (timeValue) * 6; i += 6)
@@ -220,7 +186,8 @@ public class GraphScript : MonoBehaviour
         }
     }
 
-    float GetOffset(int index, int valuesIndex)
+    //GraphScript
+    float GetOffset(int index, int valuesIndex, int[,] colorValueArr)
     {
         float offset = 0;
         for(int i = 0; i < index; i++)
@@ -230,7 +197,8 @@ public class GraphScript : MonoBehaviour
         return offset;
     }
 
-    void SetColors()
+    //GraphScript
+    public void SetColors()
     {
         graphColors = new Color[15] { new Color(0.7f, 0.3f, 1.0f), new Color(1.0f, 0.4f, 0.4f), new Color(0.4f, 1.0f, 0.4f), 
                                     new Color(1.0f, 1.0f, 0.4f), new Color(1.0f, 0.6f, 0.3f), new Color(0.4f, 0.4f, 1.0f), 
@@ -239,124 +207,12 @@ public class GraphScript : MonoBehaviour
                                     new Color(0.3f, 0.2f, 0.4f), new Color(0.4f, 0.2f, 0.35f), new Color(0.25f, 0.4f, 0.4f) };
     }
 
-    public void GetVariables(int colorValueMode)
-    {
-        timeValue = SoundScript.timeValue;
-        //Debug.Log(timeValue);
-        
-        //Debug.Log(colorAmount);
-        values = SoundScript.values;
-        domMode = values[0].domMode;
-
-        //Gene[] test = values[0].geneData;
-        //Debug.Log(GeneticManager.BlendInCalc(test[0]));
-        if(domMode != 0) {
-            graphUI.GetComponent<GraphUI>().ChangeText("Allele Graph");
-            if (colorValueMode == 0) //Gets the color values for alleles
-            {
-                colorAmount = SoundScript.colorValue;
-                //Debug.Log(values.Count);
-                colorValueArr = new int[colorAmount, timeValue + 1];
-                for (int i = 0; i < values.Count; i++)
-                {
-                    bool[][] arrData = values[i].alleleData;
-                    for (int j = 0; j < arrData.Length; j++)
-                    {
-                        int gene = 0;
-                        for (int k = 0; k < arrData[j].Length; k++)
-                        {
-                            if (arrData[j][k])
-                            {
-                                gene++;
-                            }
-                            else
-                            {
-                                break;
-                            }
-                        }
-                        colorValueArr[gene, i]++;
-                    }
-                }
-            }
-            else if(colorValueMode == 1) //Gets the color values for phenotypes
-            {
-                colorAmount = 2;
-                colorValueArr = new int[2, timeValue + 1];
-                for (int i = 0; i < values.Count; i++)
-                {
-                    for (int j = 0; j < values[i].phenotypeData.Length; j++)
-                    {
-                        //Debug.Log(GeneticManager.BlendInCalc(values[i].phenotypeData[j]));
-                        if (values[i].phenotypeData[j] == 1)
-                        {
-                            colorValueArr[0, i]++;
-                        }
-                        else if (values[i].phenotypeData[j] == 0.5f)
-                        {
-                            colorValueArr[1, i]++;
-                        }
-
-                    }
-                }
-            }
-        }
-        else {
-            graphUI.GetComponent<GraphUI>().ChangeText("Allele/Phenotype Graph");
-            graphUI.rootVisualElement.styleSheets.Add(noGraphSwitch);
-            colorAmount = SoundScript.colorValue;
-                //Debug.Log(values.Count);
-                colorValueArr = new int[colorAmount, timeValue + 1];
-                for (int i = 0; i < values.Count; i++)
-                {
-                    bool[][] arrData = values[i].alleleData;
-                    for (int j = 0; j < arrData.Length; j++)
-                    {
-                        int gene = 0;
-                        for (int k = 0; k < arrData[j].Length; k++)
-                        {
-                            if (arrData[j][k])
-                            {
-                                gene++;
-                            }
-                            else
-                            {
-                                break;
-                            }
-                        }
-                        colorValueArr[gene, i]++;
-                    }
-                }
-        }
-        for(int i = 0; i < values.Count; i++)
-        {
-            if(maxValue < values[i].populationAmount)
-            {
-                maxValue = values[i].populationAmount;
-            }
-        }
-    }
-    void ResetGraph() 
+    //GraphScript
+    public void ResetGraph() 
     {
         for(int i = 0; i < transform.childCount; i++) 
         {
             Destroy(transform.GetChild(i).gameObject);
-        }
-    }
-
-    public void SwitchGraph() 
-    {
-        ResetGraph();
-        if(graphNum == 1) {
-            graphNum = 2;
-            GetVariables(1);
-            CreateMeshes(1);
-            graphUI.GetComponent<GraphUI>().ChangeText("Phenotype Graph");
-        }
-        else if(graphNum == 2) {
-            graphNum = 1;
-            GetVariables(0);
-            CreateMeshes(0);
-            graphUI.GetComponent<GraphUI>().ChangeText("Allele Graph");
         }
     }
 }

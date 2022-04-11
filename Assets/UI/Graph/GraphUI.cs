@@ -21,10 +21,9 @@ public class GraphUI : MonoBehaviour
         menu = root.Q<Button>("main-menu");
         graphText = root.Q<Label>("graph-text");
 
-        switchGraph.clicked += graph.GetComponent<GraphScript>().SwitchGraph;
+        switchGraph.clicked += graph.GetComponent<GraphBoardScript>().SwitchGraph;
         restart.clicked += GetComponent<LoadSceneFunctions>().StartLastGameMode;
         menu.clicked += GetComponent<LoadSceneFunctions>().BackToMain;
-        graph.GetComponent<GraphScript>().enabled = true;
     }
 
     public void ChangeText(string text)
