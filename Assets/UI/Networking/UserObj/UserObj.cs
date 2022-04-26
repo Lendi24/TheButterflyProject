@@ -23,6 +23,10 @@ public class UserObj : NetworkBehaviour
         CurrentConfig.conf = configObj;
         NetworkManager.singleton.StopClient();
 
+        ConfigExplorer callbackConf = GameObject.Find("UIDocument").GetComponent<ConfigExplorer>();
+        callbackConf.PostConnectCallback(NetMode.mode);
+
+        /*
         switch (NetMode.mode)
         {
             case 3:
@@ -35,7 +39,7 @@ public class UserObj : NetworkBehaviour
 
             default:
                 break;
-        }
+        }*/
 
     }
 }

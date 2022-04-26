@@ -77,6 +77,7 @@ public class ConfigExplorer : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+
         //GetButtons: Needs selected, remote
         GetComponent<UIDocument>().rootVisualElement.Q<VisualElement>("remote-row1").Q<Button>("start").clicked += () => { ButtonInListPressed(selectedCard.uri, 3); };
         GetComponent<UIDocument>().rootVisualElement.Q<VisualElement>("remote-row1").Q<Button>("import").clicked += () => { ButtonInListPressed(selectedCard.uri, 4); };
@@ -227,11 +228,15 @@ public class ConfigExplorer : MonoBehaviour
          * 4 - Download
          */
 
+        NetMode.mode = mode;
         CurrentConfig.conf = null;
         netscript.Connect(new Mirror.Discovery.ServerResponse { uri = configName });
-        NetMode.mode = mode;
 
         /*
+         * 
+         * 
+
+         * 
         switch (mode)
         {
             case 3:
@@ -249,6 +254,38 @@ public class ConfigExplorer : MonoBehaviour
         }
         */
     }
+
+    public void PostConnectCallback(int mode)
+    {
+        switch (mode)
+        {
+            case 3:
+                SceneManager.LoadScene("ButterHunt");
+                break;
+
+            case 4:
+                GetComponent<PopupsUI>().SpawnpopEnterText(
+                    title: "Enter new config-file name",
+                    fillerText: "Name here",
+                    buttonGreenText: "Confirm",
+                    buttonRedText: "Cancel",
+                    elem: GetComponent<UIDocument>().rootVisualElement,
+                    greenButtonAction: PopupGiveNameCallback
+                );
+                break;
+
+            default:
+                break;
+        }
+    }
+
+    void PopupGiveNameCallback (string name)
+    {
+        ConfigurationFunctions.SaveToFile(CurrentConfig.conf, name);
+        SceneManager.LoadScene("ConfigExplorer");
+    }
+
+
 
     /*            case 3:
                 Debug.Log("Trying to play remote config " + configName);
