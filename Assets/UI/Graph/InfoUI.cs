@@ -57,31 +57,31 @@ public class InfoUI : MonoBehaviour
     public void UpdatePosition()
     {
         float newX = 0;
-        if(Input.mousePosition.x+infoBox.resolvedStyle.width > Screen.width)
+        if(Input.mousePosition.x - infoBox.resolvedStyle.width/2 + infoBox.resolvedStyle.width > Screen.width)
         {
             newX = Screen.width - infoBox.resolvedStyle.width;
         }
-        else if(Input.mousePosition.x < 0)
+        else if(Input.mousePosition.x - infoBox.resolvedStyle.width/2 < 0)
         {
             newX = 0;
         }
         else
         {
-            newX = Input.mousePosition.x;
+            newX = Input.mousePosition.x - infoBox.resolvedStyle.width/2;
         }
 
         float newY = 0;
-        if (Input.mousePosition.y + infoBox.resolvedStyle.height > Screen.height)
+        if (Input.mousePosition.y + 30 + infoBox.resolvedStyle.height > Screen.height)
         {
             newY = Screen.height - infoBox.resolvedStyle.height;
         }
-        else if (Input.mousePosition.y < 0)
+        else if (Input.mousePosition.y + 30 < 0)
         {
             newY = 0;
         }
         else
         {
-            newY = Input.mousePosition.y;
+            newY = Input.mousePosition.y + 30;
         }
         root.transform.position = new Vector3(newX, -newY, 0);
     }
