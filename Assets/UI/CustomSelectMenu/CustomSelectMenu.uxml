@@ -9,11 +9,11 @@
         <ui:ScrollView name="MainView" style="background-color: rgba(0, 0, 0, 0.28);">
             <ui:VisualElement name="butterfly-settings-page" style="display: flex;">
                 <ui:SliderInt picking-mode="Ignore" label="Gene Length" value="3" high-value="10" low-value="1" name="menu-slider-genelength" direction="Horizontal" inverted="false" show-input-field="true" style="flex-direction: column; display: none;" />
-                <ui:SliderInt picking-mode="Ignore" label="Start Amount Random" value="1" high-value="3" name="menu-slider-startamountrandom" low-value="1" show-input-field="true" style="flex-direction: column;" />
-                <ui:SliderInt picking-mode="Ignore" label="Start Amount Gene" value="1" high-value="10" name="menu-slider-startamountgene" low-value="1" show-input-field="true" style="flex-direction: column;" />
+                <ui:SliderInt picking-mode="Ignore" label="Random Starting Amount" value="1" high-value="3" name="menu-slider-startamountrandom" low-value="1" show-input-field="true" style="flex-direction: column;" />
+                <ui:SliderInt picking-mode="Ignore" label="Gene Starting Amount" value="1" high-value="10" name="menu-slider-startamountgene" low-value="1" show-input-field="true" style="flex-direction: column;" />
                 <ui:SliderInt picking-mode="Ignore" label="Round Spawn Amount" value="2" high-value="10" name="menu-slider-roundspawnamount" low-value="1" show-input-field="true" style="flex-direction: column; align-items: stretch; justify-content: flex-start;" />
                 <ui:Toggle label="Keep Butterfly Amount" name="menu-toggle-keepbutterflyamount" />
-                <ui:Toggle label="Reset On Next Gen" name="menu-toggle-resetonnextgen" value="true" />
+                <ui:Toggle label="Reset On Next Round" name="menu-toggle-resetonnextgen" value="true" />
                 <ui:RadioButtonGroup label="Gene Mode" value="-1" name="gene-mode" focusable="true" style="flex-direction: column;">
                     <ui:RadioButton label="Light is dominant" name="light" />
                     <ui:RadioButton label="No dominance" value="true" name="none" />
