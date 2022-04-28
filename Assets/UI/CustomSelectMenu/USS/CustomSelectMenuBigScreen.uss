@@ -1,0 +1,23 @@
+#Tabs {
+	padding-bottom: 5px;
+}
+
+#Tabs Button {
+	margin: 4px;
+}
+
+#Tabs .Active {
+	background-color: rgb(163,163,163);
+}
+
+#MainView Label {
+	color: white;
+}
+
+#MainView .Settings {
+	display: none;
+}
+
+#MainView .Active {
+	display: flex;
+}

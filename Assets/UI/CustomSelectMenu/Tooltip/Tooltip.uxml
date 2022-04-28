@@ -1,0 +1,8 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" xsi="http://www.w3.org/2001/XMLSchema-instance" engine="UnityEngine.UIElements" editor="UnityEditor.UIElements" noNamespaceSchemaLocation="../../../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
+    <Style src="project://database/Assets/UI/CustomSelectMenu/Tooltip/Tooltip.uss?fileID=7433441132597879392&amp;guid=639430a52aab8de498a70b8b1fb67793&amp;type=3#Tooltip" />
+    <ui:VisualElement name="Tooltip" style="align-items: flex-start; flex-direction: column; flex-wrap: nowrap; visibility: visible; position: absolute; justify-content: flex-end; bottom: 0;">
+        <ui:VisualElement name="text-container">
+            <ui:Label text="Label" display-tooltip-when-elided="true" name="tooltip-text" />
+        </ui:VisualElement>
+    </ui:VisualElement>
+</ui:UXML>

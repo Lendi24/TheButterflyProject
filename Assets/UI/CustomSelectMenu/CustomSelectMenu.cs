@@ -7,6 +7,7 @@ using UnityEngine.SceneManagement;
 
 public class CustomSelectMenu : MonoBehaviour
 {
+    public UIDocument tooltip;
     public Button timeSettingsButton, gameSettingsButton, butterflySettingsButton;
     public VisualElement timeSettingsPage, gameSettingsPage, butterflySettingsPage;
     public Slider preHuntTime, huntTime, renderPerlin, renderLerp;
@@ -62,8 +63,48 @@ public class CustomSelectMenu : MonoBehaviour
         timeSettingsButton.clicked += () => { SwitchTab(timeSettingsPage, timeSettingsButton); };
         gameSettingsButton.clicked += () => { SwitchTab(gameSettingsPage, gameSettingsButton); };
         butterflySettingsButton.clicked += () => { SwitchTab(butterflySettingsPage, butterflySettingsButton); };
-        
-        SwitchTab(butterflySettingsPage, butterflySettingsButton);
+
+        //Enter Event
+        preHuntTime.RegisterCallback<PointerEnterEvent>(OnPointerEnterEvent, TrickleDown.TrickleDown);
+        huntTime.RegisterCallback<PointerEnterEvent>(OnPointerEnterEvent, TrickleDown.TrickleDown);
+
+        healthAmount.RegisterCallback<PointerEnterEvent>(OnPointerEnterEvent, TrickleDown.TrickleDown);
+        kills.RegisterCallback<PointerEnterEvent>(OnPointerEnterEvent, TrickleDown.TrickleDown);
+        noSafeClick.RegisterCallback<PointerEnterEvent>(OnPointerEnterEvent, TrickleDown.TrickleDown);
+        renderLerp.RegisterCallback<PointerEnterEvent>(OnPointerEnterEvent, TrickleDown.TrickleDown);
+        renderPerlin.RegisterCallback<PointerEnterEvent>(OnPointerEnterEvent, TrickleDown.TrickleDown);
+
+        startAmountRandom.RegisterCallback<PointerEnterEvent>(OnPointerEnterEvent, TrickleDown.TrickleDown);
+        startAmountGene.RegisterCallback<PointerEnterEvent>(OnPointerEnterEvent, TrickleDown.TrickleDown);
+        roundSpawnAmount.RegisterCallback<PointerEnterEvent>(OnPointerEnterEvent, TrickleDown.TrickleDown);
+        keepButterflyAmount.RegisterCallback<PointerEnterEvent>(OnPointerEnterEvent, TrickleDown.TrickleDown);
+        resetOnNextGen.RegisterCallback<PointerEnterEvent>(OnPointerEnterEvent, TrickleDown.TrickleDown);
+        renderButterBack.RegisterCallback<PointerEnterEvent>(OnPointerEnterEvent, TrickleDown.TrickleDown);
+        geneModeRadio.Q<RadioButton>("light").RegisterCallback<PointerEnterEvent>(OnPointerEnterEvent, TrickleDown.TrickleDown);
+        geneModeRadio.Q<RadioButton>("none").RegisterCallback<PointerEnterEvent>(OnPointerEnterEvent, TrickleDown.TrickleDown);
+        geneModeRadio.Q<RadioButton>("dark").RegisterCallback<PointerEnterEvent>(OnPointerEnterEvent, TrickleDown.TrickleDown);
+
+        //Exit Event
+        preHuntTime.RegisterCallback<PointerLeaveEvent>(OnPointerLeaveEvent, TrickleDown.TrickleDown);
+        huntTime.RegisterCallback<PointerLeaveEvent>(OnPointerLeaveEvent, TrickleDown.TrickleDown);
+
+        healthAmount.RegisterCallback<PointerLeaveEvent>(OnPointerLeaveEvent, TrickleDown.TrickleDown);
+        kills.RegisterCallback<PointerLeaveEvent>(OnPointerLeaveEvent, TrickleDown.TrickleDown);
+        noSafeClick.RegisterCallback<PointerLeaveEvent>(OnPointerLeaveEvent, TrickleDown.TrickleDown);
+        renderLerp.RegisterCallback<PointerLeaveEvent>(OnPointerLeaveEvent, TrickleDown.TrickleDown);
+        renderPerlin.RegisterCallback<PointerLeaveEvent>(OnPointerLeaveEvent, TrickleDown.TrickleDown);
+
+        startAmountRandom.RegisterCallback<PointerLeaveEvent>(OnPointerLeaveEvent, TrickleDown.TrickleDown);
+        startAmountGene.RegisterCallback<PointerLeaveEvent>(OnPointerLeaveEvent, TrickleDown.TrickleDown);
+        roundSpawnAmount.RegisterCallback<PointerLeaveEvent>(OnPointerLeaveEvent, TrickleDown.TrickleDown);
+        keepButterflyAmount.RegisterCallback<PointerLeaveEvent>(OnPointerLeaveEvent, TrickleDown.TrickleDown);
+        resetOnNextGen.RegisterCallback<PointerLeaveEvent>(OnPointerLeaveEvent, TrickleDown.TrickleDown);
+        renderButterBack.RegisterCallback<PointerLeaveEvent>(OnPointerLeaveEvent, TrickleDown.TrickleDown);
+        geneModeRadio.Q<RadioButton>("light").RegisterCallback<PointerLeaveEvent>(OnPointerLeaveEvent, TrickleDown.TrickleDown);
+        geneModeRadio.Q<RadioButton>("none").RegisterCallback<PointerLeaveEvent>(OnPointerLeaveEvent, TrickleDown.TrickleDown);
+        geneModeRadio.Q<RadioButton>("dark").RegisterCallback<PointerLeaveEvent>(OnPointerLeaveEvent, TrickleDown.TrickleDown);
+
+        //SwitchTab(butterflySettingsPage, butterflySettingsButton);
         try
         {
             loadInitValues();
@@ -72,6 +113,35 @@ public class CustomSelectMenu : MonoBehaviour
         {
             Debug.LogWarning("NoLoadedConfig!");
         }
+    }
+
+    private void OnPointerEnterEvent(PointerEnterEvent evt)
+    {
+        if(evt.target as SliderInt != null)
+        {
+            tooltip.GetComponent<TooltipScript>().ShowTooltip((evt.target as SliderInt).tooltip);
+        }
+        else if (evt.target as Slider != null)
+        {
+            tooltip.GetComponent<TooltipScript>().ShowTooltip((evt.target as Slider).tooltip);
+        }
+        else if (evt.target as MinMaxSlider != null)
+        {
+            tooltip.GetComponent<TooltipScript>().ShowTooltip((evt.target as MinMaxSlider).tooltip);
+        }
+        else if (evt.target as Toggle != null)
+        {
+            tooltip.GetComponent<TooltipScript>().ShowTooltip((evt.target as Toggle).tooltip);
+        }
+        else if (evt.target as RadioButton != null)
+        {
+            tooltip.GetComponent<TooltipScript>().ShowTooltip((evt.target as RadioButton).tooltip);
+        }
+    }
+
+    private void OnPointerLeaveEvent(PointerLeaveEvent evt)
+    {
+        tooltip.GetComponent<TooltipScript>().HideTooltip();
     }
 
 
@@ -96,19 +166,26 @@ public class CustomSelectMenu : MonoBehaviour
     void SwitchTab(VisualElement page, Button button)
     {
         ResetSettingsMenu();
-        page.style.display = DisplayStyle.Flex;
-        button.style.backgroundColor = new StyleColor { value = Color.red };
+        page.AddToClassList("Active");
+        button.AddToClassList("Active");
     }
 
     void ResetSettingsMenu()
     {
-        timeSettingsPage.style.display = DisplayStyle.None;
+        timeSettingsPage.RemoveFromClassList("Active");
+        gameSettingsPage.RemoveFromClassList("Active");
+        butterflySettingsPage.RemoveFromClassList("Active");
+
+        timeSettingsButton.RemoveFromClassList("Active");
+        gameSettingsButton.RemoveFromClassList("Active");
+        butterflySettingsButton.RemoveFromClassList("Active");
+        /*timeSettingsPage.style.display = DisplayStyle.None;
         gameSettingsPage.style.display = DisplayStyle.None;
         butterflySettingsPage.style.display = DisplayStyle.None;
 
         timeSettingsButton.style.backgroundColor = new StyleColor { value = Color.white };
         gameSettingsButton.style.backgroundColor = new StyleColor { value = Color.white };
-        butterflySettingsButton.style.backgroundColor = new StyleColor { value = Color.white };
+        butterflySettingsButton.style.backgroundColor = new StyleColor { value = Color.white };*/
     }
 
     ConfigurationSettings MakeConfObject() {

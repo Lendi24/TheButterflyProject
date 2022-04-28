@@ -1,0 +1,16 @@
+#Tooltip {
+	border-radius: 5;
+	background-color: rgb(100,100,100);
+}
+
+#text-container {
+	margin: 5;
+	background-color: rgb(75,75,75);
+}
+
+#tooltip-text {
+	color: white;
+	font-size: 14;
+	padding: 0;
+	margin: 4;
+}

@@ -1,41 +1,41 @@
 <ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" xsi="http://www.w3.org/2001/XMLSchema-instance" engine="UnityEngine.UIElements" editor="UnityEditor.UIElements" noNamespaceSchemaLocation="../../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
+    <Style src="project://database/Assets/UI/CustomSelectMenu/USS/CustomSelectMenuBigScreen.uss?fileID=7433441132597879392&amp;guid=599964966579ab744b5fc3cf6f1ba75f&amp;type=3#CustomSelectMenuBigScreen" />
     <ui:Label text=" Custom Mode" display-tooltip-when-elided="true" style="-unity-text-align: upper-center; font-size: 20px; -unity-font-style: bold;" />
-    <ui:VisualElement name="window" style="background-color: rgba(79, 79, 79, 0.64); flex-shrink: 1; flex-grow: 1; margin-left: 10px; margin-right: 10px; margin-top: 10px; margin-bottom: 10px; padding-left: 2px; padding-right: 2px; padding-top: 2px; padding-bottom: 2px;">
+    <ui:VisualElement name="window" style="background-color: rgba(79, 79, 79, 0.64); flex-shrink: 1; flex-grow: 1; margin-left: 10px; margin-right: 10px; margin-top: 10px; margin-bottom: 0; padding-left: 5px; padding-right: 5px; padding-top: 5px; padding-bottom: 5px;">
         <ui:VisualElement name="Tabs" style="flex-direction: row; justify-content: flex-start; flex-shrink: 0; flex-grow: 0;">
             <ui:Button text="Time" display-tooltip-when-elided="true" name="time-settings-button" />
             <ui:Button text="Game" display-tooltip-when-elided="true" name="game-settings-button" />
-            <ui:Button text="Butterfly Spawning" display-tooltip-when-elided="true" name="butterfly-settings-button" style="background-color: rgb(255, 0, 0);" />
+            <ui:Button text="Butterfly Spawning" display-tooltip-when-elided="true" name="butterfly-settings-button" class="Active" />
         </ui:VisualElement>
         <ui:ScrollView name="MainView" style="background-color: rgba(0, 0, 0, 0.28);">
-            <ui:VisualElement name="butterfly-settings-page" style="display: flex;">
+            <ui:VisualElement name="butterfly-settings-page" class="Settings Active">
                 <ui:SliderInt picking-mode="Ignore" label="Gene Length" value="3" high-value="10" low-value="1" name="menu-slider-genelength" direction="Horizontal" inverted="false" show-input-field="true" style="flex-direction: column; display: none;" />
-                <ui:SliderInt picking-mode="Ignore" label="Random Starting Amount" value="1" high-value="3" name="menu-slider-startamountrandom" low-value="1" show-input-field="true" style="flex-direction: column;" />
-                <ui:SliderInt picking-mode="Ignore" label="Gene Starting Amount" value="1" high-value="10" name="menu-slider-startamountgene" low-value="1" show-input-field="true" style="flex-direction: column;" />
-                <ui:SliderInt picking-mode="Ignore" label="Round Spawn Amount" value="2" high-value="10" name="menu-slider-roundspawnamount" low-value="1" show-input-field="true" style="flex-direction: column; align-items: stretch; justify-content: flex-start;" />
-                <ui:Toggle label="Keep Butterfly Amount" name="menu-toggle-keepbutterflyamount" />
-                <ui:Toggle label="Reset On Next Round" name="menu-toggle-resetonnextgen" value="true" />
+                <ui:SliderInt picking-mode="Ignore" label="Random Starting Amount" value="1" high-value="3" name="menu-slider-startamountrandom" low-value="1" show-input-field="true" tooltip="The random amount of butterflies that will spawn at the beginning of the game." style="flex-direction: column;" />
+                <ui:SliderInt picking-mode="Ignore" label="Gene Starting Amount" value="1" high-value="10" name="menu-slider-startamountgene" low-value="1" show-input-field="true" tooltip="The amount of butterflies that will spawn with a specific gene each." style="flex-direction: column;" />
+                <ui:SliderInt picking-mode="Ignore" label="Round Spawn Amount" value="2" high-value="10" name="menu-slider-roundspawnamount" low-value="1" show-input-field="true" tooltip="The amount of butterflies you want to spawn after each round." style="flex-direction: column; align-items: stretch; justify-content: flex-start;" />
+                <ui:Toggle label="Keep Butterfly Amount" name="menu-toggle-keepbutterflyamount" tooltip="Toggles whether you want the butterfly population to stay the same throughout every round." />
+                <ui:Toggle label="Reset On Next Round" name="menu-toggle-resetonnextgen" value="true" tooltip="Toggles whether you want the butterflies to switch places after every round or not." />
                 <ui:RadioButtonGroup label="Gene Mode" value="-1" name="gene-mode" focusable="true" style="flex-direction: column;">
-                    <ui:RadioButton label="Light is dominant" name="light" />
-                    <ui:RadioButton label="No dominance" value="true" name="none" />
-                    <ui:RadioButton label="Dark is dominant" value="false" name="dark" />
+                    <ui:RadioButton label="Light is dominant" name="light" tooltip="Light colored butterflies have the dominant gene." />
+                    <ui:RadioButton label="No dominance" value="true" name="none" tooltip="There is no dominant gene." />
+                    <ui:RadioButton label="Dark is dominant" value="false" name="dark" tooltip="Dark colored butterflies have the dominant gene." />
                 </ui:RadioButtonGroup>
             </ui:VisualElement>
-            <ui:VisualElement name="game-settings-page" style="display: flex;">
-                <ui:MinMaxSlider picking-mode="Ignore" label="Min/Max Kills" min-value="1" max-value="3" low-limit="1" high-limit="6" name="menu-minmaxslider-kills" />
+            <ui:VisualElement name="game-settings-page" class="Settings">
+                <ui:MinMaxSlider picking-mode="Ignore" label="Min/Max Kills" min-value="1" max-value="3" low-limit="1" high-limit="6" name="menu-minmaxslider-kills" tooltip="The range between the amount of butterflies you&apos;re required to kill and the maximum amount of butterflies you can kill." />
                 <ui:SliderInt picking-mode="Ignore" label="Health Amount" value="3" high-value="7" name="menu-slider-healthamount" low-value="1" />
-                <ui:Toggle label="No Safe Click" name="menu-toggle-nosafeclick" value="true" />
-                <ui:Slider picking-mode="Ignore" label="RenderLerp" value="42" high-value="1" name="menu-slider-lerp" />
-                <ui:Slider picking-mode="Ignore" label="RenderPerlin" value="42" high-value="1" name="menu-slider-perlin" />
-                <ui:Toggle label="EnableTextureBackground" name="menu-render-butter-back" />
+                <ui:Toggle label="No Safe Click" name="menu-toggle-nosafeclick" value="true" tooltip="Toggles whether you want to lose clicks when clicking on something that isn&apos;t a butterfly or not." />
+                <ui:Slider picking-mode="Ignore" label="RenderLerp" value="42" high-value="1" name="menu-slider-lerp" tooltip="This one should be changed!!!" />
+                <ui:Slider picking-mode="Ignore" label="RenderPerlin" value="42" high-value="1" name="menu-slider-perlin" tooltip="This one should be changed!!!" />
+                <ui:Toggle label="EnableTextureBackground" name="menu-render-butter-back" tooltip="Maybe this one should change aswell since it&apos;s connected to the 2 above?" />
             </ui:VisualElement>
-            <ui:VisualElement name="time-settings-page" style="opacity: 1; display: flex; visibility: visible; overflow: visible;">
-                <ui:Slider picking-mode="Ignore" label="Pre Hunt Time" value="2" high-value="10" name="menu-slider-prehunttime" low-value="1" style="align-items: stretch; justify-content: flex-start; flex-direction: row;" />
-                <ui:SliderInt picking-mode="Ignore" label="Start Amount Random" value="5" high-value="10" name="menu-slider-startamountrandom" low-value="1" />
-                <ui:Slider picking-mode="Ignore" label="Hunt Time" value="4" high-value="10" name="menu-slider-hunttime" low-value="2" />
+            <ui:VisualElement name="time-settings-page" class="Settings" style="opacity: 1; visibility: visible; overflow: visible;">
+                <ui:Slider picking-mode="Ignore" label="Hunt Time" value="4" high-value="10" name="menu-slider-hunttime" low-value="2" tooltip="The amount of time you will have to kill butterflies every hunt." />
+                <ui:Slider picking-mode="Ignore" label="Cooldown Time" value="2" high-value="10" name="menu-slider-prehunttime" low-value="1" tooltip="The amount of time it takes between every hunt." style="align-items: stretch; justify-content: flex-start; flex-direction: row;" />
             </ui:VisualElement>
         </ui:ScrollView>
     </ui:VisualElement>
-    <ui:VisualElement name="BottomUI" style="flex-direction: row; justify-content: space-around; align-items: flex-end; position: relative; visibility: visible; overflow: visible; min-width: 100%; min-height: auto;">
+    <ui:VisualElement name="BottomUI" style="flex-direction: row; justify-content: space-around; align-items: flex-end; position: relative; visibility: visible; overflow: visible; min-width: 100%; min-height: auto; margin-top: 5px; margin-bottom: 5px;">
         <ui:Button text="Start" display-tooltip-when-elided="true" name="menu-button-play" />
         <ui:Button text="Back" display-tooltip-when-elided="true" name="menu-button-back" />
         <ui:Button text="Load config" display-tooltip-when-elided="true" name="menu-button-load" />
