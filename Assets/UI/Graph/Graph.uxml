@@ -1,11 +1,17 @@
 <ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" xsi="http://www.w3.org/2001/XMLSchema-instance" engine="UnityEngine.UIElements" editor="UnityEditor.UIElements" noNamespaceSchemaLocation="../../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
     <Style src="project://database/Assets/UI/Graph/USS/GraphSmallScreen.uss?fileID=7433441132597879392&amp;guid=7380df5f5196863418ccb7c1bd391d24&amp;type=3#GraphSmallScreen" />
     <ui:VisualElement name="Container">
-        <ui:Label text="Allele Graph" display-tooltip-when-elided="true" name="graph-text" style="flex-grow: 0; flex-direction: column; justify-content: flex-start; flex-shrink: 0;" />
-        <ui:VisualElement name="Button">
-            <ui:Button text="Switch Graph" display-tooltip-when-elided="true" name="switch-graph" />
-            <ui:Button text="Restart" display-tooltip-when-elided="true" name="restart-game" style="height: 37px; width: 195px; white-space: nowrap; left: auto; top: 0; right: auto; bottom: 0;" />
-            <ui:Button text="Main Menu" display-tooltip-when-elided="true" name="main-menu" style="height: 37px; width: 195px; white-space: nowrap; left: auto; top: 0; right: auto; bottom: 0;" />
+        <ui:VisualElement name="Text" style="align-items: center;">
+            <ui:Label text="Game Over!" display-tooltip-when-elided="true" name="gameover-text" />
+            <ui:Label text="Score: 0" display-tooltip-when-elided="true" name="score-text" />
+        </ui:VisualElement>
+        <ui:VisualElement name="Button" style="-unity-text-align: upper-left; align-items: center;">
+            <ui:Label text="Allele Graph" display-tooltip-when-elided="true" name="graph-text" style="flex-grow: 0; flex-direction: column; justify-content: flex-start; flex-shrink: 0; -unity-text-align: upper-center;" />
+            <ui:VisualElement name="VisualElement" style="align-items: stretch;">
+                <ui:Button text="Switch Graph" display-tooltip-when-elided="true" name="switch-graph" style="align-items: center;" />
+                <ui:Button text="Restart" display-tooltip-when-elided="true" name="restart-game" style="height: 37px; width: 195px; white-space: nowrap; left: auto; top: auto; right: auto; bottom: auto; align-items: center;" />
+                <ui:Button text="Main Menu" display-tooltip-when-elided="true" name="main-menu" style="height: 37px; width: 195px; white-space: nowrap; left: auto; top: auto; right: auto; bottom: auto; align-items: center;" />
+            </ui:VisualElement>
         </ui:VisualElement>
     </ui:VisualElement>
 </ui:UXML>

@@ -37,7 +37,6 @@ public class TooltipScript : MonoBehaviour
 
     public void HideTooltip()
     {
-        Debug.Log("e?");
         tooltip.style.visibility = Visibility.Hidden;
     }
 }

@@ -24,6 +24,7 @@ public class MainMenuUI : MonoBehaviour
 
         startButton.clicked += GetComponent<LoadSceneFunctions>().StartButtonPressed;
         loadButton.clicked += GetComponent<LoadSceneFunctions>().LoadButtonPressed;
+        creditsButton.clicked += GetComponent<LoadSceneFunctions>().CreditsButtonPressed;
         //credits
         exitButton.clicked += Application.Quit;
 

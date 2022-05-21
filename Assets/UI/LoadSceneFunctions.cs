@@ -20,6 +20,12 @@ public class LoadSceneFunctions : MonoBehaviour
         SceneManager.LoadScene("CustomSelectMenu");
     }
 
+    public void CreditsButtonPressed()
+    {
+        SoundScript.PlayAudio(audioClip);
+        SceneManager.LoadScene("CreditsScene");
+    }
+
     //StartUI
 
     /*
@@ -134,7 +140,6 @@ public class LoadSceneFunctions : MonoBehaviour
 
     public void ToGraph()
     {
-        SoundScript.PlayAudio(audioClip);
         SceneManager.LoadScene("GraphScene");
     }
 

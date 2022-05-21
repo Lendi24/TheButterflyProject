@@ -385,9 +385,10 @@ rContainer.transform.childCount);
                         switch (healthAmount)
                         {
                             case 0:
-                                GetComponent<SplashShifter>().ShowSplash(0, gameOverSplash);
+                                //GetComponent<SplashShifter>().ShowSplash(0, gameOverSplash);
                                 Debug.Log("U loose");
-                                SoundScript.SetVariables(rounds, butterflyGeneLength + 1, statsLogList);
+                                SoundScript.SetVariables(rounds, butterflyGeneLength + 1, statsLogList, score);
+                                GetComponent<LoadSceneFunctions>().ToGraph();
                                 gameState = 4;//Failed! Health will be lost, energy will be lost or game will be lost here.
                                 break;
 
@@ -482,6 +483,11 @@ rContainer.transform.childCount);
     public int GetScore()
     {
         return score;
+    }
+
+    public int GetRounds()
+    {
+        return rounds;
     }
 
     public float GetHuntTime()

@@ -6,7 +6,7 @@ using UnityEngine.UIElements;
 public class InfoUI : MonoBehaviour
 {
     public VisualElement infoBox;
-    public VisualElement roundsCont;
+    public Label roundText;
     public VisualElement graphStatCont;
     public VisualElement[] graphStats;
     VisualElement root;
@@ -15,7 +15,7 @@ public class InfoUI : MonoBehaviour
     {
         root = GetComponent<UIDocument>().rootVisualElement;
         infoBox = root.Q<VisualElement>("Infobox");
-        roundsCont = root.Q<VisualElement>("value-container");
+        roundText = root.Q<Label>("round-text");
         graphStatCont = root.Q<VisualElement>("color-stat-container");
     }
 
@@ -25,21 +25,29 @@ public class InfoUI : MonoBehaviour
         
     }
 
-    public void CreateGraphStats(int colorAmount, string[][] stats, int round)
+    public void CreateGraphStats(int colorAmount, string[][] stats, int round, Color[] colors)
     {
-        roundsCont.Q<Label>("value-count").text = "" + round;
+        roundText.text = "Generation " + round;
         graphStats = new VisualElement[colorAmount];
-        for(int i = 0; i < graphStats.Length; i++)
+        for(int i = graphStats.Length-1; i > -1; i--)
         {
             graphStats[i] = new VisualElement();
             graphStats[i].name = "color-value-container";
             Label graphValueName = new Label();
             graphValueName.name = "color-value-name";
             graphValueName.text = stats[i][0];
+            graphValueName.style.color = colors[i];
+            graphValueName.style.unityFontStyleAndWeight = FontStyle.Bold;
+            graphValueName.style.unityTextOutlineWidth = 0.3f;
+            graphValueName.style.unityTextOutlineColor = Color.black;
             graphStats[i].Add(graphValueName);
             Label graphValueCount = new Label();
             graphValueCount.name = "color-value-count";
             graphValueCount.text = stats[i][1];
+            graphValueCount.style.color = colors[i];
+            graphValueCount.style.unityFontStyleAndWeight = FontStyle.Bold;
+            graphValueCount.style.unityTextOutlineWidth = 0.3f;
+            graphValueCount.style.unityTextOutlineColor = Color.black;
             graphStats[i].Add(graphValueCount);
 
             graphStatCont.Add(graphStats[i]);

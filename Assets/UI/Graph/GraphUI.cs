@@ -10,6 +10,7 @@ public class GraphUI : MonoBehaviour
     public Button restart;
     public Button menu;
     public Label graphText;
+    public Label scoreText;
 
     public GameObject graph;
     // Start is called before the first frame update
@@ -20,6 +21,7 @@ public class GraphUI : MonoBehaviour
         restart = root.Q<Button>("restart-game");
         menu = root.Q<Button>("main-menu");
         graphText = root.Q<Label>("graph-text");
+        scoreText = root.Q<Label>("score-text");
 
         switchGraph.clicked += graph.GetComponent<GraphBoardScript>().SwitchGraph;
         restart.clicked += GetComponent<LoadSceneFunctions>().StartLastGameMode;
@@ -29,5 +31,9 @@ public class GraphUI : MonoBehaviour
     public void ChangeText(string text)
     {
         graphText.text = text;
+    }
+    public void SetScore(int text)
+    {
+        scoreText.text = "Score: " + text;
     }
 }

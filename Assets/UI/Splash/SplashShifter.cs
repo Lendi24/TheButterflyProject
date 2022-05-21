@@ -8,7 +8,7 @@ public class SplashShifter : MonoBehaviour
 {
     [SerializeField]
     Button restart, main, exit, graph;
-    Label score;
+    Label generation, score;
 
     private void Start()
     {
@@ -60,6 +60,17 @@ public class SplashShifter : MonoBehaviour
         {
             score = root.Q<Label>("score");
             score.text = GetComponent<GameManager>().GetScore().ToString();
+        }
+
+        catch (System.Exception)
+        {
+            //Debug.LogError(e);
+        }
+
+        try
+        {
+            generation = root.Q<Label>("generation");
+            generation.text = "Generation " + GetComponent<GameManager>().GetRounds();
         }
 
         catch (System.Exception)

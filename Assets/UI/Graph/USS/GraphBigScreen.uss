@@ -11,6 +11,16 @@
 	align-items: stretch;
 }
 
+#gameover-text {
+	font-size: 45px;
+	-unity-font-style: bold;
+}
+
+#score-text {
+	font-size: 30px;
+	-unity-font-style: bold;
+}
+
 #graph-text {
 	font-size: 30px;
 	-unity-font-style: bold;
