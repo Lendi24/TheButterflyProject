@@ -22,16 +22,16 @@
             </ui:VisualElement>
             <ui:VisualElement name="game-settings-page" style="display: flex;">
                 <ui:MinMaxSlider picking-mode="Ignore" label="Min/Max Kills" min-value="1" max-value="3" low-limit="1" high-limit="6" name="menu-minmaxslider-kills" />
-                <ui:SliderInt picking-mode="Ignore" label="Health Amount" value="3" high-value="7" name="menu-slider-healthamount" low-value="1" />
+                <ui:SliderInt picking-mode="Ignore" label="Health Amount" value="3" high-value="7" name="menu-slider-healthamount" low-value="1" show-input-field="true" />
                 <ui:Toggle label="No Safe Click" name="menu-toggle-nosafeclick" value="true" />
-                <ui:Slider picking-mode="Ignore" label="RenderLerp" value="42" high-value="1" name="menu-slider-lerp" />
-                <ui:Slider picking-mode="Ignore" label="RenderPerlin" value="42" high-value="1" name="menu-slider-perlin" />
+                <ui:Slider picking-mode="Ignore" label="RenderLerp" value="42" high-value="1" name="menu-slider-lerp" show-input-field="true" />
+                <ui:Slider picking-mode="Ignore" label="RenderPerlin" value="42" high-value="1" name="menu-slider-perlin" show-input-field="true" />
                 <ui:Toggle label="EnableTextureBackground" name="menu-render-butter-back" />
             </ui:VisualElement>
             <ui:VisualElement name="time-settings-page" style="opacity: 1; display: flex; visibility: visible; overflow: visible;">
                 <ui:Slider picking-mode="Ignore" label="Pre Hunt Time" value="2" high-value="10" name="menu-slider-prehunttime" low-value="1" style="align-items: stretch; justify-content: flex-start; flex-direction: row;" />
-                <ui:SliderInt picking-mode="Ignore" label="Start Amount Random" value="5" high-value="10" name="menu-slider-startamountrandom" low-value="1" />
-                <ui:Slider picking-mode="Ignore" label="Hunt Time" value="4" high-value="10" name="menu-slider-hunttime" low-value="2" />
+                <ui:SliderInt picking-mode="Ignore" label="Start Amount Random" value="5" high-value="10" name="menu-slider-startamountrandom" low-value="1" show-input-field="true" />
+                <ui:Slider picking-mode="Ignore" label="Hunt Time" value="4" high-value="10" name="menu-slider-hunttime" low-value="2" show-input-field="true" />
             </ui:VisualElement>
         </ui:ScrollView>
     </ui:VisualElement>
