@@ -9,3 +9,16 @@
 .unity-button:hover {
 	background-color: rgb(163, 163, 163);
 }
+
+.unity-base-text-field__input {
+	background-color: rgb(163, 163, 163);
+	overflow: visable;
+}
+
+.unity-text-element {
+	color: white;
+}
+
+.unity-text-element:focus {
+	color: white;
+}

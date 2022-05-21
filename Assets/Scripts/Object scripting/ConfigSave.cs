@@ -163,6 +163,15 @@ public static class ConfigurationFunctions
             _geneMode: 1), "ClassicH");
     }
 
+    public static void RemoveFile(string FILE_NAME)
+    {
+        string fileFullPath = CurrentConfig.SAVE_PATH + FILE_NAME + "." + CurrentConfig.SAVE_EXT;
+        if (Directory.Exists(CurrentConfig.SAVE_PATH))
+        {
+            File.Delete(fileFullPath);
+        }
+    }
+
     public static void SaveToFile(ConfigurationSettings conf, string FILE_NAME)
     {
         string filePath = CurrentConfig.SAVE_PATH;

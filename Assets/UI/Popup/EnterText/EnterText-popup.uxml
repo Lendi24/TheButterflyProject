@@ -1,0 +1,14 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" xsi="http://www.w3.org/2001/XMLSchema-instance" engine="UnityEngine.UIElements" editor="UnityEditor.UIElements" noNamespaceSchemaLocation="../../../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
+    <Style src="project://database/Assets/UI/Popup/EnterText/EnterText-popup.uss?fileID=7433441132597879392&amp;guid=e580178465552c44da823ce0e804da23&amp;type=3#EnterText-popup" />
+    <ui:VisualElement name="pop-back" />
+    <ui:VisualElement name="pop-contain">
+        <ui:VisualElement name="pop-body" class="pop-body" style="border-bottom-width: 5px; border-left-width: 10px; border-right-width: 10px; border-top-width: 10px;">
+            <ui:Label text="Label" display-tooltip-when-elided="true" name="pop-title" />
+            <ui:TextField picking-mode="Ignore" value="filler text" text="filler text" name="pop-input" />
+            <ui:VisualElement name="pop-buttons">
+                <ui:Button text="Button" display-tooltip-when-elided="true" name="pop-button-yes" />
+                <ui:Button text="Button" display-tooltip-when-elided="true" name="pop-button-no" />
+            </ui:VisualElement>
+        </ui:VisualElement>
+    </ui:VisualElement>
+</ui:UXML>

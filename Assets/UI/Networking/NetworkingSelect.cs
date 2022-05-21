@@ -31,6 +31,12 @@ public class NetworkingSelect : MonoBehaviour
         networkDiscovery.AdvertiseServer();
     }
 
+    public void StopSharingConfig()
+    {
+        NetworkManager.singleton.StopServer();
+        networkDiscovery.StartDiscovery(); 
+    }
+
     // Start is called before the first frame update
     void Start()
     {
