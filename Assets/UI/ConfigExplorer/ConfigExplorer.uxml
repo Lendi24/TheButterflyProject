@@ -1,5 +1,6 @@
 <ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" xsi="http://www.w3.org/2001/XMLSchema-instance" engine="UnityEngine.UIElements" editor="UnityEditor.UIElements" noNamespaceSchemaLocation="../../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
     <Style src="project://database/Assets/UI/ConfigExplorer/USS/ConfigExplorer.uss?fileID=7433441132597879392&amp;guid=2c8817d63af7f4c46bd0d5613ac1c30b&amp;type=3#ConfigExplorer" />
+    <Style src="project://database/Assets/UI/Popup/PopupsStyle.uss?fileID=7433441132597879392&amp;guid=e580178465552c44da823ce0e804da23&amp;type=3#PopupsStyle" />
     <ui:VisualElement name="main" style="flex-shrink: 1; flex-grow: 1;">
         <ui:VisualElement name="Text" style="flex-shrink: 0;">
             <ui:Label text="Load config" display-tooltip-when-elided="true" name="Title" />

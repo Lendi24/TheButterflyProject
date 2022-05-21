@@ -77,6 +77,7 @@ public class ConfigExplorer : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+
         //GetButtons: Needs selected, remote
         GetComponent<UIDocument>().rootVisualElement.Q<VisualElement>("remote-row1").Q<Button>("start").clicked += () => { ButtonInListPressed(selectedCard.uri, 3); };
         GetComponent<UIDocument>().rootVisualElement.Q<VisualElement>("remote-row1").Q<Button>("import").clicked += () => { ButtonInListPressed(selectedCard.uri, 4); };
@@ -84,12 +85,17 @@ public class ConfigExplorer : MonoBehaviour
         //GetButtons: Needs selected, local
         GetComponent<UIDocument>().rootVisualElement.Q<VisualElement>("local-row1").Q<Button>("start").clicked += () => { ButtonInListPressed(selectedCard.name, 1); };
         GetComponent<UIDocument>().rootVisualElement.Q<VisualElement>("local-row1").Q<Button>("export").clicked += () => { ButtonInListPressed(selectedCard.name, 2);  };
-        GetComponent<UIDocument>().rootVisualElement.Q<VisualElement>("local-row1").Q<Button>("delete").clicked += () => {  };
+        GetComponent<UIDocument>().rootVisualElement.Q<VisualElement>("local-row1").Q<Button>("delete").clicked += () => {
+            ConfigurationFunctions.RemoveFile(selectedCard.origin);
+            selectedCard = null;
+            GetConfigFiles(false);
+        };
 
         //GetButtons: Does not need selected
         GetComponent<UIDocument>().rootVisualElement.Q<Button>("editor").clicked += () => { 
             if (selectedCard == null) { SceneManager.LoadScene("CustomSelectMenu"); }
-            else { ButtonInListPressed(selectedCard.name, 0); }
+            else { if (selectedCard.uri == null) { ButtonInListPressed(selectedCard.name, 0);
+                } else { ButtonInListPressed(selectedCard.uri, 0); }}
         };
         GetComponent<UIDocument>().rootVisualElement.Q<Button>("back").clicked += () => { SceneManager.LoadScene("MainMenu");  };
         //GetComponent<UIDocument>().rootVisualElement.Q<Button>("import").clicked += () => { NetVar.netModeServer = false; SceneManager.LoadScene("Networking"); };
@@ -212,6 +218,16 @@ public class ConfigExplorer : MonoBehaviour
             case 2:
                 Debug.Log("Trying to share " + configName);
                 netscript.ShareConfig();
+
+                GetComponent<PopupsUI>().SpawnpopInfoRed(
+                title: "Sharing config over network...",
+                infoText: "Configuration file is now visible to other users on this network!",
+                buttonRedText: "Stop",
+                elem: GetComponent<UIDocument>().rootVisualElement,
+                redButtonAction: netscript.StopSharingConfig
+                );
+
+
                 break;
 
             default:
@@ -223,32 +239,51 @@ public class ConfigExplorer : MonoBehaviour
     {
         /*
          * Mode
+         * 0 - Edit
          * 3 - Play
          * 4 - Download
          */
 
+        NetMode.mode = mode;
         CurrentConfig.conf = null;
         netscript.Connect(new Mirror.Discovery.ServerResponse { uri = configName });
-        NetMode.mode = mode;
+    }
 
-        /*
+    public void PostConnectCallback(int mode)
+    {
         switch (mode)
         {
+            case 0:
+                SceneManager.LoadScene("CustomSelectMenu");
+                break;
+
             case 3:
-                Debug.Log("Trying to play remote config " + configName.ToString());
-                //SceneManager.LoadScene("ButterHunt");
+                SceneManager.LoadScene("ButterHunt");
                 break;
 
             case 4:
-                Debug.Log("Trying to download remote config " + configName.ToString());
-                ConfigurationFunctions.SaveToFile(CurrentConfig.conf, "NetSave");
+                GetComponent<PopupsUI>().SpawnpopEnterText(
+                    title: "Enter new config-file name",
+                    fillerText: "Name here",
+                    buttonGreenText: "Confirm",
+                    buttonRedText: "Cancel",
+                    elem: GetComponent<UIDocument>().rootVisualElement,
+                    greenButtonAction: PopupGiveNameCallback
+                );
                 break;
 
             default:
                 break;
         }
-        */
     }
+
+    void PopupGiveNameCallback (string name)
+    {
+        ConfigurationFunctions.SaveToFile(CurrentConfig.conf, name);
+        SceneManager.LoadScene("ConfigExplorer");
+    }
+
+
 
     /*            case 3:
                 Debug.Log("Trying to play remote config " + configName);
