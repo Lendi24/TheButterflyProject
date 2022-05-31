@@ -18,6 +18,7 @@ public class GraphBoardScript : MonoBehaviour
     int graphNum = 1; //GraphBoardScript
     int screenSizeX = Screen.width; //GraphBoardScript
     int screenSizeY = Screen.height; //GraphBoardScript
+    int score;
     List<StatSave> values; //GraphBoardScript
     int[,] colorValueArr; //GraphBoardScript
     Color[] alleleColors; //GraphBoardScript
@@ -32,6 +33,7 @@ public class GraphBoardScript : MonoBehaviour
         GetVariables(0);
         //colorValueArr = new int[colorAmount, timeValue + 1];
         //int[] triangles = new int[timeValue+3];
+        graphUI.GetComponent<GraphUI>().SetScore(score);
         graphBoard.GetComponent<GraphScript>().SetColors();
         alleleColors = graphBoard.GetComponent<GraphScript>().CreateColors(3);
         while (true)
@@ -69,6 +71,7 @@ public class GraphBoardScript : MonoBehaviour
         //Debug.Log(colorAmount);
         values = SoundScript.values;
         domMode = values[0].domMode;
+        score = SoundScript.score;
 
         //Gene[] test = values[0].geneData;
         //Debug.Log(GeneticManager.BlendInCalc(test[0]));
@@ -189,8 +192,52 @@ public class GraphBoardScript : MonoBehaviour
         string[][] stats = new string[colorAmount][];
         for(int i = 0; i < stats.Length; i++)
         {
-            stats[i] = new string[] {"Stat" + i + ":","" + colorValueArr[i,graphPoint.GetComponent<GraphPointScript>().round]};
+            stats[i] = new string[] {GetStatName(graphNum,i),"" + colorValueArr[i,graphPoint.GetComponent<GraphPointScript>().round]};
         }
-        infoUI.GetComponent<InfoUI>().CreateGraphStats(colorAmount, stats, graphPoint.GetComponent<GraphPointScript>().round);
+        Color[] colors = new Color[1];
+        if(graphNum == 1)
+        {
+            colors = alleleColors;
+        }
+        else if(graphNum == 2)
+        {
+            colors = phenotypeColors;
+        }
+        infoUI.GetComponent<InfoUI>().CreateGraphStats(colorAmount, stats, graphPoint.GetComponent<GraphPointScript>().round, colors);
+    }
+
+    public string GetStatName(int mode, int index)
+    {
+        string name = "";
+
+        if(mode == 1)
+        {
+            switch(index)
+            {
+                case 0:
+                    name = "aa";
+                    break;
+                case 1:
+                    name = "Aa";
+                    break;
+                case 2:
+                    name = "AA";
+                    break;
+            }
+        }
+        else if(mode == 2)
+        {
+            switch (index)
+            {
+                case 0:
+                    name = "a";
+                    break;
+                case 1:
+                    name = "A";
+                    break;
+            }
+        }
+
+        return name;
     }
 }

@@ -26,4 +26,7 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/UI/Networking/Networking.unity
     guid: d059cc7df2eedd4458754801304ddef9
+  - enabled: 1
+    path: Assets/UI/Credits/CreditsScene.unity
+    guid: ed46d44c59a8c0f44b53c7f7dc47a99f
   m_configObjects: {}
