@@ -1,3 +1,43 @@
+#Text {
+	align-items: center;
+}
+
+#main {
+	margin: 0 10 0 10;
+}
+
+#Title {
+	font-size: 30px;
+	-unity-font-style: bold;
+	margin-bottom: 0;
+	padding-bottom: 0;
+}
+
+#subtitle {
+	font-size: 15px;
+	margin-top: 0;
+	padding-top: 0;
+}
+
+#Configs {
+	background-color: rgba(79, 79, 79, 0.64);
+	margin-bottom: 5px;
+	padding: 5px;
+}
+
+#Scroll {
+	background-color: rgba(27, 27, 27, 0.33);
+	padding: 5px;
+}
+
+#Spacer {
+	background-color: rgba(27, 27, 27, 0.33);
+}
+
+#ButtonContainer Button {
+	margin: 5px;
+}
+
 .Card {
 	flex-direction: row; 
 	background-color: rgb(132, 132, 132); 

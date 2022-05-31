@@ -1,50 +1,56 @@
 <ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" xsi="http://www.w3.org/2001/XMLSchema-instance" engine="UnityEngine.UIElements" editor="UnityEditor.UIElements" noNamespaceSchemaLocation="../../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
     <Style src="project://database/Assets/UI/ConfigExplorer/USS/ConfigExplorer.uss?fileID=7433441132597879392&amp;guid=2c8817d63af7f4c46bd0d5613ac1c30b&amp;type=3#ConfigExplorer" />
     <Style src="project://database/Assets/UI/Popup/PopupsStyle.uss?fileID=7433441132597879392&amp;guid=e580178465552c44da823ce0e804da23&amp;type=3#PopupsStyle" />
-    <ui:VisualElement name="main" style="flex-shrink: 1; flex-grow: 1;">
-        <ui:VisualElement name="Text" style="flex-shrink: 0;">
-            <ui:Label text="Load config" display-tooltip-when-elided="true" name="Title" />
-            <ui:Label text="Select a configuration-file in the list below" display-tooltip-when-elided="true" name="subtitle" />
-        </ui:VisualElement>
-        <ui:ScrollView name="Scroll" style="flex-grow: 0;">
-            <ui:VisualElement name="LocalCards" style="display: flex;">
-                <ui:VisualElement name="0" class="Card" style="display: none;">
-                    <ui:VisualElement name="Text-Container">
-                        <ui:Label text="Label" display-tooltip-when-elided="true" />
-                    </ui:VisualElement>
-                    <ui:VisualElement name="Button-Container">
-                        <ui:Button text="Button" display-tooltip-when-elided="true" />
-                        <ui:Button text="Button" display-tooltip-when-elided="true" />
-                    </ui:VisualElement>
+    <ui:VisualElement style="flex-grow: 1; justify-content: flex-start;">
+        <ui:VisualElement name="main" style="flex-shrink: 1; flex-grow: 1; justify-content: space-between; align-items: stretch; flex-wrap: nowrap;">
+            <ui:VisualElement name="Text" style="flex-shrink: 0;">
+                <ui:Label text="Load config" display-tooltip-when-elided="true" name="Title" />
+                <ui:Label text="Select a configuration-file in the list below" display-tooltip-when-elided="true" name="subtitle" />
+            </ui:VisualElement>
+            <ui:VisualElement style="align-items: center; flex-wrap: nowrap;">
+                <ui:VisualElement name="Configs" style="flex-grow: 0; flex-shrink: 0; height: 200px; width: 700px; align-items: stretch; min-width: 200px; max-width: 700px;">
+                    <ui:ScrollView name="Scroll" style="flex-grow: 0;">
+                        <ui:VisualElement name="LocalCards" style="display: flex;">
+                            <ui:VisualElement name="0" class="Card" style="display: none;">
+                                <ui:VisualElement name="Text-Container">
+                                    <ui:Label text="Label" display-tooltip-when-elided="true" />
+                                </ui:VisualElement>
+                                <ui:VisualElement name="Button-Container">
+                                    <ui:Button text="Button" display-tooltip-when-elided="true" />
+                                    <ui:Button text="Button" display-tooltip-when-elided="true" />
+                                </ui:VisualElement>
+                            </ui:VisualElement>
+                        </ui:VisualElement>
+                        <ui:VisualElement name="RemoteCards" style="display: flex;">
+                            <ui:VisualElement name="0" class="Card" style="display: none;">
+                                <ui:VisualElement name="Text-Container">
+                                    <ui:Label text="Label" display-tooltip-when-elided="true" />
+                                </ui:VisualElement>
+                                <ui:VisualElement name="Button-Container">
+                                    <ui:Button text="Button" display-tooltip-when-elided="true" />
+                                    <ui:Button text="Button" display-tooltip-when-elided="true" />
+                                </ui:VisualElement>
+                            </ui:VisualElement>
+                        </ui:VisualElement>
+                    </ui:ScrollView>
+                    <ui:VisualElement name="Spacer" style="flex-shrink: 0; flex-grow: 1;" />
                 </ui:VisualElement>
             </ui:VisualElement>
-            <ui:VisualElement name="RemoteCards" style="display: flex;">
-                <ui:VisualElement name="0" class="Card" style="display: none;">
-                    <ui:VisualElement name="Text-Container">
-                        <ui:Label text="Label" display-tooltip-when-elided="true" />
-                    </ui:VisualElement>
-                    <ui:VisualElement name="Button-Container">
-                        <ui:Button text="Button" display-tooltip-when-elided="true" />
-                        <ui:Button text="Button" display-tooltip-when-elided="true" />
-                    </ui:VisualElement>
+            <ui:VisualElement name="ButtonContainer" style="flex-direction: column; flex-wrap: wrap; flex-shrink: 1; flex-grow: 0; justify-content: space-around; align-items: stretch;">
+                <ui:VisualElement name="remote-row1" style="flex-direction: row; justify-content: space-around; flex-wrap: wrap;">
+                    <ui:Button text="Play" display-tooltip-when-elided="true" name="start" style="flex-grow: 1; flex-shrink: 0; width: 100px;" />
+                    <ui:Button text="Import" display-tooltip-when-elided="true" name="import" style="flex-grow: 1; width: 100px;" />
                 </ui:VisualElement>
-            </ui:VisualElement>
-        </ui:ScrollView>
-        <ui:VisualElement name="Spacer" style="flex-shrink: 0; flex-grow: 1;" />
-        <ui:VisualElement name="ButtonContainer" style="flex-direction: column; flex-wrap: wrap; flex-shrink: 1; flex-grow: 0; justify-content: space-around; align-items: stretch;">
-            <ui:VisualElement name="remote-row1" style="flex-direction: row; justify-content: space-around; flex-wrap: wrap;">
-                <ui:Button text="Play" display-tooltip-when-elided="true" name="start" style="flex-grow: 1; flex-shrink: 0; width: 100px;" />
-                <ui:Button text="Import" display-tooltip-when-elided="true" name="import" style="flex-grow: 1; width: 100px;" />
-            </ui:VisualElement>
-            <ui:VisualElement name="local-row1" style="flex-direction: row; justify-content: space-around; flex-wrap: wrap;">
-                <ui:Button text="Play" display-tooltip-when-elided="true" name="start" style="flex-grow: 1; flex-shrink: 0; width: 100px;" />
-                <ui:Button text="Export" display-tooltip-when-elided="true" name="export" style="flex-grow: 1; width: 100px;" />
-                <ui:Button text="Delete" display-tooltip-when-elided="true" name="delete" style="flex-grow: 1; width: 100px;" />
-            </ui:VisualElement>
-            <ui:VisualElement name="row2" style="flex-direction: row; align-items: stretch; justify-content: space-around; flex-wrap: wrap;">
-                <ui:Button text="Back" display-tooltip-when-elided="true" name="back" style="flex-grow: 1; flex-shrink: 0; width: 100px;" />
-                <ui:Button text="Editor" display-tooltip-when-elided="true" name="editor" style="flex-grow: 1; flex-shrink: 0; width: 100px;" />
-                <ui:Button text="Reset" display-tooltip-when-elided="true" name="reset" style="flex-grow: 1; flex-shrink: 0; width: 100px;" />
+                <ui:VisualElement name="local-row1" style="flex-direction: row; justify-content: space-around; flex-wrap: wrap;">
+                    <ui:Button text="Play" display-tooltip-when-elided="true" name="start" style="flex-grow: 1; flex-shrink: 0; width: 100px;" />
+                    <ui:Button text="Export" display-tooltip-when-elided="true" name="export" style="flex-grow: 1; width: 100px;" />
+                    <ui:Button text="Delete" display-tooltip-when-elided="true" name="delete" style="flex-grow: 1; width: 100px;" />
+                </ui:VisualElement>
+                <ui:VisualElement name="row2" style="flex-direction: row; align-items: stretch; justify-content: space-around; flex-wrap: wrap;">
+                    <ui:Button text="Back" display-tooltip-when-elided="true" name="back" style="flex-grow: 1; flex-shrink: 0; width: 100px;" />
+                    <ui:Button text="Editor" display-tooltip-when-elided="true" name="editor" style="flex-grow: 1; flex-shrink: 0; width: 100px;" />
+                    <ui:Button text="Reset" display-tooltip-when-elided="true" name="reset" style="flex-grow: 1; flex-shrink: 0; width: 100px;" />
+                </ui:VisualElement>
             </ui:VisualElement>
         </ui:VisualElement>
     </ui:VisualElement>
