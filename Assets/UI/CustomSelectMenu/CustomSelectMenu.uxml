@@ -5,7 +5,7 @@
         <ui:VisualElement name="Tabs" style="flex-direction: row; justify-content: flex-start; flex-shrink: 0; flex-grow: 0;">
             <ui:Button text="Simulation Config" display-tooltip-when-elided="true" name="game-settings-button" />
             <ui:Button text="Butterfly Settings" display-tooltip-when-elided="true" name="butterfly-settings-button" class="Active" />
-            <ui:Button text="Initial Environment" display-tooltip-when-elided="true" name="initial-env-button" />
+            <ui:Button text="Environment" display-tooltip-when-elided="true" name="initial-env-button" />
         </ui:VisualElement>
         <ui:ScrollView name="MainView" style="background-color: rgba(0, 0, 0, 0.28);">
             <ui:VisualElement name="old" style="display: none; visibility: hidden;">
@@ -19,9 +19,9 @@
             </ui:VisualElement>
             <ui:VisualElement name="game-settings-page" class="Settings Active">
                 <ui:SliderInt picking-mode="Ignore" label="Health Amount" value="3" high-value="10" name="menu-slider-healthamount" low-value="1" show-input-field="true" style="flex-direction: column;" />
-                <ui:SliderInt picking-mode="Ignore" label="Minimum Kills (Can not be lower then &quot;Maximum Clicks&quot;)" value="3" high-value="10" show-input-field="true" low-value="1" name="menu-slider-min-kills" style="flex-direction: column;" />
+                <ui:SliderInt picking-mode="Ignore" label="Minimum Kills (Can not be lower then &quot;Maximum Clicks&quot;)" value="3" high-value="10" show-input-field="true" low-value="0" name="menu-slider-min-kills" style="flex-direction: column;" />
                 <ui:SliderInt picking-mode="Ignore" label="Maximum Clicks (0 will disable)" value="3" high-value="10" name="menu-slider-max-click" show-input-field="true" style="flex-direction: column;" />
-                <ui:Toggle label="Hitting a butterfly counts towards limit" name="menu-toggle-nosafeclick" value="true" tooltip="Toggles whether or not you want to lose &quot;clicks&quot; when clicking on something that isn&apos;t a butterfly." />
+                <ui:Toggle label="Only hitting a butterfly counts towards limit" name="menu-toggle-nosafeclick" value="true" tooltip="Toggles whether or not you want to lose &quot;clicks&quot; when clicking on something that isn&apos;t a butterfly." />
                 <ui:RadioButtonGroup label="Render Mode" value="1" name="radio-render-mode" style="flex-direction: column;">
                     <ui:RadioButton label="Textured" value="false" />
                     <ui:RadioButton label="Mixed" value="true" />
@@ -32,7 +32,7 @@
                 <ui:Toggle label="Reset Position On Next Round" name="menu-toggle-resetonnextgen" value="true" tooltip="Toggles whether you want the butterflies to switch places after every round or not." />
                 <ui:Toggle label="Keep Butterfly Amount" name="menu-toggle-keepbutterflyamount" tooltip="Toggles whether you want the butterfly population to stay the same throughout every round." />
                 <ui:SliderInt picking-mode="Ignore" label="Round Spawn Amount" value="2" high-value="10" name="menu-slider-roundspawnamount" low-value="1" show-input-field="true" tooltip="The amount of butterflies you want to spawn after each round." style="flex-direction: column; align-items: stretch; justify-content: flex-start;" />
-                <ui:RadioButtonGroup label="Gene Mode" value="-1" name="gene-mode" focusable="true" style="flex-direction: column;">
+                <ui:RadioButtonGroup label="Gene Mode" value="-1" name="radio-gene-mode" focusable="true" style="flex-direction: column;">
                     <ui:RadioButton label="Light is dominant" name="light" tooltip="Light colored butterflies have the dominant gene." />
                     <ui:RadioButton label="No dominance" value="true" name="none" tooltip="There is no dominant gene." />
                     <ui:RadioButton label="Dark is dominant" value="false" name="dark" tooltip="Dark colored butterflies have the dominant gene." />
@@ -42,14 +42,14 @@
                 <ui:Slider picking-mode="Ignore" label="Hunt Time" value="4" high-value="5" name="menu-slider-hunttime" low-value="2" tooltip="The amount of time you will have to kill butterflies every hunt." show-input-field="true" />
                 <ui:Slider picking-mode="Ignore" label="Splash Time" value="2" high-value="5" name="menu-slider-prehunttime" low-value="1" tooltip="The amount of time it takes between every hunt." show-input-field="true" style="align-items: stretch; justify-content: flex-start; flex-direction: row;" />
                 <ui:SliderInt picking-mode="Ignore" label="Initial Amount Of Butterflies" value="5" high-value="15" name="menu-slider-init-butteramount" low-value="3" show-input-field="true" />
-                <ui:DropdownField label="Population Bias" index="1" choices="Random,Fixed" />
+                <ui:DropdownField label="Population Bias" index="1" choices="Random,Fixed" name="dropdown-bias" />
                 <ui:VisualElement name="FixedBias" style="flex-direction: row; justify-content: center;">
-                    <ui:TextField picking-mode="Ignore" label="Amount of Gray" value="filler text" text="0" style="flex-direction: column;" />
-                    <ui:TextField picking-mode="Ignore" label="Amount of White" value="filler text" text="0" style="flex-direction: column;" />
-                    <ui:TextField picking-mode="Ignore" label="Amount of Dark" value="filler text" text="0" style="flex-direction: column;" />
+                    <ui:TextField picking-mode="Ignore" label="Amount of Dark" value="filler text" text="1" name="textf-amount-of-dark" style="flex-direction: column;" />
+                    <ui:TextField picking-mode="Ignore" label="Amount of Gray" value="filler text" text="3" name="textf-amount-of-gray" style="flex-direction: column;" />
+                    <ui:TextField picking-mode="Ignore" label="Amount of White" value="filler text" text="1" name="textf-amount-of-white" style="flex-direction: column;" />
                 </ui:VisualElement>
-                <ui:Label text="The first generation will have [NuM] light butterflies, [NuM] gray butterflies and [NuM] dark butterflies " display-tooltip-when-elided="true" style="-unity-text-align: upper-center;" />
-                <ui:Label text="There will be no gray butterflies, since the [StR] allele is dominant" display-tooltip-when-elided="true" style="-unity-text-align: upper-center;" />
+                <ui:Label text="The first generation will have [NuM] light butterflies, [NuM] gray butterflies and [NuM] dark butterflies " display-tooltip-when-elided="true" style="-unity-text-align: upper-center; display: none; visibility: hidden;" />
+                <ui:Label text="There will be no gray butterflies, since the [StR] allele is dominant" display-tooltip-when-elided="true" style="-unity-text-align: upper-center; display: none; visibility: hidden;" />
             </ui:VisualElement>
         </ui:ScrollView>
     </ui:VisualElement>
