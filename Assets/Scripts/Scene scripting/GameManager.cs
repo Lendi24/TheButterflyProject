@@ -377,7 +377,14 @@ rContainer.transform.childCount);
                   //y=C*a^x. Time decreases the more rounds have passed.
                   //postGameSplash.GetComponent<Canvas>().enabled = true;
 
-                    if ((butterflyStartAmountRandom - butterfliesRemaining) < minimumKills)
+                    if (butterContainer.transform.childCount == 0)
+                    {
+                        SoundScript.SetVariables(rounds, butterflyGeneLength + 1, statsLogList, score);
+                        GetComponent<LoadSceneFunctions>().ToGraph();
+                        gameState = 4;//Failed! Health will be lost, energy will be lost or game will be lost here.
+                    }
+
+                    else if ((butterflyStartAmountRandom - butterfliesRemaining) < minimumKills)
                     {
                         healthAmount--;
                         spriteOverlayMan.GetComponent<SpriteOverlay>().RemoveHeart();
