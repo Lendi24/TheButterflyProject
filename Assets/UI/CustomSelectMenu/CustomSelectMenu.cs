@@ -25,6 +25,8 @@ public class CustomSelectMenu : MonoBehaviour
     public RadioButtonGroup geneModeRadio, renderModeRadio;
     VisualElement root;
 
+    private bool dominActivated;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -33,15 +35,18 @@ public class CustomSelectMenu : MonoBehaviour
         //Page: Simulation Config
         healthAmount = root.Q<SliderInt>("menu-slider-healthamount"); //Unchanged
         minKills = root.Q<SliderInt>("menu-slider-min-kills");
+        minKills.RegisterCallback<ChangeEvent<int>>(OnChangeMinKills);
         maxClicks = root.Q<SliderInt>("menu-slider-max-click");
+        maxClicks.RegisterCallback<ChangeEvent<int>>(OnChangeMaxKills);
         invertetNoSafeClick = root.Q<Toggle>("menu-toggle-nosafeclick");
-        renderModeRadio = root.Q<RadioButtonGroup>("radio-render-mode"); 
+        renderModeRadio = root.Q<RadioButtonGroup>("radio-render-mode");
 
         //Page: Butterfly Settings
         resetOnNextGen = root.Q<Toggle>("menu-toggle-resetonnextgen"); //Unchanged
         keepButterflyAmount = root.Q<Toggle>("menu-toggle-keepbutterflyamount"); //Unchanged
         roundSpawnAmount = root.Q<SliderInt>("menu-slider-roundspawnamount"); //Unchanged
         geneModeRadio = root.Q<RadioButtonGroup>("radio-gene-mode"); //Unchanged
+        geneModeRadio.Q<RadioButton>("none").RegisterCallback<ChangeEvent<bool>>(OnGeneDominChange);
 
         //Page: Initial Environment
         preHuntTime = root.Q<Slider>("menu-slider-prehunttime"); //Unchanged
@@ -59,59 +64,48 @@ public class CustomSelectMenu : MonoBehaviour
         amountOfDark = root.Q<TextField>("textf-amount-of-dark");
         amountOfDark.RegisterCallback<InputEvent>(OnInitamntSpecificChange, TrickleDown.TrickleDown);
 
-        //
-
-        //Page: Time
-        /*
-        //Page: Game
-        healthAmount = root.Q<SliderInt>("menu-slider-healthamount");
-        kills = root.Q<MinMaxSlider>("menu-minmaxslider-kills");
-        noSafeClick = root.Q<Toggle>("menu-toggle-nosafeclick");
-        renderLerp = root.Q<Slider>("menu-slider-lerp");
-        renderPerlin = root.Q<Slider>("menu-slider-perlin");
-
-        //Page: ButterSettings
-        startAmountRandom = root.Q<SliderInt>("menu-slider-startamountrandom");
-        startAmountGene = root.Q<SliderInt>("menu-slider-startamountgene");
-        roundSpawnAmount = root.Q<SliderInt>("menu-slider-roundspawnamount");
-        keepButterflyAmount = root.Q<Toggle>("menu-toggle-keepbutterflyamount");
-        resetOnNextGen = root.Q<Toggle>("menu-toggle-resetonnextgen");
-        //geneLength = root.Q<SliderInt>("menu-slider-genelength");
-        renderButterBack = root.Q<Toggle>("menu-render-butter-back");
-        geneModeRadio = root.Q<RadioButtonGroup>("gene-mode");
-        */
-
-
         //BottomButtons
-        root.Q<Button>("menu-button-save").clicked += SaveCustomConfig;
-       root.Q<Button>("menu-button-load").clicked += LoadCustomConfig;
-       root.Q<Button>("menu-button-play").clicked += PlayCustomConfig;
-       root.Q<Button>("menu-button-back").clicked += GetComponent<LoadSceneFunctions>().BackToMain;
+        root.Q<Button>("menu-button-save").clicked += () => {
+            string name = root.Q<TextField>("config-name").value;
+            ConfigurationFunctions.SaveToFile(MakeConfObject(), name);
+        };
 
-       //Tab-pages
-       initEnvSettingsPage = root.Q<VisualElement>("initial-env-page");
-       gameSettingsPage = root.Q<VisualElement>("game-settings-page");
-       butterflySettingsPage = root.Q<VisualElement>("butterfly-settings-page");
+        root.Q<Button>("menu-button-load").clicked += () => {
+            SceneManager.LoadScene("ConfigExplorer");
+        };
 
-       //Tab-buttons
-       initEnvButton = root.Q<Button>("initial-env-button");
-       gameSettingsButton = root.Q<Button>("game-settings-button");
-       butterflySettingsButton = root.Q<Button>("butterfly-settings-button");
+        root.Q<Button>("menu-button-play").clicked += () => {
+            //GetComponent<LoadSceneFunctions>().StartCustomGame(preHuntTime.value, huntTime.value, geneLength.value, startAmountRandom.value, startAmountGene.value, Mathf.RoundToInt(kills.maxValue), Mathf.RoundToInt(kills.minValue), renderMode.value, roundSpawnAmount.value, healthAmount.value, resetOnNextGen.value, noSafeClick.value, keepButterflyAmount.value, geneMode);
+            CurrentConfig.conf = MakeConfObject();
+            SceneManager.LoadScene("ButterHunt");
+        };
 
-       //Tab-buttons logic-binding 
-       initEnvButton.clicked += () => { SwitchTab(initEnvSettingsPage, initEnvButton); };
-       gameSettingsButton.clicked += () => { SwitchTab(gameSettingsPage, gameSettingsButton); };
-       butterflySettingsButton.clicked += () => { SwitchTab(butterflySettingsPage, butterflySettingsButton); };
-       SwitchTab(butterflySettingsPage, butterflySettingsButton);
+        root.Q<Button>("menu-button-back").clicked += GetComponent<LoadSceneFunctions>().BackToMain;
+
+        //Tab-pages
+        initEnvSettingsPage = root.Q<VisualElement>("initial-env-page");
+        gameSettingsPage = root.Q<VisualElement>("game-settings-page");
+        butterflySettingsPage = root.Q<VisualElement>("butterfly-settings-page");
+
+        //Tab-buttons
+        initEnvButton = root.Q<Button>("initial-env-button");
+        gameSettingsButton = root.Q<Button>("game-settings-button");
+        butterflySettingsButton = root.Q<Button>("butterfly-settings-button");
+
+        //Tab-buttons logic-binding 
+        initEnvButton.clicked += () => { SwitchTab(initEnvSettingsPage, initEnvButton); };
+        gameSettingsButton.clicked += () => { SwitchTab(gameSettingsPage, gameSettingsButton); };
+        butterflySettingsButton.clicked += () => { SwitchTab(butterflySettingsPage, butterflySettingsButton); };
+        SwitchTab(butterflySettingsPage, butterflySettingsButton);
 
 
-        //Enter Event 
+        //Enter Event YO, SEB! FIX THIS!!
         preHuntTime.RegisterCallback<PointerEnterEvent>(OnPointerEnterEvent, TrickleDown.TrickleDown);
         huntTime.RegisterCallback<PointerEnterEvent>(OnPointerEnterEvent, TrickleDown.TrickleDown);
 
         healthAmount.RegisterCallback<PointerEnterEvent>(OnPointerEnterEvent, TrickleDown.TrickleDown);
-        renderLerp.RegisterCallback<PointerEnterEvent>(OnPointerEnterEvent, TrickleDown.TrickleDown);
-        renderPerlin.RegisterCallback<PointerEnterEvent>(OnPointerEnterEvent, TrickleDown.TrickleDown);
+        //renderLerp.RegisterCallback<PointerEnterEvent>(OnPointerEnterEvent, TrickleDown.TrickleDown);
+        //renderPerlin.RegisterCallback<PointerEnterEvent>(OnPointerEnterEvent, TrickleDown.TrickleDown);
 
         roundSpawnAmount.RegisterCallback<PointerEnterEvent>(OnPointerEnterEvent, TrickleDown.TrickleDown);
         keepButterflyAmount.RegisterCallback<PointerEnterEvent>(OnPointerEnterEvent, TrickleDown.TrickleDown);
@@ -125,8 +119,8 @@ public class CustomSelectMenu : MonoBehaviour
         huntTime.RegisterCallback<PointerLeaveEvent>(OnPointerLeaveEvent, TrickleDown.TrickleDown);
 
         healthAmount.RegisterCallback<PointerLeaveEvent>(OnPointerLeaveEvent, TrickleDown.TrickleDown);
-        renderLerp.RegisterCallback<PointerLeaveEvent>(OnPointerLeaveEvent, TrickleDown.TrickleDown);
-        renderPerlin.RegisterCallback<PointerLeaveEvent>(OnPointerLeaveEvent, TrickleDown.TrickleDown);
+        //renderLerp.RegisterCallback<PointerLeaveEvent>(OnPointerLeaveEvent, TrickleDown.TrickleDown);
+        //renderPerlin.RegisterCallback<PointerLeaveEvent>(OnPointerLeaveEvent, TrickleDown.TrickleDown);
 
         roundSpawnAmount.RegisterCallback<PointerLeaveEvent>(OnPointerLeaveEvent, TrickleDown.TrickleDown);
         keepButterflyAmount.RegisterCallback<PointerLeaveEvent>(OnPointerLeaveEvent, TrickleDown.TrickleDown);
@@ -146,16 +140,50 @@ public class CustomSelectMenu : MonoBehaviour
         }*/
     }
 
-    private void OnGeneDominChange(ChangeEvent<string> evt)
+    /*-------------
+     EVENT HANDLERS
+     ------------*/
+    private void OnChangeMinKills(ChangeEvent<int> evt)
     {
-        Debug.LogError(evt.newValue);
+        if (evt.newValue < maxClicks.value)
+        {
+            maxClicks.value = evt.newValue;
+        }
+    }
+
+    private void OnChangeMaxKills(ChangeEvent<int> evt)
+    {
+        if (evt.newValue > minKills.value)
+        {
+            minKills.value = evt.newValue;
+        }
+    }
+
+    private void OnGeneDominChange(ChangeEvent<bool> evt)
+    {
+        Label InitInfoText = root.Q<Label>("InitInfoText");
+
+        dominActivated = !evt.newValue;
+        if(dominActivated)
+        {
+            InitInfoText.text = "A dominant butterfly colour has been set!\n" +
+                "\"Gray butterflies\" will spawn as the dominant colour,\n" +
+                "but still have the same gene-structure as a gray butterfly would have. I.E. \"Aa\".";
+        }
+
+        else
+        {
+            InitInfoText.text = "No dominant butterfly colour has been set.\n" +
+                "Butterflies with gene \"Aa\" will be their own colour";
+        }
     }
 
     private void OnInitamntChange(ChangeEvent<int> evt)
     {
         float newVal;
+        int amountOfButtertypes = 3; //If dominant genes are 
+        //if (dominActivated) { amountOfButtertypes = 2; }
 
-        int amountOfButtertypes = 3; //Get amount of buttertypes
         if (evt.newValue % amountOfButtertypes == 0)
         {
             newVal = (evt.newValue / amountOfButtertypes);
@@ -163,13 +191,12 @@ public class CustomSelectMenu : MonoBehaviour
 
         else
         {
-            newVal = (float)System.Math.Floor((float)evt.newValue / (float)amountOfButtertypes);
+            newVal = (float)System.Math.Ceiling((float)evt.newValue / (float)amountOfButtertypes);
         }
 
         amountOfWhite.value = newVal.ToString(); 
         amountOfGray.value = ((float)evt.newValue - 2 * newVal).ToString();
         amountOfDark.value = newVal.ToString(); 
-
     }
 
     private void OnDropdownChange(ChangeEvent<string> evt)
@@ -273,25 +300,6 @@ public class CustomSelectMenu : MonoBehaviour
         tooltip.GetComponent<TooltipScript>().HideTooltip();
     }
    
-        
-    void PlayCustomConfig()
-    {
-        //GetComponent<LoadSceneFunctions>().StartCustomGame(preHuntTime.value, huntTime.value, geneLength.value, startAmountRandom.value, startAmountGene.value, Mathf.RoundToInt(kills.maxValue), Mathf.RoundToInt(kills.minValue), renderMode.value, roundSpawnAmount.value, healthAmount.value, resetOnNextGen.value, noSafeClick.value, keepButterflyAmount.value, geneMode);
-        CurrentConfig.conf = MakeConfObject();
-        SceneManager.LoadScene("ButterHunt");
-    }
-
-    void LoadCustomConfig()
-    {
-        SceneManager.LoadScene("ConfigExplorer");
-    }
-
-    void SaveCustomConfig()
-    {
-        string name = root.Q<TextField>("config-name").value;
-        ConfigurationFunctions.SaveToFile(MakeConfObject(), name);
-    }
-
     void SwitchTab(VisualElement page, Button button)
     {
         ResetSettingsMenu();
@@ -340,7 +348,6 @@ public class CustomSelectMenu : MonoBehaviour
            _confName: root.Q<TextField>("config-name").value,
            _preHuntTime: preHuntTime.value,
            _huntTime: huntTime.value,
-           //_butterflyGeneLength:           geneLength.value,
            _butterflyStartAmountRandom: 5,//startAmountRandom.value,
            _butterflyStartAmountGene: 5,//startAmountGene.value,
            _maximumKills: 5,//Mathf.RoundToInt(kills.maxValue),

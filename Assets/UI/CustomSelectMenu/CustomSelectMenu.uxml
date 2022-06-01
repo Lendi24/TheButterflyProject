@@ -44,11 +44,11 @@
                 <ui:SliderInt picking-mode="Ignore" label="Initial Amount Of Butterflies" value="5" high-value="15" name="menu-slider-init-butteramount" low-value="3" show-input-field="true" />
                 <ui:DropdownField label="Population Bias" index="1" choices="Random,Fixed" name="dropdown-bias" />
                 <ui:VisualElement name="FixedBias" style="flex-direction: row; justify-content: center;">
-                    <ui:TextField picking-mode="Ignore" label="Amount of Dark" value="filler text" text="1" name="textf-amount-of-dark" style="flex-direction: column;" />
-                    <ui:TextField picking-mode="Ignore" label="Amount of Gray" value="filler text" text="3" name="textf-amount-of-gray" style="flex-direction: column;" />
-                    <ui:TextField picking-mode="Ignore" label="Amount of White" value="filler text" text="1" name="textf-amount-of-white" style="flex-direction: column;" />
+                    <ui:TextField picking-mode="Ignore" label="Amount of Dark" value="filler text" text="2" name="textf-amount-of-dark" style="flex-direction: column;" />
+                    <ui:TextField picking-mode="Ignore" label="Amount of Gray" value="filler text" text="1" name="textf-amount-of-gray" style="flex-direction: column;" />
+                    <ui:TextField picking-mode="Ignore" label="Amount of White" value="filler text" text="2" name="textf-amount-of-white" style="flex-direction: column;" />
                 </ui:VisualElement>
-                <ui:Label text="The first generation will have [NuM] light butterflies, [NuM] gray butterflies and [NuM] dark butterflies " display-tooltip-when-elided="true" style="-unity-text-align: upper-center; display: none; visibility: hidden;" />
+                <ui:Label text="No dominant butterfly colour has been set.\nButterflies with gene &quot;Aa&quot; will be their own colour" display-tooltip-when-elided="true" name="InitInfoText" style="-unity-text-align: upper-center; display: flex; visibility: visible;" />
                 <ui:Label text="There will be no gray butterflies, since the [StR] allele is dominant" display-tooltip-when-elided="true" style="-unity-text-align: upper-center; display: none; visibility: hidden;" />
             </ui:VisualElement>
         </ui:ScrollView>
