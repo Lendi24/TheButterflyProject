@@ -65,14 +65,58 @@ public class CustomSelectMenu : MonoBehaviour
         amountOfDark.RegisterCallback<InputEvent>(OnInitamntSpecificChange, TrickleDown.TrickleDown);
 
         //BottomButtons
+        
         root.Q<Button>("menu-button-save").clicked += () => {
-            string name = root.Q<TextField>("config-name").value;
-            ConfigurationFunctions.SaveToFile(MakeConfObject(), name);
+            //string name = root.Q<TextField>("config-name").value;
+            string fillerName = "{Enter config-name here}";
+
+            GetComponent<PopupsUI>().SpawnpopEnterText(
+                title: "Saving config",
+                fillerText: fillerName,
+                buttonRedText: "Cancel",
+                elem: GetComponent<UIDocument>().rootVisualElement,
+                buttonGreenText: "Save",
+                greenButtonAction: (string name) => {
+                    Debug.Log("Trying to save with name \""+name+"\"");
+
+                    try
+                    {
+                        if (name == "" || name == fillerName)
+                        {
+                            GetComponent<PopupsUI>().SpawnpopInfoRed(
+                                title: "Error!",
+                                infoText: "Config not saved. Given name is invalid!",
+                                buttonRedText: "Cancel",
+                                elem: GetComponent<UIDocument>().rootVisualElement,
+                                redButtonAction: () => { }
+                            );
+                        }
+
+                        else
+                        {
+                            ConfigurationFunctions.SaveToFile(MakeConfObject(), name);
+                        }
+
+                    }
+                    catch (System.Exception)
+                    {
+                        GetComponent<PopupsUI>().SpawnpopInfoRed(
+                            title: "Error!",
+                            infoText: "Woops! You aren't supposed to see this \\o/\nTheButterflyProject ran into an error it couldn't handle.\nCheck logs for details!",
+                            buttonRedText: "Cancel",
+                            elem: GetComponent<UIDocument>().rootVisualElement,
+                            redButtonAction: () => { }
+                        );
+
+                    }
+                }
+            );
         };
 
+        /*
         root.Q<Button>("menu-button-load").clicked += () => {
             SceneManager.LoadScene("ConfigExplorer");
-        };
+        };*/
 
         root.Q<Button>("menu-button-play").clicked += () => {
             //GetComponent<LoadSceneFunctions>().StartCustomGame(preHuntTime.value, huntTime.value, geneLength.value, startAmountRandom.value, startAmountGene.value, Mathf.RoundToInt(kills.maxValue), Mathf.RoundToInt(kills.minValue), renderMode.value, roundSpawnAmount.value, healthAmount.value, resetOnNextGen.value, noSafeClick.value, keepButterflyAmount.value, geneMode);
@@ -128,16 +172,6 @@ public class CustomSelectMenu : MonoBehaviour
         geneModeRadio.Q<RadioButton>("light").RegisterCallback<PointerLeaveEvent>(OnPointerLeaveEvent, TrickleDown.TrickleDown);
         geneModeRadio.Q<RadioButton>("none").RegisterCallback<PointerLeaveEvent>(OnPointerLeaveEvent, TrickleDown.TrickleDown);
         geneModeRadio.Q<RadioButton>("dark").RegisterCallback<PointerLeaveEvent>(OnPointerLeaveEvent, TrickleDown.TrickleDown);
-        /*
-        //SwitchTab(butterflySettingsPage, butterflySettingsButton);
-        try
-        {
-            loadInitValues();
-        }
-        catch (System.Exception)
-        {
-            Debug.LogWarning("NoLoadedConfig!");
-        }*/
     }
 
     /*-------------
@@ -180,23 +214,45 @@ public class CustomSelectMenu : MonoBehaviour
 
     private void OnInitamntChange(ChangeEvent<int> evt)
     {
-        float newVal;
-        int amountOfButtertypes = 3; //If dominant genes are 
-        //if (dominActivated) { amountOfButtertypes = 2; }
-
-        if (evt.newValue % amountOfButtertypes == 0)
+        if (populationBias.value == "Fixed")
         {
-            newVal = (evt.newValue / amountOfButtertypes);
+            CalculateButterAmount(evt.newValue);
         }
 
         else
         {
-            newVal = (float)System.Math.Ceiling((float)evt.newValue / (float)amountOfButtertypes);
+            int whiteButter, grayButter, darkButter;
+            int.TryParse(amountOfWhite.value, out whiteButter);
+            int.TryParse(amountOfGray.value, out grayButter);
+            int.TryParse(amountOfDark.value, out darkButter);
+            int total = whiteButter + grayButter + darkButter;
+
+            if (evt.newValue < total)
+            {
+                populationBias.value = "Fixed";
+            }
+        }
+    }
+
+    private void CalculateButterAmount(int newValue)
+    {
+        float newVal;
+        int amountOfButtertypes = 3; //If dominant genes are 
+        //if (dominActivated) { amountOfButtertypes = 2; }
+
+        if (newValue % amountOfButtertypes == 0)
+        {
+            newVal = (newValue / amountOfButtertypes);
         }
 
-        amountOfWhite.value = newVal.ToString(); 
-        amountOfGray.value = ((float)evt.newValue - 2 * newVal).ToString();
-        amountOfDark.value = newVal.ToString(); 
+        else
+        {
+            newVal = (float)System.Math.Ceiling((float)newValue / (float)amountOfButtertypes);
+        }
+
+        amountOfWhite.value = newVal.ToString();
+        amountOfGray.value = ((float)newValue - 2 * newVal).ToString();
+        amountOfDark.value = newVal.ToString();
     }
 
     private void OnDropdownChange(ChangeEvent<string> evt)
@@ -205,13 +261,21 @@ public class CustomSelectMenu : MonoBehaviour
         switch (evt.newValue)
         {
             case "Fixed":
-                fixedBias.visible = true;
-                fixedBias.style.display = DisplayStyle.Flex;
+                amountOfDark.label = "Amount Of Dark";
+                amountOfGray.label = "Amount Of Gray";
+                amountOfWhite.label = "Amount Of White";
+                CalculateButterAmount(initButterAmount.value);
+
                 break;
 
             case "Random":
-                fixedBias.visible = false;
-                fixedBias.style.display = DisplayStyle.None;
+                amountOfDark.label = "Minimum Amount Of Dark";
+                amountOfDark.value = "1";
+                amountOfGray.label = "Minimum Amount Of Gray";
+                amountOfGray.value = "1";
+                amountOfWhite.label = "Minimum Amount Of White";
+                amountOfWhite.value = "1";
+
                 break;
 
             default:
@@ -235,16 +299,20 @@ public class CustomSelectMenu : MonoBehaviour
 
             if (total > initButterAmount.highValue)
             {
+                populationBias.value = "Fixed";
+
                 initButterAmount.value = initButterAmount.highValue;
                 evtCaller.value = (initButterAmount.highValue + evtCallerValue 
                     - whiteButter
                     - grayButter
                     - darkButter
                     ).ToString();
+
             }
 
             else if (total > initButterAmount.value)
             {
+                populationBias.value = "Fixed";
                 initButterAmount.value = total;
             }
 
@@ -316,13 +384,6 @@ public class CustomSelectMenu : MonoBehaviour
         initEnvButton.RemoveFromClassList("Active");
         gameSettingsButton.RemoveFromClassList("Active");
         butterflySettingsButton.RemoveFromClassList("Active");
-        /*timeSettingsPage.style.display = DisplayStyle.None;
-        gameSettingsPage.style.display = DisplayStyle.None;
-        butterflySettingsPage.style.display = DisplayStyle.None;
-
-        timeSettingsButton.style.backgroundColor = new StyleColor { value = Color.white };
-        gameSettingsButton.style.backgroundColor = new StyleColor { value = Color.white };
-        butterflySettingsButton.style.backgroundColor = new StyleColor { value = Color.white };*/
     }
     
    ConfigurationSettings MakeConfObject()
@@ -345,7 +406,7 @@ public class CustomSelectMenu : MonoBehaviour
        }
 
        return ConfigurationFunctions.MakeConfObject(
-           _confName: root.Q<TextField>("config-name").value,
+           _confName: "göran", //_confName: root.Q<TextField>("config-name").value,
            _preHuntTime: preHuntTime.value,
            _huntTime: huntTime.value,
            _butterflyStartAmountRandom: 5,//startAmountRandom.value,

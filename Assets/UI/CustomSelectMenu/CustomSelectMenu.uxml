@@ -53,11 +53,9 @@
             </ui:VisualElement>
         </ui:ScrollView>
     </ui:VisualElement>
-    <ui:VisualElement name="BottomUI" style="flex-direction: row; justify-content: space-around; align-items: flex-end; position: relative; visibility: visible; overflow: visible; min-width: 100%; min-height: auto; margin-top: 5px; margin-bottom: 5px;">
-        <ui:Button text="Start" display-tooltip-when-elided="true" name="menu-button-play" />
+    <ui:VisualElement name="BottomUI" style="flex-direction: row; justify-content: flex-start; align-items: flex-end; position: relative; visibility: visible; overflow: visible; min-width: 100%; min-height: auto; margin-top: 5px; margin-bottom: 5px;">
         <ui:Button text="Back" display-tooltip-when-elided="true" name="menu-button-back" />
-        <ui:Button text="Load config" display-tooltip-when-elided="true" name="menu-button-load" />
         <ui:Button text="Save config" display-tooltip-when-elided="true" name="menu-button-save" />
-        <ui:TextField picking-mode="Ignore" label="ConfigName" value="3" readonly="false" name="config-name" high-value="10" />
+        <ui:Button text="Start config (without saving)" display-tooltip-when-elided="true" name="menu-button-play" />
     </ui:VisualElement>
 </ui:UXML>
