@@ -22,3 +22,7 @@
 .unity-text-element:focus {
 	color: white;
 }
+
+.unity-base-dropdown__label {
+	color: black;
+}

@@ -13,7 +13,7 @@ public class PopupsUI : MonoBehaviour
         main.Remove(main.Q<VisualElement>("pop-contain"));
     }
 
-    public void SpawnpopEnterText(
+    public void SpawnpopEnterText (
         string title,
         string fillerText,
         string buttonGreenText,
@@ -39,7 +39,7 @@ public class PopupsUI : MonoBehaviour
         elem.Add(new Button { name = "pop-button-yes", text = buttonGreenText });
         elem.Add(new Button { name = "pop-button-no", text = buttonRedText });
 
-        main.Q<Button>("pop-button-yes").clicked += () => { greenButtonAction(main.Q<TextField>("pop-input").text); RemovePopup(); };
+        main.Q<Button>("pop-button-yes").clicked += () => { string input = main.Q<TextField>("pop-input").text; RemovePopup(); greenButtonAction(input); };
         main.Q<Button>("pop-button-no").clicked += () => { RemovePopup(); };
     }
 
@@ -67,7 +67,7 @@ public class PopupsUI : MonoBehaviour
         elem = main.Q<VisualElement>("pop-buttons");
         elem.Add(new Button { name = "pop-button-no", text = buttonRedText });
 
-        main.Q<Button>("pop-button-no").clicked += () => { redButtonAction(); RemovePopup(); };
+        main.Q<Button>("pop-button-no").clicked += () => {  RemovePopup(); redButtonAction(); };
     }
 
 }

@@ -23,8 +23,8 @@ public class GameManager : MonoBehaviour
     float preHuntTime, huntTime, tilesPerUnit, huntTimeReducePercent, huntTimeMin, renderLerp, renderPerlin;
 
     [SerializeField]
-    int butterflyGeneLength, butterflyStartAmountRandom, butterflyStartAmountGene, maximumKills, minimumKills, butterflyRoundSpawnAmount, healthAmount, score;
-    int roundAllowedClicks, geneMode;
+    int butterflyGeneLength, ButterlfyTotalStartAmnt, maximumKills, minimumKills, butterflyRoundSpawnAmount, healthAmount, score;
+    int liveMaximumKills, geneMode, initAmntOfWhite, initAmountOfMixed, initAmountOfDark;
 
     [SerializeField]
     bool resetEverythingOnNextGen, noSafeClick, keepButterAmount, renderButterBackground;
@@ -80,9 +80,9 @@ public class GameManager : MonoBehaviour
         GetComponent<Renderer>().material.SetTexture("_SecondaryTex", backgroundTexture);
 
 
-        // 1,0: esy
-        // 1,1: mid
-        // 0,1: hrd
+        // 1,0: Textured
+        // 1,1: Mixed
+        // 0,1: Perlin
 
         /*foreach(Transform selectedButterfly in butterContainer.GetComponentInChildren<Transform>())
         {
@@ -100,41 +100,23 @@ rContainer.transform.childCount);
         score = 0;
         gameState = 0;
 
-        /*
-        preHuntTime = ButterHuntVariables.preHuntTime;
-        huntTime = ButterHuntVariables.huntTime;
-
-        butterflyGeneLength = ButterHuntVariables.butterflyGeneLength;
-        butterflyStartAmountRandom = ButterHuntVariables.butterflyStartAmountRandom;
-        butterflyStartAmountGene = ButterHuntVariables.butterflyStartAmountGene;
-        maximumKills = ButterHuntVariables.maximumKills;
-        minimumKills = ButterHuntVariables.minimumKills;
-        butterflyRoundSpawnAmount = ButterHuntVariables.butterflyRoundSpawnAmount;
-        healthAmount = ButterHuntVariables.healthAmount;
-
-        resetEverythingOnNextGen = ButterHuntVariables.resetEverythingOnNextGen;
-        noSafeClick = ButterHuntVariables.noSafeClick;
-        keepButterAmount = ButterHuntVariables.keepButterAmount;
-
-        renderLerp = ButterHuntVariables.renderLerp;
-        renderPerlin = ButterHuntVariables.renderPerlin;
-        renderButterBackground = ButterHuntVariables.renderButterBackground;
-        */
 
         preHuntTime = CurrentConfig.conf.preHuntTime;
         huntTime = CurrentConfig.conf.huntTime;
 
-        //butterflyGeneLength = CurrentConfig.conf.butterflyGeneLength;
-        butterflyStartAmountRandom = CurrentConfig.conf.butterflyStartAmountRandom;
-        butterflyStartAmountGene = CurrentConfig.conf.butterflyStartAmountGene;
         maximumKills = CurrentConfig.conf.maximumKills;
         minimumKills = CurrentConfig.conf.minimumKills;
         butterflyRoundSpawnAmount = CurrentConfig.conf.butterflyRoundSpawnAmount;
         healthAmount = CurrentConfig.conf.healthAmount;
 
-        resetEverythingOnNextGen = CurrentConfig.conf.resetEverythingOnNextGen;
+        resetEverythingOnNextGen = CurrentConfig.conf.resetEverythingOnNextGen; //TODO: Why is this here? Either remove or fix. It is broken atm
         noSafeClick = CurrentConfig.conf.noSafeClick;
         keepButterAmount = CurrentConfig.conf.keepButterAmount;
+
+        ButterlfyTotalStartAmnt = CurrentConfig.conf.initAmntOfButter;
+        initAmntOfWhite = CurrentConfig.conf.initAmntOfWhite;
+        initAmountOfMixed = CurrentConfig.conf.initAmntOfGray;
+        initAmountOfDark = CurrentConfig.conf.initAmountOfDark;
 
         renderLerp = CurrentConfig.conf.renderLerp;
         renderPerlin = CurrentConfig.conf.renderPerlin;
@@ -146,64 +128,41 @@ rContainer.transform.childCount);
     {
         //Init variables
         gameState = 1;
-        roundAllowedClicks = maximumKills; //This vaiable name is stupid. Change it to "round clicks" and allowed klicks or smt. 
-        butterfliesRemaining = butterflyStartAmountRandom;
+        liveMaximumKills = maximumKills; 
+        butterfliesRemaining = ButterlfyTotalStartAmnt; //Should this do that??
         GetComponent<SplashShifter>().ShowSplash(0, preHuntSplash);
-        /*
-        preGameSplash.GetComponent<Canvas>().enabled = true;
-        postGameSplash.GetComponent<Canvas>().enabled = false;*/
         deadButterflies = new List<GameObject>();
         isPaused = false;
+
+        if (maximumKills == 0)
+        {
+            liveMaximumKills = butterfliesRemaining;
+        }
     }
 
     void PrepareGame()
     {
-        /*
-        if (blendTexture == null)
-        {
-            Debug.LogWarning("No blend-texture selected!\nDefaulting to colour blending...");
-        }
+        //Spawns butterflys with specific genes.
+        int[] initButterAmnt = { initAmntOfWhite, initAmountOfMixed, initAmountOfDark};
 
-        if (backgroundTexture == null)
+        for (int i = 0; i < initButterAmnt.Length; i++)
         {
-            Debug.LogWarning("No background-texture selected!\nDefaulting to perlin noise...");
-        }
-        */
-        int minAllowed = butterflyStartAmountGene * (butterflyGeneLength + 1);
-        if (butterflyStartAmountRandom < minAllowed)
-        {
-            Debug.LogError("ERROR: Misconfigured!\n" +
-            "ButterflyStartAmountRandom is the total amount of butterflies spawned at start.\n" +
-            "Butterfly start amount gene spawns one butterfly of each gene. (butterGeneStart*(ButterGeneLength+1))\n" +
-            "To fix this, ButterflyStartAmountRandom will be set to: " + minAllowed);
-            butterflyStartAmountRandom = minAllowed;
-
-            ResetVariables();
-        }
-
-        //Spawns butterflys with specific genes. This is to make sure there are at least one of each type in the population
-        if (butterflyStartAmountGene > 0)
-        {
-            for (int i = 0; i < butterflyStartAmountGene; i++)
+            for (int j = 0; j < initButterAmnt[i]; j++)
             {
-                for (int j = 0; j <= butterflyGeneLength; j++)
-                {
-                    GameObject animal = SpawnButterfly();
-                    GeneticManager.UpdateAnimalGene(animal.GetComponent<ButterflyBehaviour>().gene, butterflyGeneLength, j, geneMode);
-                    ApplyButterflyBlendin(animal, GeneticManager.BlendInCalc(animal.GetComponent<ButterflyBehaviour>().gene));
-                    
-                }
+                GameObject animal = SpawnButterfly();
+                GeneticManager.UpdateAnimalGene(animal.GetComponent<ButterflyBehaviour>().gene, butterflyGeneLength, i, geneMode);
+                ApplyButterflyBlendin(animal, GeneticManager.BlendInCalc(animal.GetComponent<ButterflyBehaviour>().gene));
             }
         }
 
-        //Spawns rest of population (or all of population, if butterflyStartAmountGene was set to 0) with random genes.
-        for (int i = 0; i < butterflyStartAmountRandom - (minAllowed); i++)
+        //Spawns rest of population (or all of population, if no fixed amt was specified) with random genes.
+        for (int i = 0; i < ButterlfyTotalStartAmnt - (initAmountOfDark + initAmountOfMixed + initAmntOfWhite); i++)
         {
             GameObject animal = SpawnButterfly();
             GeneticManager.UpdateAnimalGene(animal.GetComponent<ButterflyBehaviour>().gene, butterflyGeneLength, geneMode);
             ApplyButterflyBlendin(animal, GeneticManager.BlendInCalc(animal.GetComponent<ButterflyBehaviour>().gene));
-
         }
+
         gameState = 1;
         statsLogList.Add(new StatSave() { populationAmount = butterContainer.transform.childCount, alleleData = butterContainer.GetComponent<ButterCollection>().GetAnimalAlleles(), phenotypeData = butterContainer.GetComponent<ButterCollection>().GetAnimalPhenotypes(renderButterBackground), domMode = geneMode});
     }
@@ -240,7 +199,7 @@ rContainer.transform.childCount);
     GameObject SpawnButterfly()
     {
         Quaternion randomRotation = Quaternion.Euler(0, 0, Random.Range(1, 360));
-        GameObject newButterfly = Instantiate(butterfly,                //Prefab
+        GameObject newButterfly = Instantiate(butterfly,                    //Prefab
                                       RandomButterPos(randomRotation),      //Random pos, without overlapp
                                       randomRotation);                      //Random rot. Needs to be pre-calculated for col detect
 
@@ -345,10 +304,9 @@ rContainer.transform.childCount);
         switch (gameState)
         {
             case 1:
-                spriteOverlayMan.GetComponent<SpriteOverlay>().MakeClickSpriteUI(roundAllowedClicks);
+                spriteOverlayMan.GetComponent<SpriteOverlay>().MakeClickSpriteUI(liveMaximumKills);
                 if (TimmerManagment.Timmer(preHuntTime))
                 {
-                    //preGameSplash.GetComponent<Canvas>().enabled = false;
                     GetComponent<SplashShifter>().HideSplash();
                     Countdown.SetK(GetHuntTime());
                     gameState = 2;
@@ -365,19 +323,16 @@ rContainer.transform.childCount);
 
                 if (noSafeClick && Input.GetMouseButtonDown(0) && !isPaused)
                 {
-                    roundAllowedClicks--;
+                    liveMaximumKills--;
                     spriteOverlayMan.GetComponent<SpriteOverlay>().RemoveKlick();
                 }
-
-                //butterContainer.GetComponent<ButterCollection>().ResizeAnimals(butterflySize);
-
 
                 if (TimmerManagment.Timmer(GetHuntTime()))
                 { //Checks if Timer is finished. Time is dependant on an exponential value,
                   //y=C*a^x. Time decreases the more rounds have passed.
                   //postGameSplash.GetComponent<Canvas>().enabled = true;
 
-                    if ((butterflyStartAmountRandom - butterfliesRemaining) < minimumKills)
+                    if ((ButterlfyTotalStartAmnt - butterfliesRemaining) < minimumKills)
                     {
                         healthAmount--;
                         spriteOverlayMan.GetComponent<SpriteOverlay>().RemoveHeart();
@@ -510,7 +465,7 @@ rContainer.transform.childCount);
 
     public void ButterClick(GameObject butterfly, AudioClip audioClip)
     {
-        if (gameState == 2 && (roundAllowedClicks > 0) && !isPaused)
+        if (gameState == 2 && (liveMaximumKills > 0) && !isPaused)
         {
             if (butterfly.transform.parent.name == "ButterCollection")
             {
@@ -522,7 +477,7 @@ rContainer.transform.childCount);
             butterfly.GetComponent<MeshCollider>().enabled = false;
             butterfly.GetComponent<MeshFilter>().mesh = destroyedButterfly;
             deadButterflies.Add(butterfly);
-            if (!noSafeClick) { spriteOverlayMan.GetComponent<SpriteOverlay>().RemoveKlick(); roundAllowedClicks--; }
+            if (!noSafeClick) { spriteOverlayMan.GetComponent<SpriteOverlay>().RemoveKlick(); liveMaximumKills--; }
             Debug.Log("Butterfly click detected: Removed " + butterfly.name + " from the game board");
         }
     }
