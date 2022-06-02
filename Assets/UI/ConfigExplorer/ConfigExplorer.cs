@@ -94,7 +94,7 @@ public class ConfigExplorer : MonoBehaviour
         //GetButtons: Does not need selected
         GetComponent<UIDocument>().rootVisualElement.Q<Button>("editor").clicked += () => { 
             if (selectedCard == null) { SceneManager.LoadScene("CustomSelectMenu"); }
-            else { if (selectedCard.uri == null) { ButtonInListPressed(selectedCard.name, 0);
+            else { if (selectedCard.uri == null) { ButtonInListPressed(selectedCard.origin, 0);
                 } else { ButtonInListPressed(selectedCard.uri, 0); }}
         };
         GetComponent<UIDocument>().rootVisualElement.Q<Button>("back").clicked += () => { SceneManager.LoadScene("MainMenu");  };

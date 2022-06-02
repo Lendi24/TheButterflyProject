@@ -13,23 +13,24 @@ public static class CurrentConfig
 
 public class ConfigurationSettings
 {
-    public string confName;
-    public float preHuntTime;
-    public float huntTime;
-    //public int   butterflyGeneLength;
-    public int   butterflyStartAmountRandom;
-    public int   butterflyStartAmountGene;
-    public int   maximumKills;
-    public int   minimumKills; 
-    public int   butterflyRoundSpawnAmount;
-    public int   healthAmount;
-    public bool  resetEverythingOnNextGen;
-    public bool  noSafeClick;
-    public bool  keepButterAmount;
-    public float renderLerp;
-    public float renderPerlin;
-    public bool  renderButterBackground;
-    public int  geneMode;
+    public string   confName;
+    public float    preHuntTime;
+    public float    huntTime;
+    public int      initAmntOfWhite;
+    public int      initAmntOfGray;
+    public int      initAmntOfButter;
+    public int      initAmountOfDark;
+    public int      maximumKills;
+    public int      minimumKills; 
+    public int      butterflyRoundSpawnAmount;
+    public int      healthAmount;
+    public bool     resetEverythingOnNextGen;
+    public bool     noSafeClick;
+    public bool     keepButterAmount;
+    public float    renderLerp;
+    public float    renderPerlin;
+    public bool     renderButterBackground;
+    public int      geneMode;
 
 }
 
@@ -46,9 +47,10 @@ public static class ConfigurationFunctions
         string  _confName,
         float   _preHuntTime,
         float   _huntTime,
-        //int     _butterflyGeneLength,
-        int     _butterflyStartAmountRandom,
-        int     _butterflyStartAmountGene,
+        int     _initAmntOfButter,
+        int     _initAmntOfWhite,
+        int     _initAmntOfGray,
+        int     _initAmountOfDark,
         int     _maximumKills,
         int     _minimumKills,
         int     _butterflyRoundSpawnAmount,
@@ -68,9 +70,10 @@ public static class ConfigurationFunctions
             confName                    = _confName,
             preHuntTime                 = _preHuntTime,
             huntTime                    = _huntTime,
-            //butterflyGeneLength         = _butterflyGeneLength,
-            butterflyStartAmountRandom  = _butterflyStartAmountRandom,
-            butterflyStartAmountGene    = _butterflyStartAmountGene,
+            initAmntOfButter            = _initAmntOfButter,
+            initAmntOfWhite             = _initAmntOfWhite,
+            initAmntOfGray              = _initAmntOfGray,
+            initAmountOfDark            = _initAmountOfDark,
             maximumKills                = _maximumKills,
             minimumKills                = _minimumKills,
             butterflyRoundSpawnAmount   = _butterflyRoundSpawnAmount,
@@ -101,8 +104,10 @@ public static class ConfigurationFunctions
             _preHuntTime: 1f,
             _huntTime: 3f,
 
-            _butterflyStartAmountRandom: 8,
-            _butterflyStartAmountGene: 2,
+            _initAmntOfButter: 8,
+            _initAmntOfWhite: 1,
+            _initAmntOfGray: 1,
+            _initAmountOfDark: 1,
             _maximumKills: 3,
             _minimumKills: 1,
             _butterflyRoundSpawnAmount: 2,
@@ -116,15 +121,17 @@ public static class ConfigurationFunctions
             _renderPerlin: 0,
             _renderButterBackground: true,
 
-            _geneMode: 2), "ClassicE");
+            _geneMode: 2), "1ClassicE");
 
         SaveToFile(ConfigurationFunctions.MakeConfObject(
             _confName: "ClassicM",
             _preHuntTime: 1f,
             _huntTime: 4f,
 
-            _butterflyStartAmountRandom: 8,
-            _butterflyStartAmountGene: 2,
+            _initAmntOfButter: 8,
+            _initAmntOfWhite: 2,
+            _initAmntOfGray: 2,
+            _initAmountOfDark: 2,
             _maximumKills: 3,
             _minimumKills: 1,
             _butterflyRoundSpawnAmount: 2,
@@ -138,15 +145,17 @@ public static class ConfigurationFunctions
             _renderPerlin: 1,
             _renderButterBackground: true,
 
-            _geneMode: 0), "ClassicM");
+            _geneMode: 0), "2ClassicM");
 
         SaveToFile(ConfigurationFunctions.MakeConfObject(
             _confName: "ClassicH",
             _preHuntTime: 1f,
             _huntTime: 5f,
 
-            _butterflyStartAmountRandom: 8,
-            _butterflyStartAmountGene: 2,
+            _initAmntOfButter: 8,
+            _initAmntOfWhite: 2,
+            _initAmntOfGray: 2,
+            _initAmountOfDark: 2,
             _maximumKills: 3,
             _minimumKills: 1,
             _butterflyRoundSpawnAmount: 2,
@@ -160,7 +169,7 @@ public static class ConfigurationFunctions
             _renderPerlin: 1,
             _renderButterBackground: false,
 
-            _geneMode: 1), "ClassicH");
+            _geneMode: 1), "3ClassicH");
     }
 
     public static void RemoveFile(string FILE_NAME)
@@ -170,6 +179,32 @@ public static class ConfigurationFunctions
         {
             File.Delete(fileFullPath);
         }
+    }
+
+    public static string GetValidFilenameFromName(string name, int num)
+    {
+        string newFileName = name;
+        if (num != 0) { newFileName = newFileName + " " + num;  }
+
+        foreach (var existingFileName in GetConfigFiles())
+        {
+            if (newFileName == existingFileName)
+            {
+                if (int.TryParse(existingFileName[existingFileName.Length - 1].ToString(), out int detectedNum))
+                {
+                    newFileName = GetValidFilenameFromName(name, detectedNum + 1);
+                }
+
+                else
+                {
+                    newFileName = GetValidFilenameFromName(name, 1);
+                }
+
+                break;
+            }
+        }
+
+        return newFileName;
     }
 
     public static void SaveToFile(ConfigurationSettings conf, string FILE_NAME)

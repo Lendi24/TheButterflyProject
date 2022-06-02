@@ -11,7 +11,7 @@ public class CustomSelectMenu : MonoBehaviour
     public UIDocument tooltip;
     public Button initEnvButton, gameSettingsButton, butterflySettingsButton;
     public VisualElement initEnvSettingsPage, gameSettingsPage, butterflySettingsPage;
-    public Slider preHuntTime, huntTime, renderPerlin, renderLerp;
+    public Slider preHuntTime, huntTime;
 
     //public SliderInt startAmountRandom, startAmountGene, roundSpawnAmount, healthAmount;
     //public MinMaxSlider kills;
@@ -25,7 +25,7 @@ public class CustomSelectMenu : MonoBehaviour
     public RadioButtonGroup geneModeRadio, renderModeRadio;
     VisualElement root;
 
-    private bool dominActivated;
+    private bool dominActivated, lastChangeWasByScript;
 
     // Start is called before the first frame update
     void Start()
@@ -94,7 +94,10 @@ public class CustomSelectMenu : MonoBehaviour
 
                         else
                         {
-                            ConfigurationFunctions.SaveToFile(MakeConfObject(), name);
+                            ConfigurationFunctions.SaveToFile(
+                                MakeConfObject(name),
+                                ConfigurationFunctions.GetValidFilenameFromName(name, 0)
+                            );
                         }
 
                     }
@@ -107,20 +110,14 @@ public class CustomSelectMenu : MonoBehaviour
                             elem: GetComponent<UIDocument>().rootVisualElement,
                             redButtonAction: () => { }
                         );
-
+                        throw;
                     }
                 }
             );
         };
 
-        /*
-        root.Q<Button>("menu-button-load").clicked += () => {
-            SceneManager.LoadScene("ConfigExplorer");
-        };*/
-
         root.Q<Button>("menu-button-play").clicked += () => {
-            //GetComponent<LoadSceneFunctions>().StartCustomGame(preHuntTime.value, huntTime.value, geneLength.value, startAmountRandom.value, startAmountGene.value, Mathf.RoundToInt(kills.maxValue), Mathf.RoundToInt(kills.minValue), renderMode.value, roundSpawnAmount.value, healthAmount.value, resetOnNextGen.value, noSafeClick.value, keepButterflyAmount.value, geneMode);
-            CurrentConfig.conf = MakeConfObject();
+            CurrentConfig.conf = MakeConfObject("the dev was too lazy to name this object :C");
             SceneManager.LoadScene("ButterHunt");
         };
 
@@ -172,6 +169,8 @@ public class CustomSelectMenu : MonoBehaviour
         geneModeRadio.Q<RadioButton>("light").RegisterCallback<PointerLeaveEvent>(OnPointerLeaveEvent, TrickleDown.TrickleDown);
         geneModeRadio.Q<RadioButton>("none").RegisterCallback<PointerLeaveEvent>(OnPointerLeaveEvent, TrickleDown.TrickleDown);
         geneModeRadio.Q<RadioButton>("dark").RegisterCallback<PointerLeaveEvent>(OnPointerLeaveEvent, TrickleDown.TrickleDown);
+
+        LoadFromMemory();
     }
 
     /*-------------
@@ -179,7 +178,7 @@ public class CustomSelectMenu : MonoBehaviour
      ------------*/
     private void OnChangeMinKills(ChangeEvent<int> evt)
     {
-        if (evt.newValue < maxClicks.value)
+        if (evt.newValue > maxClicks.value && maxClicks.value != 0)
         {
             maxClicks.value = evt.newValue;
         }
@@ -187,7 +186,7 @@ public class CustomSelectMenu : MonoBehaviour
 
     private void OnChangeMaxKills(ChangeEvent<int> evt)
     {
-        if (evt.newValue > minKills.value)
+        if (evt.newValue < minKills.value)
         {
             minKills.value = evt.newValue;
         }
@@ -214,7 +213,7 @@ public class CustomSelectMenu : MonoBehaviour
 
     private void OnInitamntChange(ChangeEvent<int> evt)
     {
-        if (populationBias.value == "Fixed")
+        if (populationBias.value == "Fixed" && !lastChangeWasByScript)
         {
             CalculateButterAmount(evt.newValue);
         }
@@ -232,6 +231,8 @@ public class CustomSelectMenu : MonoBehaviour
                 populationBias.value = "Fixed";
             }
         }
+
+        lastChangeWasByScript = false;
     }
 
     private void CalculateButterAmount(int newValue)
@@ -257,7 +258,6 @@ public class CustomSelectMenu : MonoBehaviour
 
     private void OnDropdownChange(ChangeEvent<string> evt)
     {
-        VisualElement fixedBias = root.Q<VisualElement>("FixedBias");
         switch (evt.newValue)
         {
             case "Fixed":
@@ -299,8 +299,6 @@ public class CustomSelectMenu : MonoBehaviour
 
             if (total > initButterAmount.highValue)
             {
-                populationBias.value = "Fixed";
-
                 initButterAmount.value = initButterAmount.highValue;
                 evtCaller.value = (initButterAmount.highValue + evtCallerValue 
                     - whiteButter
@@ -312,14 +310,15 @@ public class CustomSelectMenu : MonoBehaviour
 
             else if (total > initButterAmount.value)
             {
-                populationBias.value = "Fixed";
                 initButterAmount.value = total;
             }
 
-            else 
+            else if (total < initButterAmount.value && populationBias.value == "Fixed")
             {
-                
+                initButterAmount.value = total;
             }
+
+            lastChangeWasByScript = true;
         }
 
         else //This is called when failed to convert new value to int
@@ -375,6 +374,10 @@ public class CustomSelectMenu : MonoBehaviour
         button.AddToClassList("Active");
     }
 
+    /*
+     Other stuff, idk..
+     */
+
     void ResetSettingsMenu()
     {
         initEnvSettingsPage.RemoveFromClassList("Active");
@@ -386,84 +389,124 @@ public class CustomSelectMenu : MonoBehaviour
         butterflySettingsButton.RemoveFromClassList("Active");
     }
     
-   ConfigurationSettings MakeConfObject()
+   ConfigurationSettings MakeConfObject(string name)
    {
-       int geneMode;
+        int detectedRenderMode = 0;
 
-       if (geneModeRadio.Q<RadioButton>("light").value)
-       {
-           geneMode = 2;
-       }
+        if (renderModeRadio.Q<RadioButton>("mixed").value)
+        {
+            detectedRenderMode = 1;
+        }
 
-       else if (geneModeRadio.Q<RadioButton>("dark").value)
-       {
-           geneMode = 1;
-       }
+        else if (renderModeRadio.Q<RadioButton>("perlin").value)
+        {
+            detectedRenderMode = 2;
+        }
 
-       else
-       {
-           geneMode = 0;
-       }
+        int geneMode = 0;
 
-       return ConfigurationFunctions.MakeConfObject(
-           _confName: "göran", //_confName: root.Q<TextField>("config-name").value,
-           _preHuntTime: preHuntTime.value,
-           _huntTime: huntTime.value,
-           _butterflyStartAmountRandom: 5,//startAmountRandom.value,
-           _butterflyStartAmountGene: 5,//startAmountGene.value,
-           _maximumKills: 5,//Mathf.RoundToInt(kills.maxValue),
-           _minimumKills: 5,//Mathf.RoundToInt(kills.minValue),
-           _butterflyRoundSpawnAmount: roundSpawnAmount.value,
-           _healthAmount: healthAmount.value,
-           _resetEverythingOnNextGen: resetOnNextGen.value,
-           _noSafeClick: true,//noSafeClick.value,
-           _keepButterAmount: keepButterflyAmount.value,
-           _renderLerp: renderLerp.value,
-           _renderPerlin: renderPerlin.value,
-           _renderButterBackground: false,//renderButterBack.value,
-           _geneMode: geneMode);
-   }
-    /*
-   void loadInitValues()
-   {
-       preHuntTime.value = CurrentConfig.conf.preHuntTime;
-       huntTime.value = CurrentConfig.conf.huntTime;
-       //geneLength.value = CurrentConfig.conf.butterflyGeneLength;
-       startAmountRandom.value = CurrentConfig.conf.butterflyStartAmountRandom;
-       startAmountGene.value = CurrentConfig.conf.butterflyStartAmountGene;
-       kills.maxValue = CurrentConfig.conf.maximumKills;
-       kills.minValue = CurrentConfig.conf.minimumKills;
-       roundSpawnAmount.value = CurrentConfig.conf.butterflyRoundSpawnAmount;
-       healthAmount.value = CurrentConfig.conf.healthAmount;
-       resetOnNextGen.value = CurrentConfig.conf.resetEverythingOnNextGen;
-       noSafeClick.value = CurrentConfig.conf.noSafeClick;
-       keepButterflyAmount.value = CurrentConfig.conf.keepButterAmount;
-       renderLerp.value = CurrentConfig.conf.renderLerp;
-       renderPerlin.value = CurrentConfig.conf.renderPerlin;
-       renderButterBack.value = CurrentConfig.conf.renderButterBackground;
+        if (geneModeRadio.Q<RadioButton>("dark").value)
+        {
+            geneMode = 1;
+        }
 
+        else if(geneModeRadio.Q<RadioButton>("light").value)
+        {
+            geneMode = 2;
+        }
 
-       switch (CurrentConfig.conf.geneMode)
-       {
-           case 0:
-               geneModeRadio.Q<RadioButton>("light").value = false;
-               geneModeRadio.Q<RadioButton>("none").value = true;
-               geneModeRadio.Q<RadioButton>("dark").value = false;
+        float renderLerp = 1;
+        float renderPerlin = 1;
 
-               break;
+        switch (detectedRenderMode)
+        {
+            case 0:
+                renderPerlin = 0;
+                break;
 
-           case 1:
-               geneModeRadio.Q<RadioButton>("light").value = false;
-               geneModeRadio.Q<RadioButton>("none").value = false;
-               geneModeRadio.Q<RadioButton>("dark").value = true;
-               break;
+            case 2:
+                renderLerp = 0;
+                break;
 
-           case 2:
-               geneModeRadio.Q<RadioButton>("light").value = true;
-               geneModeRadio.Q<RadioButton>("none").value = false;
-               geneModeRadio.Q<RadioButton>("dark").value = false;
-               break;
-       }
-   }*/
+            default:
+                break;
+        }
 
+        bool renderBack = !(detectedRenderMode == 2);
+
+        return ConfigurationFunctions.MakeConfObject(
+            _confName:                  name, 
+            _preHuntTime:               preHuntTime.value,
+            _huntTime:                  huntTime.value,
+
+            _initAmntOfButter:          initButterAmount.value,
+            _initAmntOfWhite:           int.Parse(amountOfWhite.value),
+            _initAmntOfGray:            int.Parse(amountOfGray.value),
+            _initAmountOfDark:          int.Parse(amountOfDark.value),
+
+            _maximumKills:              maxClicks.value,
+            _minimumKills:              minKills.value,
+            _butterflyRoundSpawnAmount: roundSpawnAmount.value,
+            _healthAmount:              healthAmount.value,
+            _resetEverythingOnNextGen:  resetOnNextGen.value,
+            _noSafeClick:               !invertetNoSafeClick.value,
+            _keepButterAmount:          keepButterflyAmount.value,
+            _renderLerp:                renderLerp,
+            _renderPerlin:              renderPerlin,
+            _renderButterBackground:    renderBack,
+            _geneMode:                  geneMode
+        );
+    }
+
+    private void LoadFromMemory()
+    {
+        preHuntTime.value                   =        CurrentConfig.conf.preHuntTime;
+        huntTime.value                      =        CurrentConfig.conf.huntTime;
+        
+        initButterAmount.value              =        CurrentConfig.conf.initAmntOfButter;
+        amountOfWhite.value                 =        CurrentConfig.conf.initAmntOfWhite.ToString();
+        amountOfGray.value                  =        CurrentConfig.conf.initAmntOfGray.ToString();
+        amountOfDark.value                  =        CurrentConfig.conf.initAmountOfDark.ToString();
+        
+        maxClicks.value                     =        CurrentConfig.conf.maximumKills;
+        minKills.value                      =        CurrentConfig.conf.minimumKills;
+        roundSpawnAmount.value              =        CurrentConfig.conf.butterflyRoundSpawnAmount;
+        healthAmount.value                  =        CurrentConfig.conf.healthAmount;
+        resetOnNextGen.value                =        CurrentConfig.conf.resetEverythingOnNextGen; 
+        invertetNoSafeClick.value           =       !CurrentConfig.conf.noSafeClick;
+        keepButterflyAmount.value           =        CurrentConfig.conf.keepButterAmount;
+
+        switch (CurrentConfig.conf.geneMode)
+        {
+            case 0:
+                geneModeRadio.Q<RadioButton>("light").value = true;
+                break;
+
+            case 1:
+                geneModeRadio.Q<RadioButton>("none").value = true;
+                break;
+
+            default: //really Case 2:, but yeah
+                geneModeRadio.Q<RadioButton>("dark").value = true;
+                break;
+        }
+
+        if (CurrentConfig.conf.renderButterBackground)
+        {
+            if (CurrentConfig.conf.renderPerlin == 0)
+            {
+                renderModeRadio.Q<RadioButton>("textured").value = true;
+            }
+
+            else
+            {
+                renderModeRadio.Q<RadioButton>("mixed").value = true;
+            }
+        }
+
+        else
+        {
+            renderModeRadio.Q<RadioButton>("perlin").value = true;
+        }
+    }
 }

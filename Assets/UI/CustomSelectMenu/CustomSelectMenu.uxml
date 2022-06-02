@@ -1,5 +1,6 @@
 <ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" xsi="http://www.w3.org/2001/XMLSchema-instance" engine="UnityEngine.UIElements" editor="UnityEditor.UIElements" noNamespaceSchemaLocation="../../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
     <Style src="project://database/Assets/UI/CustomSelectMenu/USS/CustomSelectMenuBigScreen.uss?fileID=7433441132597879392&amp;guid=599964966579ab744b5fc3cf6f1ba75f&amp;type=3#CustomSelectMenuBigScreen" />
+    <Style src="project://database/Assets/UI/Popup/PopupsStyle.uss?fileID=7433441132597879392&amp;guid=e580178465552c44da823ce0e804da23&amp;type=3#PopupsStyle" />
     <ui:Label text=" Custom Mode" display-tooltip-when-elided="true" style="-unity-text-align: upper-center; font-size: 20px; -unity-font-style: bold;" />
     <ui:VisualElement name="window" style="background-color: rgba(79, 79, 79, 0.64); flex-shrink: 1; flex-grow: 1; margin-left: 10px; margin-right: 10px; margin-top: 10px; margin-bottom: 0; padding-left: 5px; padding-right: 5px; padding-top: 5px; padding-bottom: 5px;">
         <ui:VisualElement name="Tabs" style="flex-direction: row; justify-content: flex-start; flex-shrink: 0; flex-grow: 0;">
@@ -19,20 +20,20 @@
             </ui:VisualElement>
             <ui:VisualElement name="game-settings-page" class="Settings Active">
                 <ui:SliderInt picking-mode="Ignore" label="Health Amount" value="3" high-value="10" name="menu-slider-healthamount" low-value="1" show-input-field="true" style="flex-direction: column;" />
-                <ui:SliderInt picking-mode="Ignore" label="Minimum Kills (Can not be lower then &quot;Maximum Clicks&quot;)" value="3" high-value="10" show-input-field="true" low-value="0" name="menu-slider-min-kills" style="flex-direction: column;" />
+                <ui:SliderInt picking-mode="Ignore" label="Minimum Kills (Can not be higher then &quot;Maximum Clicks&quot;)" value="3" high-value="10" show-input-field="true" low-value="0" name="menu-slider-min-kills" style="flex-direction: column;" />
                 <ui:SliderInt picking-mode="Ignore" label="Maximum Clicks (0 will disable)" value="3" high-value="10" name="menu-slider-max-click" show-input-field="true" style="flex-direction: column;" />
                 <ui:Toggle label="Only hitting a butterfly counts towards limit" name="menu-toggle-nosafeclick" value="true" tooltip="Toggles whether or not you want to lose &quot;clicks&quot; when clicking on something that isn&apos;t a butterfly." />
-                <ui:RadioButtonGroup label="Render Mode" value="1" name="radio-render-mode" style="flex-direction: column;">
-                    <ui:RadioButton label="Textured" value="false" />
-                    <ui:RadioButton label="Mixed" value="true" />
-                    <ui:RadioButton label="Perlin" />
+                <ui:RadioButtonGroup label="Render Mode" name="radio-render-mode" style="flex-direction: column;">
+                    <ui:RadioButton label="Textured" value="false" name="textured" />
+                    <ui:RadioButton label="Mixed" value="true" name="mixed" />
+                    <ui:RadioButton label="Perlin" name="perlin" />
                 </ui:RadioButtonGroup>
             </ui:VisualElement>
             <ui:VisualElement name="butterfly-settings-page" class="Settings Active">
                 <ui:Toggle label="Reset Position On Next Round" name="menu-toggle-resetonnextgen" value="true" tooltip="Toggles whether you want the butterflies to switch places after every round or not." />
                 <ui:Toggle label="Keep Butterfly Amount" name="menu-toggle-keepbutterflyamount" tooltip="Toggles whether you want the butterfly population to stay the same throughout every round." />
                 <ui:SliderInt picking-mode="Ignore" label="Round Spawn Amount" value="2" high-value="10" name="menu-slider-roundspawnamount" low-value="1" show-input-field="true" tooltip="The amount of butterflies you want to spawn after each round." style="flex-direction: column; align-items: stretch; justify-content: flex-start;" />
-                <ui:RadioButtonGroup label="Gene Mode" value="-1" name="radio-gene-mode" focusable="true" style="flex-direction: column;">
+                <ui:RadioButtonGroup label="Gene Mode" name="radio-gene-mode" focusable="true" value="1" style="flex-direction: column;">
                     <ui:RadioButton label="Light is dominant" name="light" tooltip="Light colored butterflies have the dominant gene." />
                     <ui:RadioButton label="No dominance" value="true" name="none" tooltip="There is no dominant gene." />
                     <ui:RadioButton label="Dark is dominant" value="false" name="dark" tooltip="Dark colored butterflies have the dominant gene." />
