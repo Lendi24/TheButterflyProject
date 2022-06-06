@@ -83,8 +83,8 @@ public class ConfigExplorer : MonoBehaviour
         GetComponent<UIDocument>().rootVisualElement.Q<VisualElement>("remote-row1").Q<Button>("import").clicked += () => { ButtonInListPressed(selectedCard.uri, 4); };
 
         //GetButtons: Needs selected, local
-        GetComponent<UIDocument>().rootVisualElement.Q<VisualElement>("local-row1").Q<Button>("start").clicked += () => { ButtonInListPressed(selectedCard.name, 1); };
-        GetComponent<UIDocument>().rootVisualElement.Q<VisualElement>("local-row1").Q<Button>("export").clicked += () => { ButtonInListPressed(selectedCard.name, 2);  };
+        GetComponent<UIDocument>().rootVisualElement.Q<VisualElement>("local-row1").Q<Button>("start").clicked += () => { ButtonInListPressed(selectedCard.origin, 1); };
+        GetComponent<UIDocument>().rootVisualElement.Q<VisualElement>("local-row1").Q<Button>("export").clicked += () => { ButtonInListPressed(selectedCard.origin, 2);  };
         GetComponent<UIDocument>().rootVisualElement.Q<VisualElement>("local-row1").Q<Button>("delete").clicked += () => {
             ConfigurationFunctions.RemoveFile(selectedCard.origin);
             selectedCard = null;

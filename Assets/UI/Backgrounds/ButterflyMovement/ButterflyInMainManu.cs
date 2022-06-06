@@ -20,6 +20,7 @@ public class ButterflyInMainManu : MonoBehaviour
     Vector3 bottomRight;
     static GameObject staticButterfly;
     static GameObject staticButterContainer;
+    Color[] colours;
     // Start is called before the first frame update
     void Start()
     {
@@ -27,6 +28,41 @@ public class ButterflyInMainManu : MonoBehaviour
         staticButterContainer = butterContainer;
         LoadBackground();
         butterContainer.transform.Rotate(new Vector3(0, 0, 180 - rot), Space.Self);
+
+        if (System.DateTime.Now.Month == 6)//6 - pride
+        {
+            colours = new Color[] {
+                Color.red,
+                new Color(r: 1.0f, g: 0.55f, b: 0f),
+                Color.yellow,
+                Color.green,
+                Color.blue,
+                new Color(r: 0.46f, g: 0.01f, b: 0.53f),
+            };
+        }
+
+        else if (System.DateTime.Now.Month == 10 && System.DateTime.Now.Day == 31)//10 / 31
+        {
+            colours = new Color[] {
+                new Color(r: 1.0f, g: 0.55f, b: 0f),
+                Color.black,
+            };
+        }
+
+        else if (System.DateTime.Now.Month == 12)//12 - tomten
+        {
+            colours = new Color[] {
+                Color.red,
+                Color.green,
+            };
+        }
+
+        else//Default
+        {
+            colours = new Color[] {
+                Color.white,
+            };
+        }
     }
 
     void Update()
@@ -41,6 +77,7 @@ public class ButterflyInMainManu : MonoBehaviour
             LoadBackground();
             butterContainer.transform.Rotate(new Vector3(0, 0, 180 - rot), Space.Self);
         }
+
         else
         {   
             if (TimmerManagment.Timmer(0.5f))
@@ -48,7 +85,7 @@ public class ButterflyInMainManu : MonoBehaviour
                 for (int i = 0; i < Mathf.CeilToInt(size / 3); i++)
                 {
                     GameObject startMarker = transform.GetChild(i).gameObject;
-                    CreateButterfly(startMarker.transform.position.x, startMarker.transform.position.y, startMarker.transform.position.z - 0.5f);
+                    CreateButterfly(startMarker.transform.position.x, startMarker.transform.position.y, startMarker.transform.position.z - 0.5f, colours[i % colours.Length]);
                 }
             }
         }
@@ -103,12 +140,12 @@ public class ButterflyInMainManu : MonoBehaviour
             for(int j = 0; j < buttersPerColumn; j++)
             {
                 //Debug.Log(butterContainer.transform.GetChild(0).position.y);
-                CreateButterfly(i * 3 - (size / 2) + 1, butterContainer.transform.GetChild(0).position.y + (j * distance), -0.5f);
+                CreateButterfly(i * 3 - (size / 2) + 1, butterContainer.transform.GetChild(0).position.y + (j * distance), -0.5f, Color.white);
             }
         }
     }
 
-    public static void CreateButterfly(float x, float y, float z)
+    public static void CreateButterfly(float x, float y, float z, Color colour)
     {
         GameObject newButterfly = Instantiate(staticButterfly);
         newButterfly.transform.parent = staticButterContainer.transform;
@@ -116,9 +153,12 @@ public class ButterflyInMainManu : MonoBehaviour
         newButterfly.transform.localScale = new Vector3(newButterfly.transform.localScale.x, newButterfly.transform.localScale.x, newButterfly.transform.localScale.x);
         newButterfly.transform.rotation = new Quaternion(0, 0, 0, 0);
         newButterfly.transform.name = "Butterfly";
+
         newButterfly.AddComponent<MenuButterflyMovement>();
         newButterfly.AddComponent<BoxCollider>();
         newButterfly.AddComponent<Rigidbody>();
+
+        newButterfly.GetComponent<MeshRenderer>().material.color = colour;
         Rigidbody butterRigid = newButterfly.GetComponent<Rigidbody>();
         butterRigid.constraints = RigidbodyConstraints.FreezeRotation;
         butterRigid.useGravity = false;

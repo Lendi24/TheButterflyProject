@@ -7,8 +7,8 @@ Shader "Butterfly/CamoShader"
         _LerpValue("Transition float", Range(0,1)) = 0.5
 
         _enablePerlin("Enable Perlin", Range(0,1)) = 0
-        _offsetX("OffsetX",Float) = 0.0
-        _offsetY("OffsetY",Float) = 0.0
+        _offsetX("OffsetX",Range(0,100)) = 0.0
+        _offsetY("OffsetY",Range(0,100)) = 0.0
         _octaves("Octaves",Int) = 7
         _lacunarity("Lacunarity", Range(1.0 , 5.0)) = 1
         _gain("Gain", Range(0.0 , 1.0)) = 1
