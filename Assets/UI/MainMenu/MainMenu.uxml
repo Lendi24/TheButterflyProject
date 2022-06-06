@@ -2,8 +2,8 @@
     <Style src="project://database/Assets/UI/StartMenu/USS/SmallScreens.uss?fileID=7433441132597879392&amp;guid=c3660a924ba52e0458e086c61c3532d5&amp;type=3#SmallScreens" />
     <ui:VisualElement name="Container">
         <ui:IMGUIContainer name="TextContainer">
-            <ui:Label text="The Butterfly Project" display-tooltip-when-elided="true" enable-rich-text="true" class="title" />
-            <ui:Label text="A game with a fancy caption" display-tooltip-when-elided="true" class="caption" />
+            <ui:Label text="The Butterfly Project" display-tooltip-when-elided="true" enable-rich-text="true" name="title" class="title" />
+            <ui:Label text="A game with a fancy caption" display-tooltip-when-elided="true" name="sub" class="caption" />
         </ui:IMGUIContainer>
         <ui:VisualElement name="CenterBar">
             <ui:VisualElement name="MenuButtonContainer">
