@@ -9,19 +9,20 @@
 #Title {
 	font-size: 30px;
 	-unity-font-style: bold;
+	margin-top: 10px;
 	margin-bottom: 0;
 	padding-bottom: 0;
 }
 
 #subtitle {
 	font-size: 15px;
-	margin-top: 0;
+	margin: 5px 0 10px 0;
 	padding-top: 0;
 }
 
 #Configs {
 	background-color: rgba(79, 79, 79, 0.64);
-	margin-bottom: 5px;
+	margin-bottom: 15px;
 	padding: 5px;
 }
 
