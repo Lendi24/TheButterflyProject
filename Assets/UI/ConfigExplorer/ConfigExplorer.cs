@@ -56,14 +56,14 @@ public class ConfigExplorer : MonoBehaviour
 
         if (selectedCard.isLocal)
         {
-            GetComponent<UIDocument>().rootVisualElement.Q<VisualElement>("local-row1").visible = true;
-            GetComponent<UIDocument>().rootVisualElement.Q<VisualElement>("remote-row1").visible = false;
+            GetComponent<UIDocument>().rootVisualElement.Q<VisualElement>("local-row1").style.display = DisplayStyle.Flex;
+            GetComponent<UIDocument>().rootVisualElement.Q<VisualElement>("remote-row1").style.display = DisplayStyle.None;
         }
 
         else
         {
-            GetComponent<UIDocument>().rootVisualElement.Q<VisualElement>("local-row1").visible = false;
-            GetComponent<UIDocument>().rootVisualElement.Q<VisualElement>("remote-row1").visible = true;
+            GetComponent<UIDocument>().rootVisualElement.Q<VisualElement>("local-row1").style.display = DisplayStyle.None;
+            GetComponent<UIDocument>().rootVisualElement.Q<VisualElement>("remote-row1").style.display = DisplayStyle.Flex;
         }
     }
 
@@ -106,8 +106,8 @@ public class ConfigExplorer : MonoBehaviour
             GetConfigFiles(false);
         };
 
-        GetComponent<UIDocument>().rootVisualElement.Q<VisualElement>("local-row1").visible = true;
-        GetComponent<UIDocument>().rootVisualElement.Q<VisualElement>("remote-row1").visible = false;
+        GetComponent<UIDocument>().rootVisualElement.Q<VisualElement>("local-row1").style.display = DisplayStyle.Flex;
+        GetComponent<UIDocument>().rootVisualElement.Q<VisualElement>("remote-row1").style.display = DisplayStyle.None;
 
         localCards = GetComponent<UIDocument>().rootVisualElement.Q<VisualElement>("LocalCards");
         remoteCards = GetComponent<UIDocument>().rootVisualElement.Q<VisualElement>("RemoteCards");
@@ -178,8 +178,8 @@ public class ConfigExplorer : MonoBehaviour
             ChangeSelectedCard(newCard); ;};
 
         VisualElement textContainer = newCard.visualObj.Q<VisualElement>("Text-Container"); //Making text contain
-        textContainer.Add(new Label { text = newCard.name });
-        textContainer.Add(new Label { text = newCard.origin });
+        textContainer.Add(new Label { name = "TitleText", text = newCard.name });
+        textContainer.Add(new Label { name = "SourceText", text = newCard.origin });
 
         /*
         VisualElement buttonContainer = card.Q<VisualElement>("Button-Container"); //Making button contain

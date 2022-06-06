@@ -55,7 +55,7 @@ public class GameManager : MonoBehaviour
         GetVariables();
         ResetVariables();
         ClearBoard();
-        spriteOverlayMan.GetComponent<SpriteOverlay>().MakeHealthSpriteUI(healthAmount); 
+        spriteOverlayMan.GetComponent<SpriteOverlay>().MakeHealthSpriteUI(healthAmount);
         SetScreenSize();
         PrepareGame();
 
@@ -128,7 +128,7 @@ rContainer.transform.childCount);
     {
         //Init variables
         gameState = 1;
-        liveMaximumKills = maximumKills; 
+        liveMaximumKills = maximumKills;
         butterfliesRemaining = ButterlfyTotalStartAmnt; //Should this do that??
         GetComponent<SplashShifter>().ShowSplash(0, preHuntSplash);
         deadButterflies = new List<GameObject>();
@@ -332,7 +332,14 @@ rContainer.transform.childCount);
                   //y=C*a^x. Time decreases the more rounds have passed.
                   //postGameSplash.GetComponent<Canvas>().enabled = true;
 
-                    if ((ButterlfyTotalStartAmnt - butterfliesRemaining) < minimumKills)
+                    if (butterContainer.transform.childCount == 0)
+                    {
+                        SoundScript.SetVariables(rounds, butterflyGeneLength + 1, statsLogList, score);
+                        GetComponent<LoadSceneFunctions>().ToGraph();
+                        gameState = 4;//Failed! Health will be lost, energy will be lost or game will be lost here.
+                    }
+
+                    else if ((butterflyStartAmountRandom - butterfliesRemaining) < minimumKills)
                     {
                         healthAmount--;
                         spriteOverlayMan.GetComponent<SpriteOverlay>().RemoveHeart();
@@ -380,7 +387,7 @@ rContainer.transform.childCount);
                 {
                     butterflyRoundSpawnAmount = deadButterContainer.transform.childCount;
                 }
-                
+
                 for (int i = 0; i < butterflyRoundSpawnAmount; i++)
                 {
                     GameObject animal = SpawnButterfly();
