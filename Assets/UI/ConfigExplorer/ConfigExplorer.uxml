@@ -37,20 +37,20 @@
                 </ui:VisualElement>
             </ui:VisualElement>
             <ui:VisualElement name="ButtonContainerContainer" style="flex-direction: row; flex-grow: 0; flex-shrink: 0; align-items: center; justify-content: center; width: 100%; height: auto; margin-top: 15px;">
-                <ui:VisualElement name="ButtonContainer" style="flex-direction: column; flex-wrap: wrap; flex-shrink: 1; flex-grow: 1; justify-content: space-around; align-items: stretch; max-width: 700px;">
-                    <ui:VisualElement name="remote-row1" style="flex-direction: row; justify-content: space-around; flex-wrap: wrap;">
-                        <ui:Button text="Play" display-tooltip-when-elided="true" name="start" style="flex-grow: 1; flex-shrink: 0; width: 100px;" />
-                        <ui:Button text="Import" display-tooltip-when-elided="true" name="import" style="flex-grow: 1; width: 100px;" />
+                <ui:VisualElement name="ButtonContainer" style="flex-shrink: 1; flex-grow: 1; justify-content: center; align-items: stretch; max-width: 700px;">
+                    <ui:VisualElement name="remote-row1" style="justify-content: space-around;">
+                        <ui:Button text="Play" display-tooltip-when-elided="true" name="start" style="width: 100px;" />
+                        <ui:Button text="Import" display-tooltip-when-elided="true" name="import" style="width: 100px;" />
                     </ui:VisualElement>
-                    <ui:VisualElement name="local-row1" style="flex-direction: row; justify-content: space-around; flex-wrap: wrap;">
-                        <ui:Button text="Play" display-tooltip-when-elided="true" name="start" style="flex-grow: 1; flex-shrink: 0; width: 100px;" />
+                    <ui:VisualElement name="local-row1" style="justify-content: space-around;">
+                        <ui:Button text="Play" display-tooltip-when-elided="true" name="start" style="width: 100px;" />
                         <ui:Button text="Export" display-tooltip-when-elided="true" name="export" style="flex-grow: 1; width: 100px;" />
                         <ui:Button text="Delete" display-tooltip-when-elided="true" name="delete" style="flex-grow: 1; width: 100px;" />
                     </ui:VisualElement>
-                    <ui:VisualElement name="row2" style="flex-direction: row; align-items: stretch; justify-content: space-around; flex-wrap: wrap;">
-                        <ui:Button text="Back" display-tooltip-when-elided="true" name="back" style="flex-grow: 1; flex-shrink: 0; width: 100px;" />
-                        <ui:Button text="Editor" display-tooltip-when-elided="true" name="editor" style="flex-grow: 1; flex-shrink: 0; width: 100px;" />
-                        <ui:Button text="Reset" display-tooltip-when-elided="true" name="reset" style="flex-grow: 1; flex-shrink: 0; width: 100px;" />
+                    <ui:VisualElement name="row2" style="justify-content: space-around;">
+                        <ui:Button text="Back" display-tooltip-when-elided="true" name="back" style="width: 100px;" />
+                        <ui:Button text="Editor" display-tooltip-when-elided="true" name="editor" style="width: 100px;" />
+                        <ui:Button text="Reset" display-tooltip-when-elided="true" name="reset" style="width: 100px;" />
                     </ui:VisualElement>
                 </ui:VisualElement>
             </ui:VisualElement>

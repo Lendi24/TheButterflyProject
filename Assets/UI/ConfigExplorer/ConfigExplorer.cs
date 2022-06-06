@@ -178,8 +178,8 @@ public class ConfigExplorer : MonoBehaviour
             ChangeSelectedCard(newCard); ;};
 
         VisualElement textContainer = newCard.visualObj.Q<VisualElement>("Text-Container"); //Making text contain
-        textContainer.Add(new Label { text = newCard.name });
-        textContainer.Add(new Label { text = newCard.origin });
+        textContainer.Add(new Label { name = "TitleText", text = newCard.name });
+        textContainer.Add(new Label { name = "SourceText", text = newCard.origin });
 
         /*
         VisualElement buttonContainer = card.Q<VisualElement>("Button-Container"); //Making button contain
