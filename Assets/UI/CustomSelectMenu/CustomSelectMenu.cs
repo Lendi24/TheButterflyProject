@@ -462,7 +462,12 @@ public class CustomSelectMenu : MonoBehaviour
     {
         preHuntTime.value                   =        CurrentConfig.conf.preHuntTime;
         huntTime.value                      =        CurrentConfig.conf.huntTime;
-        
+
+        if (CurrentConfig.conf.initAmntOfWhite + CurrentConfig.conf.initAmntOfGray + CurrentConfig.conf.initAmountOfDark != CurrentConfig.conf.initAmntOfButter)
+        {
+            populationBias.value = "Random";
+        }
+
         initButterAmount.value              =        CurrentConfig.conf.initAmntOfButter;
         amountOfWhite.value                 =        CurrentConfig.conf.initAmntOfWhite.ToString();
         amountOfGray.value                  =        CurrentConfig.conf.initAmntOfGray.ToString();

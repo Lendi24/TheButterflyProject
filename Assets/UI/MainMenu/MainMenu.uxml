@@ -13,5 +13,9 @@
                 <ui:Button text="Exit" display-tooltip-when-elided="true" name="menu-button-exit" tabindex="2" />
             </ui:VisualElement>
         </ui:VisualElement>
+        <ui:VisualElement name="Bottom" style="position: absolute; bottom: 0; flex-direction: row;">
+            <ui:Label text="Version: 0.3.0" display-tooltip-when-elided="true" name="Version" />
+            <ui:Label display-tooltip-when-elided="true" name="Updates" />
+        </ui:VisualElement>
     </ui:VisualElement>
 </ui:UXML>

@@ -30,7 +30,7 @@ public class GameManager : MonoBehaviour
     bool resetEverythingOnNextGen, noSafeClick, keepButterAmount, renderButterBackground;
 
     private bool isPaused;
-    private int butterfliesRemaining, gameState;
+    private int gameState;
     readonly string keyPrefix = "modelMatch";
     List<GameObject> deadButterflies;
     List<StatSave> statsLogList = new List<StatSave>();
@@ -47,18 +47,16 @@ public class GameManager : MonoBehaviour
     // Start is called before the first frame update
     public void Start()
     {
-        butterflyGeneLength = 2; //remove this todo ree
-
+        butterflyGeneLength = 2;
         Time.timeScale = 1;
         GetComponent<SplashShifter>().ShowSplash(0, preHuntSplash);
         Physics.autoSyncTransforms = true;
         GetVariables();
-        ResetVariables();
         ClearBoard();
         spriteOverlayMan.GetComponent<SpriteOverlay>().MakeHealthSpriteUI(healthAmount); 
         SetScreenSize();
         PrepareGame();
-
+        ResetVariables();
     }
 
     public void SetScreenSize()
@@ -128,16 +126,11 @@ rContainer.transform.childCount);
     {
         //Init variables
         gameState = 1;
-        liveMaximumKills = maximumKills; 
-        butterfliesRemaining = ButterlfyTotalStartAmnt; //Should this do that??
+        if (maximumKills == 0) { liveMaximumKills = butterContainer.GetComponent<Transform>().childCount; }
+        else { liveMaximumKills = maximumKills; }
         GetComponent<SplashShifter>().ShowSplash(0, preHuntSplash);
         deadButterflies = new List<GameObject>();
         isPaused = false;
-
-        if (maximumKills == 0)
-        {
-            liveMaximumKills = butterfliesRemaining;
-        }
     }
 
     void PrepareGame()
@@ -163,7 +156,6 @@ rContainer.transform.childCount);
             ApplyButterflyBlendin(animal, GeneticManager.BlendInCalc(animal.GetComponent<ButterflyBehaviour>().gene));
         }
 
-        gameState = 1;
         statsLogList.Add(new StatSave() { populationAmount = butterContainer.transform.childCount, alleleData = butterContainer.GetComponent<ButterCollection>().GetAnimalAlleles(), phenotypeData = butterContainer.GetComponent<ButterCollection>().GetAnimalPhenotypes(renderButterBackground), domMode = geneMode});
     }
 
@@ -232,6 +224,10 @@ rContainer.transform.childCount);
             butterRender.material.SetTexture("_SecondaryTex", null);
             butterRender.material.SetFloat("_enablePerlin", blendIn);
         }
+
+        //RandomOffset
+        butterRender.material.SetFloat("_offsetX", Random.Range(1, 100));
+        butterRender.material.SetFloat("_offsetY", Random.Range(1, 100));
     }
 
     void TextureMatchedRender(GameObject _newButterfly)
@@ -332,7 +328,7 @@ rContainer.transform.childCount);
                   //y=C*a^x. Time decreases the more rounds have passed.
                   //postGameSplash.GetComponent<Canvas>().enabled = true;
 
-                    if ((ButterlfyTotalStartAmnt - butterfliesRemaining) < minimumKills)
+                    if (deadButterContainer.GetComponent<Transform>().childCount < minimumKills)
                     {
                         healthAmount--;
                         spriteOverlayMan.GetComponent<SpriteOverlay>().RemoveHeart();
@@ -380,7 +376,7 @@ rContainer.transform.childCount);
                 {
                     butterflyRoundSpawnAmount = deadButterContainer.transform.childCount;
                 }
-                
+
                 for (int i = 0; i < butterflyRoundSpawnAmount; i++)
                 {
                     GameObject animal = SpawnButterfly();
@@ -391,9 +387,16 @@ rContainer.transform.childCount);
                     ApplyButterflyBlendin(animal, GeneticManager.BlendInCalc(animal.GetComponent<ButterflyBehaviour>().gene));
                 }
 
+                ResetVariables();
+
+                if (maximumKills == 0)
+                {
+                    liveMaximumKills = butterContainer.GetComponent<Transform>().childCount;
+                    //liveMaximumKills = butterfliesRemaining;
+                }
+
                 statsLogList.Add(new StatSave() { populationAmount = butterContainer.transform.childCount, alleleData = butterContainer.GetComponent<ButterCollection>().GetAnimalAlleles(), phenotypeData = butterContainer.GetComponent<ButterCollection>().GetAnimalPhenotypes(renderButterBackground), domMode = geneMode });
 
-                ResetVariables();
                 break;
 
             default:
@@ -472,7 +475,6 @@ rContainer.transform.childCount);
                 SoundScript.PlayAudio(audioClip);
             }
             SetScore();
-            butterfliesRemaining--;
             butterfly.transform.parent = deadButterContainer.transform;
             butterfly.GetComponent<MeshCollider>().enabled = false;
             butterfly.GetComponent<MeshFilter>().mesh = destroyedButterfly;

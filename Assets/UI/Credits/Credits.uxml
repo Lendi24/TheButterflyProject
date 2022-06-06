@@ -1,10 +1,12 @@
 <ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" xsi="http://www.w3.org/2001/XMLSchema-instance" engine="UnityEngine.UIElements" editor="UnityEditor.UIElements" noNamespaceSchemaLocation="../../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
     <ui:VisualElement name="Credits" style="justify-content: space-between; flex-grow: 1; flex-shrink: 0; align-items: stretch;">
         <ui:ScrollView scroll-deceleration-rate="0,135" elasticity="0,1" style="flex-grow: 1; flex-shrink: 0;">
-            <ui:Label text="TheButterflyProject was created (and is/was maintained) by Fabian Lendic and Sebastian Nilsson-Stor as a school project. The goal of this project was to digitialize and improve a similar physical tool used to showcase evolution in a similar way. " display-tooltip-when-elided="true" name="inspiration-text" style="white-space: normal; height: 112px;" />
-            <ui:Label text="The project is powered by the Unity Game Engine. All 3D-models (yes, there are 3D-models) are created in blender, 2D-textures in GIMP and vector-based images in Inkscape." display-tooltip-when-elided="true" name="programs-text" style="white-space: normal;" />
-            <ui:Label text="A project website (should) be available at https://cv.lendic.xyz/thebutterflyproject for more info&#10;Found an issue? You are welcome to contribute code to this project, or tell us about it, at https://github.com/Lendi24/TheButterflyProject  " display-tooltip-when-elided="true" name="websitegithub-text" style="white-space: normal;" />
-            <ui:Label text="Have fun! :)" display-tooltip-when-elided="true" name="havefun-text" />
+            <ui:VisualElement style="flex-grow: 1; flex-shrink: 0; justify-content: center; align-items: center;">
+                <ui:Label text="TheButterflyProject was created (and is/was maintained) by Fabian Lendic and Sebastian Nilsson-Stor as a school project. The goal of this project was to digitialize and improve a similar physical tool used to showcase evolution in a similar way. " display-tooltip-when-elided="true" name="inspiration-text" style="white-space: normal; height: 112px; -unity-text-align: upper-center;" />
+                <ui:Label text="The project is powered by the Unity Game Engine. All 3D-models (yes, there are 3D-models) are created in blender, 2D-textures in GIMP and vector-based images in Inkscape." display-tooltip-when-elided="true" name="programs-text" style="white-space: normal; -unity-text-align: upper-center;" />
+                <ui:Label text="A project website (should) be available at https://cv.lendic.xyz/thebutterflyproject for more info.&#10;&#10;Found an issue? You are welcome to contribute code to this project, or tell us about it, at https://github.com/Lendi24/TheButterflyProject  " display-tooltip-when-elided="true" name="websitegithub-text" style="white-space: normal; -unity-text-align: upper-center;" />
+                <ui:Label text="Have fun! :)" display-tooltip-when-elided="true" name="havefun-text" />
+            </ui:VisualElement>
         </ui:ScrollView>
         <ui:VisualElement name="button-container" style="align-items: center;">
             <ui:Button text="Back" display-tooltip-when-elided="true" name="button-back" style="align-items: center; flex-shrink: 1;" />
